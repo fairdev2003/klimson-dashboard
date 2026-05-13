@@ -1,0 +1,33 @@
+{
+    "terminal.integrated.profiles.linux": {
+        "zsh-host": {
+            "path": "/usr/bin/flatpak-spawn",
+            "args": [
+                "--host",
+                "--env=TERM=xterm-256color",
+                "zsh"
+            ],
+            "icon": "terminal-linux",
+            "color": "terminal.ansiBlue"
+        }
+    },
+    "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace', 'monospace'",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 14,
+    "editor.fontWeight": "400",
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode",
+        "editor.formatOnSave": true
+    },
+    "editor.formatOnSave": true,
+    // Czy pokazywać podpowiedzi automatycznie po wpisaniu np. spacji lub kropki
+    "editor.suggestOnTriggerCharacters": true,
+    // Jak szybko mają się pojawiać (w milisekundach)
+    "editor.quickSuggestionsDelay": 10,
+    // Czy podpowiedzi mają się pojawiać wewnątrz tagów (HTML/Svelte)
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "on"
+    }
+}

@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+	@apply bg-neutral-950;
+}
+
+body,
+h1,
+h2,
+p,
+h3 {
+	font-family: 'Poppins', sans-serif;
+	font-optical-sizing: auto;
+	font-style: normal;
+}
+
+
+button {
+
+}
+
+.button {
+	cursor: pointer;
+}
+
+
+@theme {
+	--color-primary: #262626;
+	--color-secondary: #40404099;
+	--color-secondary-text: #d4d4d4;
+
+	--color-primary-add-button: #193cb8;
+	--color-secondary-add-button: #1447e6;
+}
+
+.button {
+	background-color: var(--color-primary);
+	color: var(--color-secondary-text);
+	border: 1px solid var(--color-secondary);
+	padding: 0.5rem 1rem;
+}
+
+.button-blue {
+	background-color: var(--color-primary-add-button);
+	color: var(--color-secondary-text);
+	border: 1px solid var(--color-secondary-add-button);
+	padding: 0.5rem 1rem;
+}
+
+.button-blue:hover {
+	background-color: var(--color-secondary-add-button);
+}
+
+.button:hover {
+	background-color: var(--color-secondary);
+}

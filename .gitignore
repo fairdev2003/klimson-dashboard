@@ -1,0 +1,6 @@
+# Foldery zależności (najważniejsze!)
+node_modules/
+dist/
+.svelte-kit/
+build/
+backend/.env
