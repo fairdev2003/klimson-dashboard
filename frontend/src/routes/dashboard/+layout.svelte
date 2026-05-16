@@ -20,10 +20,6 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	onMount(() => {
-		goto($route);
-	});
-
 	$effect(() => {
 		$route = page.url.pathname;
 	});

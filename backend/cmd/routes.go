@@ -109,5 +109,4 @@ func InitRoutes() {
 	go hub.Run()
 	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, hub)
 	newQuizController.RegisterRoutes()
-
 }
