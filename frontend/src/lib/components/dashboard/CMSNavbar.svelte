@@ -47,7 +47,7 @@
 			<p>Harcquiz</p>
 			<p>for Contr.</p>
 		{:else}
-			<p>Harcquiz</p>
+			<p>Klimson</p>
 			<p>CMS</p>
 		{/if}
 	</a>

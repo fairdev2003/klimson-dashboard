@@ -125,6 +125,7 @@ func FetchEnvVariables() {
 
 func Init() {
 	helpers.ClearConsole()
+
 	LoadConfig()
 	FetchEnvVariables()
 	db = Db()

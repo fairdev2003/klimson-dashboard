@@ -6,6 +6,7 @@
 	import gsap from 'gsap';
 	import Button from './Button.svelte';
 	import { animation_preset, type AnimationPresetType } from '$lib/dashboard/stores/persist';
+	import { stopPropagation } from 'svelte/legacy';
 
 	type Props = {
 		opened: boolean;
@@ -200,14 +201,16 @@
 		onclick={(e) => {
 			e.stopPropagation();
 		}}
-		style="left: {pos.x}px; bottom: {20 - pos.y}px; {isDragging ? 'z-index: 1000' : ''}"
-		class={`${d ? 'absolute' : 'relative'} ${className}  rounded-lg border border-neutral-800 bg-neutral-950 text-white `}
+		class={`${d ? 'absolute' : 'relative'} ${className} border border-neutral-700 bg-neutral-900 text-white `}
 	>
 		<!-- HEADER -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div
+			onclick={(e) => {
+				e.stopPropagation();
+			}}
 			onmousedown={handleMouseDown}
-			class="flex h-10 cursor-grab items-center justify-between border-b border-neutral-800 px-4 active:cursor-grabbing"
+			class="flex h-10 items-center justify-between border-b border-neutral-700 px-4"
 		>
 			<p class="truncate text-sm font-semibold">{title}</p>
 			<button

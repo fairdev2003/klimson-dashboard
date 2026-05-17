@@ -59,11 +59,7 @@
 			</button>
 		</div>
 
-		<nav class="mt-4 flex flex-col gap-1 px-2">
-			{#each contents as content}
-				{@render Content(content)}
-			{/each}
-		</nav>
+		<nav class="mt-4 flex flex-col gap-1 px-2"></nav>
 
 		<div class="mt-auto mb-4"></div>
 	</div>

@@ -11,7 +11,7 @@
 			{
 				name: 'ID',
 				slug: 'id',
-				type: 'number'
+				type: 'id'
 			},
 			{
 				name: 'Firstname',
@@ -21,7 +21,7 @@
 			{
 				name: 'Lastname',
 				slug: 'last_name',
-				type: 'number'
+				type: 'string'
 			},
 			{
 				name: 'Age',
@@ -33,10 +33,16 @@
 				slug: 'email',
 				type: 'string'
 			},
+
 			{
 				name: 'Address',
 				slug: 'address',
 				type: 'string'
+			},
+			{
+				name: 'Profile Picture',
+				slug: 'pfp_logo',
+				type: 'image'
 			}
 		]
 	};
@@ -48,7 +54,8 @@
 			last_name: 'Kowalski',
 			age: 26,
 			email: 'jan.kowalski@example.com',
-			address: 'Warszawa, Marszałkowska 10'
+			address: 'Warszawa, Marszałkowska 10',
+			pfp_logo: 'https://api.klimson.dev/storage/interface/random/banana.webp'
 		},
 		{
 			id: 2,
@@ -56,7 +63,8 @@
 			last_name: 'Klimson',
 			age: 23,
 			email: 'klimson.dev@gmail.com',
-			address: 'Kraków, Floriańska 5'
+			address: 'Kraków, Floriańska 5',
+			pfp_logo: 'https://api.klimson.dev/interface/bucket/kongo/bacardi/bacardi_1.png'
 		},
 		{
 			id: 3,
@@ -64,7 +72,8 @@
 			last_name: 'Nowak',
 			age: 31,
 			email: 'nowak.anna@outlook.com',
-			address: 'Gdańsk, Długa 22'
+			address: 'Gdańsk, Długa 22',
+			pfp_logo: 'https://api.klimson.dev/interface/bucket/klimson.dev/sfm/patterns/01-pattern.sfm'
 		},
 		{
 			id: 4,
@@ -72,13 +81,19 @@
 			last_name: 'Cox',
 			age: 42,
 			email: 'v.cox@therac.org',
-			address: 'Tyler, Texas 54'
+			address: 'Tyler, Texas 54',
+			pfp_logo: 'https://api.klimson.dev/interface/bucket/kongo/italy/1.jpg'
 		}
 	];
 </script>
 
-<div class="overflow-x-auto border border-neutral-600 shadow-sm inline-block">
-	<table class="w-auto border-collapse text-left text-sm text-white">
+<div class="overflow-x-auto shadow-sm inline-flex flex-col gap-4">
+	<div>
+		<h1 class="font-bold text-blue-500">
+			DatabaseTable.svelte <span class="font-normal text-white">component</span>
+		</h1>
+	</div>
+	<table class="w-auto border-collapse text-left text-sm border border-neutral-600 text-white">
 		<thead class="bg-neutral-800 text-xs tracking-wider">
 			<tr>
 				{#each table.columns as column}
