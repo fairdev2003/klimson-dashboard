@@ -102,16 +102,6 @@
 
 	let BenchmarkModalOpened: boolean = $state(false);
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
-
-	const widgets = [
-		TotalContributors,
-		TotalQuizzes,
-		TotalQuizzes,
-		TotalQuizzes,
-		TotalApiRoutes,
-		DevWidget,
-		ProdWidget
-	];
 </script>
 
 <!-- <div class=" p-5 text-white">
@@ -137,11 +127,7 @@
 	{/if}
 </div> -->
 
-<div class="grid grid-cols-5 p-5 gap-5">
-	{#each widgets as Widget}
-		<Widget />
-	{/each}
-</div>
+<div class="grid grid-cols-5 p-5 gap-5"></div>
 
 {@render BenchmarkAll()}
 
@@ -154,42 +140,6 @@
 			{loading}
 			onclick={RefreshBenchmark}>Odśwież</Button
 		>
-		{#each Object.entries($requestTimes) as [key, value]}
-			<div class="flex flex-col gap-1">
-				<div class="flex justify-between text-xs font-medium">
-					<span
-						class="cursor-pointer text-blue-500 hover:underline"
-						onclick={() => {
-							benchmarkKey = key;
-							BenchmarkModalOpened = true;
-						}}>{key}</span
-					>
-					<span
-						class={value < 300
-							? 'text-green-500'
-							: value < 1800
-								? 'text-orange-500'
-								: 'text-red-500'}
-					>
-						{$dashboardLoaded ? value + 'ms' : '-'}
-					</span>
-				</div>
-				{#if $dashboardLoaded}
-					<div class="h-2 w-full overflow-hidden rounded-full bg-neutral-800">
-						<div
-							class="h-full transition-all duration-500 ease-out {value < 300
-								? 'bg-green-500'
-								: value < 1800
-									? 'bg-orange-500'
-									: 'animate-pulse bg-red-500'}"
-							style="width: {Math.min((value / 2000) * 100, 100)}%"
-						></div>
-					</div>
-				{:else}
-					<div class="h-2 w-full animate-pulse overflow-hidden rounded-full bg-green-800"></div>
-				{/if}
-			</div>
-		{/each}
 	</div>
 {/snippet}
 

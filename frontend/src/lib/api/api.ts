@@ -13,6 +13,9 @@ import { Cntrb } from './requests/contributor';
 import { toast } from '$lib/dashboard/stores/toast';
 import { debug } from '$lib/dashboard/stores/debug';
 import { latest_requests } from '../../routes/dashboard/contributors/vars';
+import { DatabaseClass } from './requests/database';
+import { ContextStorage } from './requests/context_storage';
+import { PG3D } from './requests/pg3d';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -190,6 +193,18 @@ export class Api extends ApiStatic {
 
 	public get contributor() {
 		return new Cntrb(this.api);
+	}
+
+	public get database() {
+		return new DatabaseClass(this.api);
+	}
+
+	public get context_storage() {
+		return new ContextStorage(this.api);
+	}
+
+	public get pg3d() {
+		return new PG3D(this.api);
 	}
 }
 

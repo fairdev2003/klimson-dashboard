@@ -8,7 +8,7 @@
 	import ContextMenu from './ContextMenu.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import { api } from '$lib/api/api';
-	import Sidebar from './Sidebar.svelte';
+	import Sidebar from './sidebar/Sidebar.svelte';
 
 	type Props = {
 		children: Snippet;

@@ -1,10 +1,12 @@
 <script lang="ts">
+	import type { ColumnData, TableDataType } from '$lib/api/requests/database.table';
+	import type { TableData } from '$lib/api/requests/misc';
 	import MovingTooltip from '../MovingTooltip.svelte';
 	import type { DatabaseTableColumn } from './data_table.types';
 	import TableTypeSpan from './TableTypeSpan.svelte';
 
 	type Props = {
-		column: DatabaseTableColumn;
+		column: TableData;
 	};
 
 	let { column }: Props = $props();
@@ -17,12 +19,17 @@
 				<p class="text-xs">
 					type: {column.type}
 				</p>
+				<p class="text-xs">
+					{#if column.foreign_key === 'true'}
+						Foreign Key Column
+					{/if}
+				</p>
 			</div>
 		{/snippet}
 
 		<div class="flex gap-1 items-center">
-			<TableTypeSpan type={column.type} />
-			<p>{column.slug}</p>
+			<TableTypeSpan {column} />
+			<p>{column.name}</p>
 		</div>
 	</MovingTooltip>
 </th>

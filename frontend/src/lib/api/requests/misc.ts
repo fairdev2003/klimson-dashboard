@@ -9,6 +9,14 @@ import type { RoutesResponse } from '../../../routes/dashboard/routes/types';
 import { Api } from '../api';
 import type { ServerResponse } from '../types';
 
+export type TableData = {
+	table: string;
+	type: string;
+	name: string;
+	icon: string;
+	foreign_key: string;
+};
+
 class Misc {
 	/**
 	 * Tworzy nową instancję ImageApi.
@@ -35,6 +43,17 @@ class Misc {
 		});
 
 		console.log(response.data);
+
+		return response;
+	}
+
+	public async GetTables(): Promise<ServerResponse<{ tables: TableData[] }>> {
+		const response: ServerResponse<{ tables: TableData[] }> = await this.api.get(
+			'/admin/database/list/tables',
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
 
 		return response;
 	}

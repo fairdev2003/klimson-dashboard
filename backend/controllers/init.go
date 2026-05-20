@@ -331,4 +331,16 @@ func (controller GlobalController) RegisterRoutes() {
 		Color:         "lime",
 		Description:   "Uprawnienie do testów przekierowań",
 	}), controller.TestRedirect)
+
+	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)
+	controller.adminPath.PUT("/context_storage/update/:key", controller.UpdateContextStorage)
+	controller.adminPath.GET("/context_storage/private", controller.GetPrivateContextStorage)
+	controller.adminPath.DELETE("/context_storage/delete/:id", controller.DeleteContextStorageRecord)
+	controller.adminPath.GET("/context_storage/private/single/:key", controller.GetPrivateContext)
+
+	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)
+	controller.publicPath.GET("/pg3d/player_data/:player_id", controller.GetPlayerData)
+
+	controller.adminPath.GET("/database/list/tables", controller.GetTables)
+	controller.adminPath.GET("/database/table/:table_name", controller.GetTableData)
 }

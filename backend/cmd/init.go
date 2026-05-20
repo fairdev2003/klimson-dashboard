@@ -83,12 +83,16 @@ func Db() *gorm.DB {
 }
 
 func AutoMigrateModels() {
+	var modelsToMigrate []any
+	for _, m := range models.MigratableModels {
+		modelsToMigrate = append(modelsToMigrate, m.Model)
+	}
 
-	if err := db.AutoMigrate(&models.Quiz{}, &models.Question{}, &models.Answer{}, &models.Blog{}, &models.Hero{}, &models.Stat{}, &models.Contributor{}, &models.Log{}, &models.Role{}); err != nil {
-		logger.ErrorLog("Error while migrating models to postagres database")
+	if err := db.AutoMigrate(modelsToMigrate...); err != nil {
+		logger.ErrorLog("Error while migrating models to postgres database")
+		return
 	}
 	logger.GreenServerLog("✓ " + "Migrated database models")
-
 }
 
 func StartGinServer() {

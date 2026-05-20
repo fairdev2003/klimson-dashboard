@@ -288,15 +288,3 @@
 		</div>
 	</div>
 {/snippet}
-
-<svelte:document
-	onkeydown={(e) => {
-		if (e.key === 'Escape') {
-			if (editMode) {
-				confirm_modal_opened = true;
-				return;
-			}
-			onClose?.();
-		}
-	}}
-/>

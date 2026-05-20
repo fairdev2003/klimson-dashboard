@@ -24,7 +24,9 @@
 	<!-- left navbar conten -->
 	<div class="flex items-center">
 		<div class="flex items-center gap-3">
-			<ContextMenu />
+			<span class="text-blue-500">
+				<Icon icon="majesticons:lightning-bolt" width="30" height="30" />
+			</span>
 			{@render CMSTextLogo($userInfo.contributor)}
 		</div>
 		<div class="ml-5 flex gap-2">
@@ -42,7 +44,7 @@
 </div>
 
 {#snippet CMSTextLogo(contributor: boolean = false)}
-	<a href="/dashboard" class="w-20 cursor-pointer py-3 font-semibold text-blue-400 select-none">
+	<a href="/dashboard" class="w-20 cursor-pointer py-3 font-semibold text-blue-500 select-none">
 		{#if contributor}
 			<p>Harcquiz</p>
 			<p>for Contr.</p>

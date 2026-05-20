@@ -1,115 +1,85 @@
 <script lang="ts">
+	import type { ColumnData } from '$lib/api/requests/database.table';
+	import Icon from '@iconify/svelte';
 	import type { DatabaseTableProps } from './data_table.types';
 	import DatabaseColumnField from './DatabaseColumnField.svelte';
 	import DatabaseField from './DatabaseField.svelte';
+	import { onMount } from 'svelte';
+	import { sortColumnsOrder } from './data_table.helpers';
+	import type { TableData } from '$lib/api/requests/misc';
+	import { highlightedFields } from './data_table.store';
+	import { sortOrderList } from './table_sorter';
 
-	const table: DatabaseTableProps = {
-		database: {
-			name: 'Users'
-		},
-		columns: [
-			{
-				name: 'ID',
-				slug: 'id',
-				type: 'id'
-			},
-			{
-				name: 'Firstname',
-				slug: 'first_name',
-				type: 'string'
-			},
-			{
-				name: 'Lastname',
-				slug: 'last_name',
-				type: 'string'
-			},
-			{
-				name: 'Age',
-				slug: 'age',
-				type: 'number'
-			},
-			{
-				name: 'Email',
-				slug: 'email',
-				type: 'string'
-			},
-
-			{
-				name: 'Address',
-				slug: 'address',
-				type: 'string'
-			},
-			{
-				name: 'Profile Picture',
-				slug: 'pfp_logo',
-				type: 'image'
-			}
-		]
+	type Props = {
+		data: any[];
+		table_name: string;
+		column: TableData[];
 	};
 
-	const rows: Record<string, string | number>[] = [
-		{
-			id: 1,
-			first_name: 'Jan',
-			last_name: 'Kowalski',
-			age: 26,
-			email: 'jan.kowalski@example.com',
-			address: 'Warszawa, Marszałkowska 10',
-			pfp_logo: 'https://api.klimson.dev/storage/interface/random/banana.webp'
-		},
-		{
-			id: 2,
-			first_name: 'Kamil',
-			last_name: 'Klimson',
-			age: 23,
-			email: 'klimson.dev@gmail.com',
-			address: 'Kraków, Floriańska 5',
-			pfp_logo: 'https://api.klimson.dev/interface/bucket/kongo/bacardi/bacardi_1.png'
-		},
-		{
-			id: 3,
-			first_name: 'Anna',
-			last_name: 'Nowak',
-			age: 31,
-			email: 'nowak.anna@outlook.com',
-			address: 'Gdańsk, Długa 22',
-			pfp_logo: 'https://api.klimson.dev/interface/bucket/klimson.dev/sfm/patterns/01-pattern.sfm'
-		},
-		{
-			id: 4,
-			first_name: 'Voyne',
-			last_name: 'Cox',
-			age: 42,
-			email: 'v.cox@therac.org',
-			address: 'Tyler, Texas 54',
-			pfp_logo: 'https://api.klimson.dev/interface/bucket/kongo/italy/1.jpg'
-		}
-	];
+	let schema: TableData[] = $state([]);
+	let { data, table_name, column }: Props = $props();
+
+	const blacklistedKeys = ['deleted_at', 'password', 'updated_at'];
+
+	let filteredData = $derived(
+		data.filter((row) => {
+			const isDeleted =
+				row.deleted_at !== null && row.deleted_at !== undefined && row.deleted_at !== '';
+			return !isDeleted;
+		})
+	);
+
+	onMount(() => {
+		$highlightedFields = [];
+
+		schema = sortColumnsOrder(column, sortOrderList);
+	});
 </script>
 
-<div class="overflow-x-auto shadow-sm inline-flex flex-col gap-4">
-	<div>
-		<h1 class="font-bold text-blue-500">
-			DatabaseTable.svelte <span class="font-normal text-white">component</span>
+<div class="w-full max-w-full overflow-x-auto shadow-sm flex flex-col gap-4">
+	<div class="flex flex-col gap-1">
+		<a class="flex gap-1 items-center text-blue-500 hover:underline" href="/dashboard/database">
+			<Icon icon="lets-icons:back" />
+			<p>Back to database list</p>
+		</a>
+		<h1 class="font-bold text-blue-500 flex justify-between">
+			<p>
+				Viewing Table: <span class="font-normal text-white">{table_name}</span>
+			</p>
+			{#if $highlightedFields.length > 0}
+				<p class="text-green-500">
+					Changes: {$highlightedFields.length}
+				</p>
+			{/if}
 		</h1>
 	</div>
-	<table class="w-auto border-collapse text-left text-sm border border-neutral-600 text-white">
-		<thead class="bg-neutral-800 text-xs tracking-wider">
-			<tr>
-				{#each table.columns as column}
-					<DatabaseColumnField {column} />
-				{/each}
-			</tr>
-		</thead>
 
-		<tbody class="bg-neutral-900 text-white">
-			{#each rows as row}
-				<tr class="transition-colors">
-					{#each table.columns as column}
-						<DatabaseField {column} {row} />
+	<div class="w-full overflow-x-auto">
+		<table
+			class="w-full min-w-max border-collapse text-left text-sm border border-neutral-600 text-white"
+		>
+			<thead class="bg-neutral-800 text-xs tracking-wider">
+				<tr>
+					{#each schema as column}
+						<DatabaseColumnField {column} />
 					{/each}
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			{#if filteredData && filteredData.length}
+				<tbody class="bg-neutral-900 text-white">
+					{#each filteredData as row}
+						<tr class="transition-colors hover:bg-neutral-800/50">
+							{#each schema as column}
+								<DatabaseField {column} {row} />
+							{/each}
+						</tr>
+					{/each}
+				</tbody>
+			{:else}
+				<div class="w-full">
+					<p>No records :c</p>
+				</div>
+			{/if}
+		</table>
+	</div>
 </div>

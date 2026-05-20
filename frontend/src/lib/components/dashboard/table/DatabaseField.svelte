@@ -5,10 +5,13 @@
 	import Icon from '@iconify/svelte';
 	import FieldEditModal from './FieldEditModal.svelte';
 	import SFMCodeArea from '../sfm/(components)/SFMCodeArea.svelte';
+	import type { ColumnData } from '$lib/api/requests/database.table';
+	import { highlightedFields } from './data_table.store';
+	import { get } from 'svelte/store';
 
 	type Props = {
 		row: any;
-		column: DatabaseColumn;
+		column: ColumnData;
 	};
 
 	let { row, column }: Props = $props();
@@ -49,6 +52,8 @@
 		return sfmExtensions.some((ext) => lowerCaseName.endsWith(ext));
 	}
 
+	let highlightedIds: string[] = $state([]);
+
 	onMount(() => {
 		field_id = crypto.randomUUID();
 	});
@@ -58,6 +63,7 @@
 	onclick={() => {
 		opened = !opened;
 	}}
+	class:highlighted={$highlightedFields.includes(field_id)}
 	class="whitespace-nowrap cursor-pointer border text-neutral-300 font-medium border-neutral-700 hover:bg-neutral-700"
 >
 	<MovingTooltip>
@@ -85,10 +91,14 @@
 						{row[column.slug]}
 					</p>
 				{/if}
-
-				<p class="text-xs">
-					type: {column.type}
-				</p>
+				<div>
+					<p class="text-xs">
+						type: {column.type}
+					</p>
+					<p class="text-xs">
+						field id: {field_id}
+					</p>
+				</div>
 			</div>
 		{/snippet}
 
@@ -113,6 +123,27 @@
 		}}
 		class="cursor-auto"
 	>
-		<FieldEditModal {column} {row} bind:opened />
+		<FieldEditModal
+			onSave={() => {
+				if (!field_id) return;
+
+				$highlightedFields = [...$highlightedFields, field_id];
+			}}
+			id={field_id}
+			{column}
+			{row}
+			bind:opened
+		/>
 	</div>
 </td>
+
+<style>
+	@import 'tailwindcss';
+
+	.highlighted {
+		@apply bg-green-500/20;
+	}
+
+	.normal {
+	}
+</style>

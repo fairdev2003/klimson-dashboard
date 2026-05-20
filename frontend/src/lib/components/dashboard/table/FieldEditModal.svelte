@@ -5,14 +5,18 @@
 	import DatabaseColumn from './DatabaseColumn.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import DatabaseModalInput from './DatabaseModalInput.svelte';
+	import type { ColumnData } from '$lib/api/requests/database.table';
+	import { highlightedFields } from './data_table.store';
 
 	type Props = {
 		opened: boolean;
 		row: any;
-		column: DatabaseColumn;
+		onSave: () => void;
+		column: ColumnData;
+		id: `${string}-${string}-${string}-${string}-${string}` | undefined;
 	};
 
-	let { opened = $bindable(), column, row }: Props = $props();
+	let { opened = $bindable(), column, row, id, onSave }: Props = $props();
 
 	let key: string = $state('');
 	let value: string = $state('');
@@ -38,6 +42,13 @@
 	</div>
 
 	<div class="flex justify-end mt-3">
-		<Button size="small" theme="correct">Add Change</Button>
+		<Button
+			size="small"
+			theme="correct"
+			onclick={() => {
+				onSave();
+				opened = false;
+			}}>Add Change</Button
+		>
 	</div>
 </Modal>

@@ -1,25 +1,23 @@
+/* Definiujemy szerokość i wysokość suwaka (dla scrolla pionowego i poziomego) */
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
-	display: block;
-	display: none;
+    width: 8px;
+    height: 8px;
 }
 
+/* Tor, po którym porusza się suwak (Tailwind neutral-900 lub neutral-800) */
 ::-webkit-scrollbar-track {
-	padding-right: 20px;
-	border-radius: 10px;
-	margin-right: 20px;
-	display: none;
+    background-color: #171717; /* neutral-900 */
+    border-radius: 9999px;
 }
 
+/* Sam uchwyt/suwak (Tailwind neutral-700) */
 ::-webkit-scrollbar-thumb {
-	background: var(--color-primary);
-	display: none;
-	border-radius: 10px;
+    background-color: #404040; /* neutral-700 */
+    border-radius: 9999px;
+    border: 2px solid #171717; /* Tworzy elegancki odstęp wokół suwaka */
 }
 
+/* Stan po najechaniu myszką (Tailwind neutral-500) */
 ::-webkit-scrollbar-thumb:hover {
-	display: none;
-	background: var(--color-secondary);
-	border-radius: 10px;
+    background-color: #737373; /* neutral-500 */
 }
