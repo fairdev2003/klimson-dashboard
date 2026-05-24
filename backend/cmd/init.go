@@ -73,6 +73,7 @@ func LoadConfig() {
 
 func Db() *gorm.DB {
 	dsn := db_conn_string
+
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		logger.ErrorLog(err.Error())

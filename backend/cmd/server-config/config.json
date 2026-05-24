@@ -2,7 +2,7 @@
   "display_name": "HarcQuiz Api",
   "internal_name": "harcquiz-api",
   "description": "Serwer największej bazy quizów harcerskich",
-  "port": 8090,
+  "port": 8090, 
   "debug": false,
   "api_config": {
     "path": "/harc-api",
@@ -10,3 +10,4 @@
   },
   "config_path": "./"
 }
+

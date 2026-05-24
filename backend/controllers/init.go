@@ -332,6 +332,12 @@ func (controller GlobalController) RegisterRoutes() {
 		Description:   "Uprawnienie do testów przekierowań",
 	}), controller.TestRedirect)
 
+	storagePath := controller.publicPath.Group("/storage")
+	storagePath.GET("/file/*filepath", controller.GetFile)
+	storagePath.GET("/list/*folder", controller.ListFiles)
+	storagePath.GET("/interface/*folder", controller.Interface)
+	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
+
 	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)
 	controller.adminPath.PUT("/context_storage/update/:key", controller.UpdateContextStorage)
 	controller.adminPath.GET("/context_storage/private", controller.GetPrivateContextStorage)
@@ -340,6 +346,8 @@ func (controller GlobalController) RegisterRoutes() {
 
 	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)
 	controller.publicPath.GET("/pg3d/player_data/:player_id", controller.GetPlayerData)
+
+	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)
 
 	controller.adminPath.GET("/database/list/tables", controller.GetTables)
 	controller.adminPath.GET("/database/table/:table_name", controller.GetTableData)

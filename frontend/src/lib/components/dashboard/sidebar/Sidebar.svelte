@@ -58,9 +58,9 @@
 			name: 'Context Storage'
 		},
 		{
-			icon: 'pinhead:pixel-circle',
-			href: '/dashboard/pg3d',
-			name: 'Pixel Gun 3D'
+			icon: 'mdi:spotify',
+			href: '/dashboard/spotify',
+			name: 'Spotify'
 		},
 		{
 			icon: 'mdi:image',

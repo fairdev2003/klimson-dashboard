@@ -24,8 +24,8 @@ func InitRoutes() {
 	ctx := context.Background()
 	server.Use(helpers.CorsConf("*"))
 	server.Use(helpers.NetworkLogger())
-	apiPath = server.Group(cfg.Api.Version).Group("/api")
-	wsPath = server.Group(cfg.Api.Version).Group("/ws")
+	apiPath = server.Group("/")
+	wsPath = server.Group("/ws")
 	adminPath = apiPath.Group("/admin")
 	adminPath.Use(AuthMiddleware())
 	adminPath.Use(helpers.CorsConf("*"))
@@ -33,6 +33,38 @@ func InitRoutes() {
 	// root routes
 	apiPath.GET("/", func(c *gin.Context) {
 		c.JSON(200, "Nie powinno ciebie tu byc ://")
+	})
+	apiPath.GET("/callback", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"succes": true,
+		})
+	})
+
+	type MostCommonColorBody struct {
+		ImageURL string `json:"image_url" binding:"required"` // Dodaliśmy tag 'required' dla walidacji
+	}
+
+	apiPath.POST("/most_common_image_color", func(ctx *gin.Context) {
+		var body MostCommonColorBody
+
+		if err := ctx.ShouldBindJSON(&body); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": "Niepoprawny format JSON lub brak pola image_url",
+			})
+			return
+		}
+
+		hex, err := helpers.GetMostCommonColor(body.ImageURL)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"hex": hex,
+		})
 	})
 	adminPath.GET("/verify", func(c *gin.Context) {
 		c.JSON(200, gin.H{"access": true})

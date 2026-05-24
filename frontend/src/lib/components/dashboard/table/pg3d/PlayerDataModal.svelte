@@ -31,6 +31,7 @@
 							alt="Clan Logo"
 							class="size-5 [image-rendering:pixelated]"
 						/>
+
 						<p>{player.clan.clanname}</p>
 					</span>
 				{/if}

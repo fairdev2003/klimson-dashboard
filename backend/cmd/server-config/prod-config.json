@@ -1,0 +1,12 @@
+{
+  "display_name": "Klimson Server",
+  "internal_name": "klimson-api",
+  "description": "Serwer dla mnie!!",
+  "port": 20187,
+  "debug": false,
+  "api_config": {
+    "path": "/klimson/api",
+    "version": "v1"
+  },
+  "config_path": "./"
+}

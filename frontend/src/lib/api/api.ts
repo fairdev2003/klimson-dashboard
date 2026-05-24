@@ -28,16 +28,16 @@ class ApiStatic {
 	protected _dev_server = 'http://localhost:8090';
 
 	/** Adres serwera produkcyjnego (backend) */
-	protected _prod_server = 'https://harcquiz-ztai.onrender.com';
+	protected _prod_server = 'https://api.klimson.dev/';
 
 	/** Adres frontendu produkcyjnego */
 	protected _prod_front = 'https://harc-quiz.klimson.dev';
 
 	/** Wersja API (np. `/v1`) */
-	protected _version = '/v1';
+	protected _version = '';
 
 	/** Prefiks ścieżek API (np. `/api`) */
-	protected _prefix = '/api';
+	protected _prefix = '';
 
 	/**
 	 * Zwraca aktualny host w zależności od środowiska.
@@ -227,6 +227,7 @@ export class Api extends ApiStatic {
  * });
  * ```
  */
+// const api = new Api({ dev_server: 'https://api.klimson.dev' });
 const api = new Api();
 
 export { api };
