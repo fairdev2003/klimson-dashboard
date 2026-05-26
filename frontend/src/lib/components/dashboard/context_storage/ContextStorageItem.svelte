@@ -7,6 +7,7 @@
 	import type { ContextStorageType } from '$lib/api/requests/context_storage';
 	import { context_storage } from './context_storage.store';
 	import Check from '../Check.svelte';
+	import HarcCheckBox from '../HarcCheckBox.svelte';
 
 	type Props = {
 		context_record: ContextStorageType;
@@ -14,6 +15,7 @@
 
 	let { context_record }: Props = $props();
 
+	// svelte-ignore state_referenced_locally
 	let update_context_form = $state(context_record);
 	let deletionModalOpened: boolean = $state(false);
 
@@ -70,7 +72,7 @@
 	<div class="flex flex-col gap-2">
 		<DatabaseModalInput label="Key" bind:value={update_context_form.key} />
 		<DatabaseModalInput label="Value" bind:value={update_context_form.value} />
-		<Check label="Is Public?" bind:value={update_context_form.is_public} />
+		<HarcCheckBox label="Public" bind:checked={update_context_form.is_public} />
 		<DatabaseModalInput label="Category" bind:value={update_context_form.category_name} />
 		<DatabaseModalInput label="Type" bind:value={update_context_form.type} />
 		<div class="mt-3 flex justify-end">
@@ -84,7 +86,7 @@
 						update_context_form
 					);
 
-					const response = await api.context_storage.GetPrivateContextStorage();
+					const response = await api.context_storage.GetPrivateContextStorages();
 
 					$context_storage = response.data;
 
@@ -126,7 +128,7 @@
 							context_record.id
 						);
 
-						const response = await api.context_storage.GetPrivateContextStorage();
+						const response = await api.context_storage.GetPrivateContextStorages();
 
 						deleteLoading = false;
 						$context_storage = response.data;

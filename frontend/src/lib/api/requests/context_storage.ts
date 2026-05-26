@@ -34,7 +34,7 @@ class ContextStorage {
 	 * console.log(api.image.upload_url);
 	 */
 
-	public async GetPrivateContextStorage(): Promise<ServerResponse<ContextStorageType[]>> {
+	public async GetPrivateContextStorages(): Promise<ServerResponse<ContextStorageType[]>> {
 		const response: ServerResponse<ContextStorageType[]> = await this.api.get(
 			`/admin/context_storage/private`,
 			{

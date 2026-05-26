@@ -151,12 +151,7 @@ class ImageApi {
 			headers: { Authorization: `Bearer ${Api.token}` }
 		});
 
-		let imageList: string[] = [];
-		response.data.forEach((image) => {
-			imageList.push(`${this.api_config.host}/uploads/${key}/${image}`);
-		});
-
-		return imageList;
+		return response.data;
 	}
 }
 

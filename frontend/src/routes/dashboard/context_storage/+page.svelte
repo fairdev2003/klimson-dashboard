@@ -5,6 +5,7 @@
 	import Check from '$lib/components/dashboard/Check.svelte';
 	import { context_storage } from '$lib/components/dashboard/context_storage/context_storage.store';
 	import ContextStorageItem from '$lib/components/dashboard/context_storage/ContextStorageItem.svelte';
+	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
 	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
 	import FieldEditModal from '$lib/components/dashboard/table/FieldEditModal.svelte';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
@@ -24,10 +25,14 @@
 		is_public: false
 	});
 
+	$effect(() => {
+		console.log(new_context_form);
+	});
+
 	let loading: boolean = $state(false);
 
 	onMount(async () => {
-		const response = await api.context_storage.GetPrivateContextStorage();
+		const response = await api.context_storage.GetPrivateContextStorages();
 
 		$context_storage = response.data;
 	});
@@ -63,17 +68,25 @@
 	<div class="flex flex-col gap-2">
 		<DatabaseModalInput label="Key" bind:value={new_context_form.key} />
 		<DatabaseModalInput label="Value" bind:value={new_context_form.value} />
-		<Check label="Is Public?" bind:value={new_context_form.is_public} />
+		<HarcCheckBox label="Public" bind:checked={new_context_form.is_public} />
 		<DatabaseModalInput label="Category" bind:value={new_context_form.category_name} />
 		<DatabaseModalInput label="Type" bind:value={new_context_form.type} />
-		<div class="mt-3 flex justify-end">
+		<div class="mt-3 flex justify-between">
+			<Button
+				{loading}
+				onclick={() => {
+					console.log(new_context_form);
+				}}
+				theme="base"
+				size="small">Inpsect context</Button
+			>
 			<Button
 				{loading}
 				onclick={async () => {
 					loading = true;
 					const create_response = await api.context_storage.CreateContextStorage(new_context_form);
 
-					const response = await api.context_storage.GetPrivateContextStorage();
+					const response = await api.context_storage.GetPrivateContextStorages();
 
 					$context_storage = response.data;
 

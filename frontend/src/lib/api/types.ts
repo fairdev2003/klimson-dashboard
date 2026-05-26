@@ -56,7 +56,10 @@ export type ApiConfig = {
 
 export type ImageKey = 'quiz' | 'question' | 'blog' | 'hero' | 'static';
 
-export type ImageList = string[];
+export type ImageList = {
+	name: string;
+	is_dir: boolean;
+}[];
 
 export type QuizWhereObject = {
 	id: number | undefined;
@@ -68,8 +71,8 @@ export type CheckCorrectObject = {
 };
 
 export type UpdateOneFieldType<T> = {
-    [K in keyof T]: {
-        key: K;
-        value: T[K];
-    }
+	[K in keyof T]: {
+		key: K;
+		value: T[K];
+	};
 }[keyof T];

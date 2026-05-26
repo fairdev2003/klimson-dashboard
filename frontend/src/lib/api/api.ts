@@ -31,7 +31,7 @@ class ApiStatic {
 	protected _prod_server = 'https://api.klimson.dev/';
 
 	/** Adres frontendu produkcyjnego */
-	protected _prod_front = 'https://harc-quiz.klimson.dev';
+	protected _prod_front = 'https://dashboard.klimson.dev';
 
 	/** Wersja API (np. `/v1`) */
 	protected _version = '';
@@ -44,6 +44,9 @@ class ApiStatic {
 	 * @returns {string} Adres hosta (dev lub prod)
 	 */
 	protected get _host(): string {
+		console.log('DEBUG: dev =', dev);
+		console.log('DEBUG: _dev_server =', this._dev_server);
+		console.log('DEBUG: _prod_server =', this._prod_server);
 		return dev ? this._dev_server : this._prod_server;
 	}
 
@@ -228,6 +231,6 @@ export class Api extends ApiStatic {
  * ```
  */
 // const api = new Api({ dev_server: 'https://api.klimson.dev' });
-const api = new Api();
+const api = new Api({ dev_server: 'http://localhost:8090' });
 
 export { api };

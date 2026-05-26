@@ -16,7 +16,7 @@ func GenerateRootToken(isContributor bool) (string, error) {
 		"exp":         time.Now().Add(time.Hour * 2).Unix(),
 		"permissions": "root",
 		"contributor": false,
-		"name":        "Paweł Cyngot",
+		"name":        "Jakub Klimkiewicz",
 		"login":       "root",
 	}
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/harc_quiz/backend/khttp"
 	"github.com/zgierz/harc_quiz/backend/models"
 	"gorm.io/gorm"
 )
@@ -37,7 +38,7 @@ func (gc GlobalController) DeleteContextStorageRecord(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Stats data deleted", "success": true})
 }
 
-func (gc GlobalController) GetPrivateContextStorage(ctx *gin.Context) {
+func (gc GlobalController) GetPrivateContextStorages(ctx *gin.Context) {
 	var storageItems []models.ContextStorage
 
 	err := gc.db.Find(&storageItems).Error
@@ -77,6 +78,29 @@ func (controller GlobalController) GetPrivateContext(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, storageItem)
+}
+
+func (controller GlobalController) GetPublicContextStorage(ctx *gin.Context) {
+	id := ctx.Param("key")
+	if id == "" || id == ":key" {
+		khttp.BadRequestResponse(ctx, nil, "Key is required")
+		return
+	}
+
+	var storage models.ContextStorage
+
+	err := controller.db.First(&storage, "key = ?", id).Error
+	if err != nil {
+		khttp.BadRequestResponse(ctx, nil, "Context storage not found")
+		return
+	}
+
+	if !*storage.Public {
+		khttp.UnauthorizedResponse(ctx, nil, "Is not public")
+		return
+	}
+
+	ctx.JSON(200, storage)
 }
 
 func (controller GlobalController) UpdateContextStorage(ctx *gin.Context) {

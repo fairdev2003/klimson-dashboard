@@ -1,1 +1,8 @@
-<h1>Tu będzie kiedyś nowy HarcQuiz przyjacielu</h1>
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		goto('/login');
+	});
+</script>

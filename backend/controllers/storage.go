@@ -39,6 +39,11 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 	c.File(fullPath)
 }
 
+type ListRecord struct {
+	Name  string `json:"name"`
+	IsDir bool   `json:"is_dir"`
+}
+
 func (gc GlobalController) ListFiles(c *gin.Context) {
 	folderPath := c.Param("folder")
 
@@ -50,12 +55,16 @@ func (gc GlobalController) ListFiles(c *gin.Context) {
 		return
 	}
 
-	var fileList []string
+	var fileList []ListRecord
 	for _, entry := range entries {
-		fileList = append(fileList, entry.Name())
+
+		fileList = append(fileList, ListRecord{
+			Name:  entry.Name(),
+			IsDir: entry.IsDir(),
+		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{"files": fileList})
+	c.JSON(http.StatusOK, fileList)
 }
 
 func (gc GlobalController) Interface(c *gin.Context) {

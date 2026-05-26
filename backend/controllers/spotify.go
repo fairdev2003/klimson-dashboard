@@ -11,6 +11,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/harc_quiz/backend/khttp"
+)
+
+const (
+	SPOTIFY_STATUS_URL = "https://api.spotify.com/v1/me/player"
 )
 
 type SpotifyAuthResponse struct {
@@ -132,6 +137,7 @@ func RequestSpotify(spotify_url string, m ...string) (map[string]interface{}, er
 	}
 
 	var spotifyRaw map[string]interface{}
+
 	if err := json.NewDecoder(resp.Body).Decode(&spotifyRaw); err != nil {
 		return nil, err
 	}
@@ -140,10 +146,10 @@ func RequestSpotify(spotify_url string, m ...string) (map[string]interface{}, er
 }
 
 func (controller GlobalController) GetPlaybackState(ctx *gin.Context) {
-	playback_state, err := RequestSpotify("https://api.spotify.com/v1/me/player")
+	playback_state, err := RequestSpotify(SPOTIFY_STATUS_URL)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
 	}
 
-	ctx.JSON(http.StatusOK, playback_state)
+	khttp.SuccessResponse(ctx, playback_state)
 }
