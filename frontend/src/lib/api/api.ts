@@ -29,7 +29,7 @@ class ApiStatic {
 	protected _dev_server = 'http://localhost:8090';
 
 	/** Adres serwera produkcyjnego (backend) */
-	protected _prod_server = 'https://api.klimson.dev/';
+	protected _prod_server = 'https://api.klimson.dev';
 
 	/** Adres frontendu produkcyjnego */
 	protected _prod_front = 'https://dashboard.klimson.dev';
