@@ -65,17 +65,18 @@
 			name: 'Spotify',
 			disabled: false
 		},
-		{
-			icon: 'mdi:image',
-			href: '/dashboard/images',
-			name: 'Image Explorer',
-			disabled: false
-		},
+
 		{
 			icon: 'mdi:files',
 			href: '/dashboard/storage',
 			name: 'File Storage',
 			disabled: false
+		},
+		{
+			icon: 'mdi:image',
+			href: '/dashboard/images',
+			name: 'Image Explorer',
+			disabled: true
 		},
 		{
 			icon: 'mdi:link',
