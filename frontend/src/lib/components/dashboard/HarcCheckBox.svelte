@@ -17,14 +17,14 @@
 			<div
 				in:fade={{ duration: 100 }}
 				out:fade={{ duration: 100 }}
-				class="absolute z-20 w-full h-full bottom-3 right-2"
+				class="absolute z-8 w-full h-full bottom-3 right-2"
 			>
 				<Icon icon="material-symbols:check" class="text-green-500" width="37" height="37" />
 			</div>
 		{/if}
 
 		<div
-			class="absolute z-50 w-full h-full cursor-pointer"
+			class="absolute z-9 w-full h-full cursor-pointer"
 			onclick={() => {
 				checked = !checked;
 			}}
