@@ -34,7 +34,7 @@
 >
 	<div
 		class:hidden={!$sidebar_open}
-		class="shrink-0 self-stretch w-75 bg-neutral-900 border-t border-neutral-700 z-50
+		class="shrink-0 self-stretch w-75 bg-neutral-900 border-t border-neutral-700 z-10
            
            /* 1. Domyślnie na małych ekranach: */
            absolute inset-y-0 left-0 h-full

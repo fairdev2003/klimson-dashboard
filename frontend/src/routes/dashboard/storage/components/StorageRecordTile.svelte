@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { api } from '$lib/api/api';
 	import MovingTooltip from '$lib/components/dashboard/MovingTooltip.svelte';
 	import Icon from '@iconify/svelte';
@@ -17,6 +18,9 @@
 <button
 	onclick={() => {
 		onclick();
+		if (!is_dir) {
+			goto(`/dashboard/file/${slug}/${name}`);
+		}
 	}}
 	oncontextmenu={(e) => {
 		e.preventDefault();
