@@ -44,9 +44,6 @@ class ApiStatic {
 	 * @returns {string} Adres hosta (dev lub prod)
 	 */
 	protected get _host(): string {
-		console.log('DEBUG: dev =', dev);
-		console.log('DEBUG: _dev_server =', this._dev_server);
-		console.log('DEBUG: _prod_server =', this._prod_server);
 		return dev ? this._dev_server : this._prod_server;
 	}
 
@@ -100,8 +97,8 @@ export class Api extends ApiStatic {
 	 * @example
 	 * ```ts
 	 * const api = new Api({
-	 *   dev_server: 'http://127.0.0.1:5000',
-	 *   prod_server: 'https://api.myapp.com',
+	 *   dev_server: 'http://localhost:8090',
+	 *   prod_server: 'https://api.klimson.dev',
 	 * });
 	 *
 	 * const data = await api.quiz.GetQuiz({ id: 1 }); // sql where
