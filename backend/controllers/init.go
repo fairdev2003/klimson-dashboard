@@ -35,6 +35,10 @@ func (controller GlobalController) RegisterRoutes() {
 	storagePath.GET("/interface/*folder", controller.Interface)
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
+	// protected file storage
+	controller.adminPath.POST("/storage/interface/create-folder/*folder", controller.CreateFolder)
+	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
+
 	// context storage crud operations
 	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)
 	controller.adminPath.PUT("/context_storage/update/:key", controller.UpdateContextStorage)

@@ -76,7 +76,7 @@
 			icon: 'mdi:image',
 			href: '/dashboard/images',
 			name: 'Image Explorer',
-			disabled: true
+			disabled: false
 		},
 		{
 			icon: 'mdi:link',
@@ -87,7 +87,7 @@
 	];
 </script>
 
-<div class="sticky top-16.25 h-[calc(100vh-65px)] overflow-hidden flex flex-col m-5">
+<div class="sticky top-16.25 h-screen overflow-hidden flex flex-col m-5">
 	<SidebarUserLogged
 		name="cwel"
 		role="$root"

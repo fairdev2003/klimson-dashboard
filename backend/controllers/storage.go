@@ -47,6 +47,49 @@ type ListRecord struct {
 	Size         int64     `json:"file_size"`
 }
 
+func (gc GlobalController) UploadFile(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Brak pliku w żądaniu", "success": false})
+		return
+	}
+
+	folderPath := c.Param("folder")
+	dst := filepath.Join("./static/uploads", folderPath, file.Filename)
+
+	if err := c.SaveUploadedFile(file, dst); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Błąd zapisu pliku", "success": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Plik przesłany pomyślnie", "success": true})
+}
+
+func (gc GlobalController) CreateFolder(c *gin.Context) {
+	var input struct {
+		FolderName string `json:"folder_name"`
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Nieprawidłowe dane", "success": false})
+		return
+	}
+
+	folderPath := c.Param("folder")
+	fullPath := filepath.Join("./static/uploads", folderPath, input.FolderName)
+
+	if _, err := os.Stat(fullPath); !os.IsNotExist(err) {
+		c.JSON(http.StatusConflict, gin.H{"message": "Folder o tej nazwie już istnieje", "success": false})
+		return
+	}
+
+	if err := os.MkdirAll(fullPath, 0755); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Błąd tworzenia folderu", "success": false})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Folder stworzony", "success": true})
+}
+
 func (gc GlobalController) ListFiles(c *gin.Context) {
 	folderPath := c.Param("folder")
 	fullPath := "./static/uploads" + folderPath

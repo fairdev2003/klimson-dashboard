@@ -1,11 +1,16 @@
 import type { AxiosInstance } from 'axios';
 import type { ServerResponse } from '../types';
+import { Api } from '../api';
 
 export type StorageRecord = {
 	name: string;
 	is_dir: boolean;
 	file_size: number;
 	modified: string;
+};
+
+type FolderCreationBody = {
+	folder_name: string;
 };
 
 class Storage {
@@ -37,6 +42,50 @@ class Storage {
 
 		return response;
 	}
+
+	public async CreateFolder(
+		path: string,
+		folder: FolderCreationBody
+	): Promise<ServerResponse<{ message: string; success: boolean }>> {
+		const pathname = path ? path : '';
+
+		const response: ServerResponse<{ message: string; success: boolean }> = await this.api.post(
+			`/admin/storage/interface/create-folder/${pathname}`,
+			folder,
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
+
+		return response;
+	}
+
+	// W pliku, gdzie masz klasę Storage
+	public async UploadFile(
+		path: string,
+		file: File
+	): Promise<ServerResponse<{ message: string; success: boolean }>> {
+		const pathname = path ? path : '';
+
+		// Tworzymy FormData tutaj
+		const formData = new FormData();
+		formData.append('file', file);
+
+		const response: ServerResponse<{ message: string; success: boolean }> = await this.api.post(
+			`/admin/storage/interface/upload-file/${pathname}`,
+			formData,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data', // Axios automatycznie doda boundary
+					Authorization: `Bearer ${Api.token}`
+				}
+			}
+		);
+
+		return response;
+	}
+
+	// /admin/storage/interface/create-folder/*folder
 }
 
 export { Storage };
