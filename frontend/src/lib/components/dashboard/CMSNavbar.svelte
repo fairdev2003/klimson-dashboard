@@ -7,12 +7,13 @@
 	import Icon from '@iconify/svelte';
 	import QuickActionButton from './QuickActionButton.svelte';
 	import { userInfo } from '$lib/dashboard/stores/store';
+	import { sidebar_open } from '$lib/dashboard/stores/persist';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
 		console.log('Attached element:', element.clientHeight);
 
 		return () => {
-			console.log('Detached element:', element);
+			console.log('Detached element:', element.clientHeight);
 		};
 	};
 </script>
@@ -23,15 +24,25 @@
 >
 	<!-- left navbar conten -->
 	<div class="flex items-center">
-		<div class="flex items-center gap-3">
+		<div class="lg:flex hidden items-center">
 			<span class="text-blue-500">
 				<Icon icon="majesticons:lightning-bolt" width="30" height="30" />
 			</span>
 			{@render CMSTextLogo($userInfo.contributor)}
 		</div>
+		<div class="lg:hidden flex items-center min-h-[66px]">
+			<button
+				onclick={() => {
+					$sidebar_open = !$sidebar_open;
+				}}
+				class="text-white"
+			>
+				<Icon icon="material-symbols:menu" width="30" height="30" />
+			</button>
+		</div>
 		<div class="ml-5 flex gap-2">
 			<SearchNavbarBox />
-			<QuickActionButton />
+			<!-- <QuickActionButton /> -->
 		</div>
 	</div>
 	<!-- right navbar content -->

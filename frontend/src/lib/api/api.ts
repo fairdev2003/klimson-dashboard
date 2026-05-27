@@ -16,6 +16,7 @@ import { latest_requests } from '../../routes/dashboard/contributors/vars';
 import { DatabaseClass } from './requests/database';
 import { ContextStorage } from './requests/context_storage';
 import { PG3D } from './requests/pg3d';
+import { Storage } from './requests/storage';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -206,6 +207,10 @@ export class Api extends ApiStatic {
 	public get pg3d() {
 		return new PG3D(this.api);
 	}
+
+	public get storage() {
+		return new Storage(this.api);
+	}
 }
 
 /**
@@ -227,7 +232,7 @@ export class Api extends ApiStatic {
  * });
  * ```
  */
-// const api = new Api({ dev_server: 'https://api.klimson.dev' });
-const api = new Api({ dev_server: 'http://localhost:8090' });
+const api = new Api({ dev_server: 'https://api.klimson.dev' });
+// const api = new Api({ dev_server: 'http://localhost:8090' });
 
 export { api };

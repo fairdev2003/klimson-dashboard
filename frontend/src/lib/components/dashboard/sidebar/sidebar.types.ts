@@ -3,6 +3,7 @@ type SidebarBase = {
 	href: string;
 	name: string;
 	description?: string;
+	disabled: boolean;
 };
 
 export type SidebarItemType = {

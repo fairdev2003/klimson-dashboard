@@ -3,6 +3,7 @@
 	import { route } from '$lib/dashboard/stores/persist';
 	import Icon from '@iconify/svelte';
 	import type { SidebarItemType } from './sidebar.types';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	type Props = { content: SidebarItemType };
 	let { content }: Props = $props();
@@ -15,10 +16,15 @@
 {#if content.child}{:else}
 	<div
 		onclick={() => {
+			if (content.disabled) {
+				return;
+			}
+
 			goto(content.href);
 		}}
 		class:normal={!statement}
 		class:selected={statement}
+		class:disabled={content.disabled}
 		class="flex items-center px-3 cursor-pointer transition-colors border-x border-b h-10 gap-3"
 	>
 		{#if content.icon}
@@ -43,5 +49,13 @@
 
 	.normal {
 		@apply bg-neutral-800 hover:bg-neutral-700 border-neutral-700 text-neutral-500;
+	}
+
+	.disabled {
+		@apply opacity-50 hover:bg-neutral-800 hover:cursor-not-allowed;
+	}
+
+	.disabled:hover {
+		background-color: none !important;
 	}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { contextMenuOptions, summary_open } from '$lib/dashboard/stores/store';
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import Summary from './summary/Summary.svelte';
 	import SidebarContent from './SidebarContent.svelte';
 	import { sidebar_open } from '$lib/dashboard/stores/persist';
@@ -18,10 +18,10 @@
 	let showMenu: boolean = $state(false);
 	let currentTarget: HTMLDivElement | null = $state(null);
 
-	function handleRightClick(e) {
+	function handleRightClick(e: MouseEvent) {
 		e.preventDefault();
 		menuPos = { x: e.clientX, y: e.clientY };
-		showMenu = true;
+		// showMenu = true;
 	}
 
 	let { children }: Props = $props();
@@ -33,9 +33,16 @@
 	class="relative mt-[65px] flex min-h-[calc(100vh-66px)] bg-neutral-950 text-white"
 >
 	<div
-		style:width={$sidebar_open ? '300px' : '72px'}
-		class="shrink-0 self-stretch bg-neutral-800/60 transition-all duration-300"
+		class:hidden={!$sidebar_open}
+		class="shrink-0 self-stretch w-75 bg-neutral-900 border-t border-neutral-700 z-50
+           
+           /* 1. Domyślnie na małych ekranach: */
+           absolute inset-y-0 left-0 h-full
+           
+           /* 2. Na dużych ekranach (lg+): */
+           lg:static lg:flex lg:flex-col"
 	>
+		<!-- style:width={$sidebar_open ? '300px' : '0px'} -->
 		<Sidebar />
 	</div>
 

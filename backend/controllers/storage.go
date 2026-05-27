@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,13 +41,14 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 }
 
 type ListRecord struct {
-	Name  string `json:"name"`
-	IsDir bool   `json:"is_dir"`
+	Name         string    `json:"name"`
+	IsDir        bool      `json:"is_dir"`
+	ModifiedTime time.Time `json:"modified"`
+	Size         int64     `json:"file_size"`
 }
 
 func (gc GlobalController) ListFiles(c *gin.Context) {
 	folderPath := c.Param("folder")
-
 	fullPath := "./static/uploads" + folderPath
 
 	entries, err := os.ReadDir(fullPath)
@@ -57,10 +59,17 @@ func (gc GlobalController) ListFiles(c *gin.Context) {
 
 	var fileList []ListRecord
 	for _, entry := range entries {
+		// Pobieramy pełne informacje o pliku
+		info, err := entry.Info()
+		if err != nil {
+			continue // Jeśli nie da się pobrać info, pomijamy ten plik
+		}
 
 		fileList = append(fileList, ListRecord{
-			Name:  entry.Name(),
-			IsDir: entry.IsDir(),
+			Name:         entry.Name(),
+			IsDir:        entry.IsDir(),
+			ModifiedTime: info.ModTime(),
+			Size:         info.Size(),
 		})
 	}
 

@@ -22,11 +22,13 @@
 	const blacklistedKeys = ['deleted_at', 'password', 'updated_at'];
 
 	let filteredData = $derived(
-		data.filter((row) => {
-			const isDeleted =
-				row.deleted_at !== null && row.deleted_at !== undefined && row.deleted_at !== '';
-			return !isDeleted;
-		})
+		data
+			? data.filter((row) => {
+					const isDeleted =
+						row.deleted_at !== null && row.deleted_at !== undefined && row.deleted_at !== '';
+					return !isDeleted;
+				})
+			: []
 	);
 
 	onMount(() => {

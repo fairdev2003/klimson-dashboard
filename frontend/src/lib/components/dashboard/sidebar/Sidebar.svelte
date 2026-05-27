@@ -39,11 +39,12 @@
 	});
 
 	const contents: SidebarItems = [
-		{ icon: 'material-symbols:home', href: '/dashboard', name: 'Main Page' },
+		{ icon: 'material-symbols:home', href: '/dashboard', name: 'Main Page', disabled: false },
 		{
 			icon: 'material-symbols:database',
 			href: '/dashboard/database',
-			name: 'Database Editor'
+			name: 'Database Editor',
+			disabled: false
 
 			// child: [
 			// 	{
@@ -55,22 +56,32 @@
 		{
 			icon: 'mdi:bucket',
 			href: '/dashboard/context_storage',
-			name: 'Context Storage'
+			name: 'Context Storage',
+			disabled: false
 		},
 		{
 			icon: 'mdi:spotify',
 			href: '/dashboard/spotify',
-			name: 'Spotify'
+			name: 'Spotify',
+			disabled: false
 		},
 		{
 			icon: 'mdi:image',
 			href: '/dashboard/images',
-			name: 'Image Explorer'
+			name: 'Image Explorer',
+			disabled: false
+		},
+		{
+			icon: 'mdi:files',
+			href: '/dashboard/storage',
+			name: 'File Storage',
+			disabled: false
 		},
 		{
 			icon: 'mdi:link',
 			href: '/dashboard/routes',
-			name: 'API Routes'
+			name: 'API Routes',
+			disabled: true
 		}
 	];
 </script>

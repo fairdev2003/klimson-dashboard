@@ -27,13 +27,6 @@
 	import ProdWidget from './widgets/ProdWidget.svelte';
 	// s
 
-	let data: ServerResponse<Quiz[]> = $state([] as any);
-
-	onMount(async () => {
-		const response = await api.quiz.GetAll();
-		data = response;
-	});
-
 	function tooltip(content: string): Attachment {
 		return (element) => {
 			const tooltip = tippy(element, { content });

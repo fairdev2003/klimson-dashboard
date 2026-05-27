@@ -1,5 +1,18 @@
 package models
 
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
+type BaseModel struct {
+	ID        uint           `json:"id" gorm:"primaryKey"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+}
+
 type MigrationType struct {
 	Model any
 	Name  string
@@ -7,14 +20,8 @@ type MigrationType struct {
 }
 
 var MigratableModels = []MigrationType{
-	// {Model: &Quiz{}, Name: "Quizzes", Icon: "lucide:help-circle"},
-	// {Model: &Question{}, Name: "Questions", Icon: "lucide:file-question"},
-	// {Model: &Answer{}, Name: "Answers", Icon: "lucide:message-square-text"},
-	// {Model: &Blog{}, Name: "Blogs", Icon: "lucide:book-open-text"},
-	// {Model: &Hero{}, Name: "Heroes", Icon: "lucide:shield"},
-	// {Model: &Stat{}, Name: "Statistics", Icon: "lucide:bar-chart-3"},
-	// {Model: &Contributor{}, Name: "Contributors", Icon: "lucide:users-2"},
-	// {Model: &Log{}, Name: "Logs", Icon: "lucide:terminal"},
-	// {Model: &Role{}, Name: "Roles", Icon: "lucide:key-round"},
+	{Model: &User{}, Name: "Users", Icon: "mdi:user"},
+	{Model: &Permission{}, Name: "Permissions", Icon: "material-symbols:key-rounded"},
+	{Model: &Role{}, Name: "Role", Icon: "mingcute:hat-fill"},
 	{Model: &ContextStorage{}, Name: "Context Storage", Icon: "material-symbols:contextual-token"},
 }
