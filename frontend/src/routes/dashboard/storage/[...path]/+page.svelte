@@ -127,7 +127,9 @@
 
 {#snippet StorageHeader()}
 	<input type="file" class="hidden" bind:this={fileInput} onchange={UploadFile} />
-	<div class="p-4 bg-neutral-900 border border-neutral-700 flex justify-between items-center">
+	<div
+		class="p-4 bg-neutral-900 border border-neutral-700 lg:flex-row flex flex-col gap-4 justify-between lg:items-center"
+	>
 		<div class="flex flex-col gap-2">
 			<button
 				onclick={() => {
