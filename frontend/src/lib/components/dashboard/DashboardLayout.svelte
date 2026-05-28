@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { contextMenuOptions, summary_open } from '$lib/dashboard/stores/store';
-	import { onMount, type Snippet } from 'svelte';
-	import Summary from './summary/Summary.svelte';
-	import SidebarContent from './SidebarContent.svelte';
+	import { contextMenuOptions } from '$lib/dashboard/stores/store';
+	import { type Snippet } from 'svelte';
 	import { sidebar_open } from '$lib/dashboard/stores/persist';
-	import { fade, fly, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import ContextMenu from './ContextMenu.svelte';
-	import { toast } from '$lib/dashboard/stores/toast';
-	import { api } from '$lib/api/api';
+
 	import Sidebar from './sidebar/Sidebar.svelte';
 
 	type Props = {
@@ -58,8 +55,6 @@
 		</div>
 	</div>
 
-	{@render SummarySidebarMobile()}
-
 	{#if showMenu}
 		<ContextMenu
 			{...menuPos}
@@ -69,22 +64,3 @@
 		/>
 	{/if}
 </div>
-
-{#snippet SummarySidebarMobile()}
-	<!-- MOBILE SIDEBAR -->
-	<div
-		class="fixed top-0 right-0 z-50 h-full border-l border-neutral-700/60 bg-neutral-900 transition-all duration-300 ease-in-out lg:hidden"
-		class:lg:w-[450px]={$summary_open}
-		class:w-full={$summary_open}
-		class:w-[0px]={!$summary_open}
-	>
-		<!-- Toggle Button -->
-
-		<!-- Sidebar content -->
-		<div class="h-full overflow-y-auto p-4">
-			{#if $summary_open}
-				<Summary />
-			{/if}
-		</div>
-	</div>
-{/snippet}

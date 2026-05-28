@@ -1,18 +1,7 @@
 import { dev } from '$app/environment';
 import axios, { type AxiosInstance } from 'axios';
 import type { ApiClassParams, ApiConfig } from './types';
-import { QuizApi } from './requests/quiz';
-import { ImageApi } from './requests/image';
-import { AnswerApi } from './requests/answers';
 import { Misc } from './requests/misc';
-import { Question } from './requests/question';
-import { Blog } from './requests/blog';
-import { Hero } from './requests/hero';
-import { Stats } from './requests/stats';
-import { Cntrb } from './requests/contributor';
-import { toast } from '$lib/dashboard/stores/toast';
-import { debug } from '$lib/dashboard/stores/debug';
-import { latest_requests } from '../../routes/dashboard/contributors/vars';
 import { DatabaseClass } from './requests/database';
 import { ContextStorage } from './requests/context_storage';
 import { PG3D } from './requests/pg3d';
@@ -127,20 +116,6 @@ export class Api extends ApiStatic {
 			(config as any).metadata = { startTime: new Date() };
 			return config;
 		});
-
-		this.api.interceptors.response.use((response) => {
-			const endTime = new Date();
-			const startTime = (response.config as any).metadata.startTime;
-			const duration = endTime.getTime() - startTime.getTime();
-			const url = response.config.url || 'unknown';
-			latest_requests.update((state) => ({
-				...state,
-				[url]: `${duration}ms`
-			}));
-
-			(response as any).duration = duration;
-			return response;
-		});
 	}
 
 	/**
@@ -151,9 +126,7 @@ export class Api extends ApiStatic {
 	 * const quiz = await api.quiz.getQuiz({id: 1});
 	 * ```
 	 */
-	public get quiz() {
-		return new QuizApi(this.api);
-	}
+
 	/**
 	 * Zwraca interfejs do endpointów `image`.
 	 *
@@ -165,35 +138,9 @@ export class Api extends ApiStatic {
 	 * const response = await api.image.SendImage("quiz", formData);
 	 * ```
 	 */
-	public get image() {
-		return new ImageApi(this.api, this.api_config);
-	}
-	public get answer() {
-		return new AnswerApi(this.api);
-	}
 
 	public get misc() {
 		return new Misc(this.api);
-	}
-
-	public get question() {
-		return new Question(this.api);
-	}
-
-	public get blog() {
-		return new Blog(this.api);
-	}
-
-	public get hero() {
-		return new Hero(this.api);
-	}
-
-	public get stats() {
-		return new Stats(this.api);
-	}
-
-	public get contributor() {
-		return new Cntrb(this.api);
 	}
 
 	public get database() {

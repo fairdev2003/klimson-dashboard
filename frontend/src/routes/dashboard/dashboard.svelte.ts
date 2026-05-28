@@ -2,14 +2,7 @@ import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
 import {
 	dashboardLoadState,
-	quizzes,
-	questions,
 	routes,
-	blogs,
-	heros,
-	contributors,
-	permissionList,
-	requestTimes,
 	updateResponseTime,
 	dashboardLoaded
 } from '$lib/dashboard/stores/data.store';

@@ -47,5 +47,3 @@ export const animation_preset = persistedWritable<AnimationPresetType>('animatio
 
 export const accounts = persistedWritable<JWT[]>('accounts', []);
 export const route = persistedWritable<string>('route', '/dashboard');
-
-

@@ -1,5 +1,4 @@
 import type { AxiosResponse } from 'axios';
-import type { Quiz } from '../../routes/dashboard/quizzes/types';
 
 /**
  * Typ konfiguracji inicjalizacyjnej klasy `Api`.

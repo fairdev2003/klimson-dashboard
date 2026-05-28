@@ -1,10 +1,4 @@
 <script lang="ts">
-	import {
-		addChildToQuizzes,
-		addFormQuiz,
-		sidebar_content,
-		sidebar_menu_static
-	} from '$lib/dashboard/stores/store';
 	import Icon from '@iconify/svelte';
 	import MovingTooltip from '../MovingTooltip.svelte';
 	import { slide } from 'svelte/transition';
@@ -16,17 +10,6 @@
 	import SidebarItem from './SidebarItem.svelte';
 
 	let content_show: boolean = $state(true);
-
-	$effect(() => {
-		addChildToQuizzes(
-			`Aktywny formularz`,
-			'/dashboard/quizzes/update',
-			'Formularz twojego quizu',
-			() => {
-				// siurek
-			}
-		);
-	});
 
 	type SContent = {
 		icon: string;
