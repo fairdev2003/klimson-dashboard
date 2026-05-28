@@ -48,7 +48,7 @@
 >
 	<div class="flex flex-col items-center gap-2">
 		<h1 class="text-2xl font-bold tracking-tight">Witaj ponownie</h1>
-		<p class="text-sm text-neutral-400">Zaloguj się do panelu HarcQuiz</p>
+		<p class="text-sm text-neutral-400">Zaloguj się do DOJEBANEGO panelu</p>
 	</div>
 
 	<div class="mt-5 w-full space-y-4">
