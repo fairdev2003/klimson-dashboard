@@ -108,6 +108,30 @@ func (gc GlobalController) DeleteFileOrFolder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Usunięto pomyślnie"})
 }
 
+func (gc GlobalController) RenameItem(c *gin.Context) {
+	oldPath := c.Param("folder")
+	var req struct {
+		NewName string `json:"newName"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Błędne dane"})
+		return
+	}
+
+	oldFullPath := filepath.Join("./static/uploads", oldPath)
+
+	dir := filepath.Dir(oldFullPath)
+	newFullPath := filepath.Join(dir, req.NewName)
+
+	err := os.Rename(oldFullPath, newFullPath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Nie udało się zmienić nazwy"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Nazwa zmieniona"})
+}
+
 func (gc GlobalController) ListFiles(c *gin.Context) {
 	folderPath := c.Param("folder")
 	fullPath := "./static/uploads" + folderPath

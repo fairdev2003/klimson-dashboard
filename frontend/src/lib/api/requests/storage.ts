@@ -97,7 +97,17 @@ class Storage {
 		return response;
 	}
 
-	// /admin/storage/interface/create-folder/*folder
+	public async RenameItem(
+		path: string,
+		newName: string
+	): Promise<ServerResponse<{ success: boolean }>> {
+		const response: ServerResponse<{ success: boolean }> = await this.api.post(
+			`/admin/storage/interface/rename/${path}`,
+			{ newName },
+			{ headers: { Authorization: `Bearer ${Api.token}` } }
+		);
+		return response;
+	}
 }
 
 export { Storage };

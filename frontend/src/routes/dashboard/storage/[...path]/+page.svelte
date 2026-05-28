@@ -117,19 +117,48 @@
 	}
 
 	async function DeleteFileOrFolder(name: string, isDir: boolean) {
-		if (!confirm(`Czy na pewno chcesz usunąć ${name}?`)) return;
+		let confirmDelete = false;
+
+		if (isDir) {
+			// Dodatkowe potwierdzenie dla folderu
+			const input = prompt(
+				`To jest folder. Czy na pewno chcesz usunąć "${name}" wraz z całą zawartością? Wpisz nazwę folderu, aby potwierdzić:`
+			);
+			confirmDelete = input === name;
+		} else {
+			confirmDelete = confirm(`Czy na pewno chcesz usunąć plik "${name}"?`);
+		}
+
+		if (!confirmDelete) return;
 
 		try {
 			const pathToDelete = `${params.path || ''}/${name}`.replace(/\/+/g, '/');
 			const res = await api.storage.DeleteItem(pathToDelete);
 
 			if (res.data.success) {
-				toast.success('Usunięto!');
+				toast.success('Usunięto pomyślnie!');
 				await invalidateAll();
 			}
 		} catch (e) {
 			toast.error('Błąd podczas usuwania');
 			console.error(e);
+		}
+	}
+
+	async function RenameFileOrFolder(name: string) {
+		const newName = prompt('Podaj nową nazwę:', name);
+		if (!newName || newName === name) return;
+
+		try {
+			const path = `${params.path || ''}/${name}`.replace(/\/+/g, '/');
+			const res = await api.storage.RenameItem(path, newName);
+
+			if (res.data.success) {
+				toast.success('Zmieniono nazwę!');
+				await invalidateAll();
+			}
+		} catch (e) {
+			toast.error('Błąd podczas zmiany nazwy');
 		}
 	}
 </script>
@@ -174,7 +203,14 @@
 		>
 			Otwórz
 		</button>
-		<button class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button>
+		<button
+			onclick={async () => {
+				if (!selectedItem) return;
+
+				await RenameFileOrFolder(selectedItem.name);
+			}}
+			class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button
+		>
 		<button
 			onclick={async () => {
 				if (!selectedItem) return;
