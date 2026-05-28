@@ -90,6 +90,24 @@ func (gc GlobalController) CreateFolder(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Folder stworzony", "success": true})
 }
 
+func (gc GlobalController) DeleteFileOrFolder(c *gin.Context) {
+	targetPath := c.Param("folder")
+	fullPath := filepath.Join("./static/uploads", targetPath)
+
+	if !strings.HasPrefix(fullPath, filepath.Clean("./static/uploads")) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Błędna ścieżka"})
+		return
+	}
+
+	err := os.RemoveAll(fullPath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Nie udało się usunąć"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Usunięto pomyślnie"})
+}
+
 func (gc GlobalController) ListFiles(c *gin.Context) {
 	folderPath := c.Param("folder")
 	fullPath := "./static/uploads" + folderPath

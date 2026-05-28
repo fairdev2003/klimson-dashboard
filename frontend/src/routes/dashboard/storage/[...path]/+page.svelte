@@ -10,6 +10,7 @@
 	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
 	import { api } from '$lib/api/api';
 	import { toast } from '$lib/dashboard/stores/toast';
+	import { onMount } from 'svelte';
 
 	let { data, params } = $props();
 
@@ -47,6 +48,7 @@
 			const response = await api.storage.UploadFile(params.path || '', file);
 
 			if (response.data.success) {
+				toast.success('Success!');
 				await invalidateAll();
 			}
 		} catch (e) {
@@ -54,6 +56,25 @@
 		} finally {
 			uploading = false;
 			target.value = '';
+		}
+	}
+
+	async function UploadPastedFile(file: File) {
+		uploading = true;
+		try {
+			const response = await api.storage.UploadFile(params.path || '', file);
+
+			if (response.data.success) {
+				toast.success('Plik wklejony pomyślnie!');
+				await invalidateAll();
+			} else {
+				toast.error('Błąd: ' + response.data.message);
+			}
+		} catch (e) {
+			console.error('Błąd wklejania pliku:', e);
+			toast.error('Nie udało się wgrać wklejonego pliku.');
+		} finally {
+			uploading = false;
 		}
 	}
 
@@ -78,6 +99,39 @@
 			toast.error('Nie udało się stworzyć folderu: ' + errorMessage);
 		}
 	}
+	function HandlePaste(event: ClipboardEvent) {
+		const items = event.clipboardData?.items;
+		if (!items) return;
+
+		const itemList = Array.from(items);
+
+		for (const item of itemList) {
+			if (item.kind === 'file') {
+				const file = item.getAsFile();
+				if (file) {
+					event.preventDefault();
+					UploadPastedFile(file);
+				}
+			}
+		}
+	}
+
+	async function DeleteFileOrFolder(name: string, isDir: boolean) {
+		if (!confirm(`Czy na pewno chcesz usunąć ${name}?`)) return;
+
+		try {
+			const pathToDelete = `${params.path || ''}/${name}`.replace(/\/+/g, '/');
+			const res = await api.storage.DeleteItem(pathToDelete);
+
+			if (res.data.success) {
+				toast.success('Usunięto!');
+				await invalidateAll();
+			}
+		} catch (e) {
+			toast.error('Błąd podczas usuwania');
+			console.error(e);
+		}
+	}
 </script>
 
 <div class="flex flex-col gap-4">
@@ -89,7 +143,7 @@
 				{is_dir}
 				{name}
 				slug={params.path}
-				onclick={() => {
+				onclick={(e) => {
 					if (is_dir) {
 						const currentPath = page.url.pathname.replace(/\/$/, '');
 						goto(`${currentPath}/${name}`);
@@ -100,7 +154,7 @@
 	</div>
 </div>
 
-{#if menuVisible}
+{#if menuVisible && selectedItem}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 
 	<div
@@ -121,7 +175,14 @@
 			Otwórz
 		</button>
 		<button class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button>
-		<button class="block w-full text-left p-2 hover:bg-neutral-700 text-red-400">Usuń</button>
+		<button
+			onclick={async () => {
+				if (!selectedItem) return;
+
+				await DeleteFileOrFolder(selectedItem.name, selectedItem.is_dir);
+			}}
+			class="block w-full text-left p-2 hover:bg-neutral-700 text-red-400">Usuń</button
+		>
 	</div>
 {/if}
 
@@ -194,3 +255,5 @@
 		</div>
 	</div>
 </Modal>
+
+<svelte:window onpaste={HandlePaste} />

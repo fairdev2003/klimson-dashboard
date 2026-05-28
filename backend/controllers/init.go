@@ -38,6 +38,7 @@ func (controller GlobalController) RegisterRoutes() {
 	// protected file storage
 	controller.adminPath.POST("/storage/interface/create-folder/*folder", controller.CreateFolder)
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
+	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 
 	// context storage crud operations
 	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)

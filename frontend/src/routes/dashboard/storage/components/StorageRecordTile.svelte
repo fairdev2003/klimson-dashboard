@@ -5,19 +5,19 @@
 	import Icon from '@iconify/svelte';
 
 	type Props = {
-		onclick: () => void;
+		onclick: (e: MouseEvent) => void;
 		name: string;
 		is_dir: boolean;
 		slug: string;
-		onrightclick: (e: MouseEvent) => void; // Nowy prop
+		onrightclick: (e: MouseEvent) => void;
 	};
 
 	let { onclick, name, is_dir, slug, onrightclick }: Props = $props();
 </script>
 
 <button
-	onclick={() => {
-		onclick();
+	onclick={(e) => {
+		onclick(e);
 		if (!is_dir) {
 			goto(`/dashboard/file/${slug}/${name}`);
 		}

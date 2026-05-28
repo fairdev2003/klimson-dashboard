@@ -85,6 +85,18 @@ class Storage {
 		return response;
 	}
 
+	public async DeleteItem(
+		path: string
+	): Promise<ServerResponse<{ success: boolean; message: string }>> {
+		const response: ServerResponse<{ success: boolean; message: string }> = await this.api.delete(
+			`/admin/storage/interface/delete/${path}`,
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
+		return response;
+	}
+
 	// /admin/storage/interface/create-folder/*folder
 }
 
