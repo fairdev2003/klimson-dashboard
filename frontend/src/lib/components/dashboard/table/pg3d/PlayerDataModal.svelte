@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte';
-	import type { PlayerData, PlayerInfo } from '../../../../../routes/dashboard/pg3d/pg3d.types';
-	import ProdWidget from '../../../../../routes/dashboard/widgets/ProdWidget.svelte';
+	import type { PlayerInfo } from '../../../../../routes/pg3d/pg3d.types';
 	import Loader from '../../Loader.svelte';
 	import Heading from '../../typography/Heading.svelte';
 
