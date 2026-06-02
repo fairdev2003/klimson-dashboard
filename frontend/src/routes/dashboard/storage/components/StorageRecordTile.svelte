@@ -30,7 +30,7 @@
 
 		onclick(e);
 
-		if (!is_dir) {
+		if (!is_dir && !storage_logic.delete_multiple_enabled) {
 			goto(`/dashboard/file/${slug}/${name}`);
 		}
 	}}

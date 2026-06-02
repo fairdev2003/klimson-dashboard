@@ -103,16 +103,18 @@
 	}
 	function HandlePaste(event: ClipboardEvent) {
 		const items = event.clipboardData?.items;
+		const files = Array.from(items).filter((i) => i.kind === 'file');
 		if (!items) return;
 
 		const itemList = Array.from(items);
 
 		for (const item of itemList) {
 			if (item.kind === 'file') {
-				const file = item.getAsFile();
+				const file = files[files.length - 1]?.getAsFile();
 				if (file) {
 					event.preventDefault();
 					UploadPastedFile(file);
+					break;
 				}
 			}
 		}
@@ -158,9 +160,11 @@
 			if (res.data.success) {
 				toast.success('Zmieniono nazwę!');
 				await invalidateAll();
+				return res.data.success;
 			}
 		} catch (e) {
 			toast.error('Błąd podczas zmiany nazwy');
+			return false;
 		}
 	}
 </script>
@@ -174,8 +178,13 @@
 				{is_dir}
 				{name}
 				slug={params.path}
-				onclick={(e) => {
-					if (is_dir) {
+				onclick={async (e) => {
+					let success: boolean | undefined = false;
+					if (storage_logic.edit_enabled) {
+						success = await RenameFileOrFolder(name);
+					}
+
+					if (is_dir && !success) {
 						const currentPath = page.url.pathname.replace(/\/$/, '');
 						goto(`${currentPath}/${name}`);
 					}
@@ -288,11 +297,16 @@
 					class="z-10"
 				>
 					{#if additionalOptionsOpened}
-						<div class="p-4" in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+						<div
+							class="p-4 flex flex-col gap-2"
+							in:slide={{ duration: 300 }}
+							out:slide={{ duration: 300 }}
+						>
 							<HarcCheckBox
 								bind:checked={storage_logic.delete_multiple_enabled}
 								label="Delete Mode"
 							/>
+							<HarcCheckBox bind:checked={storage_logic.edit_enabled} label="Edit Mode" />
 						</div>
 					{/if}
 				</div>
@@ -333,3 +347,6 @@
 </Modal>
 
 <svelte:window onpaste={HandlePaste} />
+
+<style>
+</style>
