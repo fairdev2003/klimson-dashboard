@@ -5,7 +5,7 @@ class Storage {
 		console.log(typeof arg);
 	}
 
-	public delete_multiple_enabled: boolean = $state(true);
+	public delete_multiple_enabled: boolean = $state(false);
 	public edit_enabled: boolean = $state(false); // for mobile
 }
 

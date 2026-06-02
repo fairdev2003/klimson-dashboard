@@ -8,6 +8,8 @@
 	import { route } from '$lib/dashboard/stores/persist';
 	import type { SidebarItems } from './sidebar.types';
 	import SidebarItem from './SidebarItem.svelte';
+	import { sidebar_open } from '$lib/dashboard/stores/store';
+	import { get } from 'svelte/store';
 
 	let content_show: boolean = $state(true);
 
@@ -77,7 +79,7 @@
 	];
 </script>
 
-<div class="sticky top-16.25 h-screen overflow-hidden flex flex-col m-5">
+<div class="sticky left-0 top-16.25 h-screen z-500 overflow-hidden flex flex-col m-5">
 	<SidebarUserLogged
 		name="cwel"
 		role="$root"

@@ -39,7 +39,6 @@
            /* 2. Na dużych ekranach (lg+): */
            lg:static lg:flex lg:flex-col"
 	>
-		<!-- style:width={$sidebar_open ? '300px' : '0px'} -->
 		<Sidebar />
 	</div>
 

@@ -186,7 +186,7 @@
 		<div class="absolute inset-0 bg-black/50 rounded-3xl -z-20"></div>
 
 		<svg
-			class="absolute inset-0 size-full pointer-events-none overflow-visible z-20"
+			class="absolute inset-0 size-full pointer-events-none overflow-visible z-5"
 			width="100%"
 			height="100%"
 		>
@@ -214,10 +214,10 @@
 
 		<div
 			bind:this={flashBorderEl}
-			class="absolute inset-0 z-30 rounded-3xl border-2 border-green-500 opacity-0 pointer-events-none [box-shadow:0_0_20px_rgba(34,197,94,0.5)]"
+			class="absolute inset-0 z-6 rounded-3xl border-2 border-green-500 opacity-0 pointer-events-none [box-shadow:0_0_20px_rgba(34,197,94,0.5)]"
 		></div>
 
-		<div class="relative w-full flex flex-col gap-0.5 z-10">
+		<div class="relative w-full flex flex-col gap-0.5 z-9">
 			<div class="m-5 my-7 flex flex-col">
 				<div class="mb-4 flex justify-between items-center">
 					<span class="text-green-500 size-6">
