@@ -16,7 +16,7 @@
 		}
 	});
 
-	let svgPathEl = $state<SVGInterfaceElement | null>(null);
+	let svgPathEl = $state<HTMLOrSVGElement | null>(null);
 	let flashBorderEl = $state<HTMLDivElement | null>(null);
 
 	let currentTrackId = $state<string | null>(null);
@@ -170,6 +170,8 @@
 	<p class="my-3 mt-6 text-green-500">▶ Słucham teraz Spotify.</p>
 	{@const album_cover = spotifyApp.spotify.item?.album.images[0].url}
 
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		onclick={() => {
 			openModal();
@@ -256,6 +258,8 @@
 {/snippet}
 
 {#snippet Modal()}
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		onclick={() => closeModal()}
 		class={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-neutral-950/90 backdrop-blur-md ${responsiveState === 'mobile' && 'pb-10'}`}
@@ -277,6 +281,7 @@
 				<div class="relative flex w-full flex-col">
 					{#if spotifyApp.getSong()}{/if}
 					{#if spotifyApp.getSong()}
+						<!-- svelte-ignore a11y_missing_attribute -->
 						<a class="flex cursor-pointer items-center gap-1 font-bold">
 							{spotifyApp.getSong()}
 						</a>
