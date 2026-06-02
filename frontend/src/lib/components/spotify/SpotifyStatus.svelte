@@ -174,7 +174,7 @@
 		onclick={() => {
 			openModal();
 		}}
-		class="relative mx-auto mb-3 flex cursor-pointer items-center gap-2 overflow-visible rounded-3xl object-center transition-all select-none hover:bg-neutral-700/70 active:bg-neutral-700/70 md:w-3/4 lg:w-150"
+		class="relative mx-auto mb-3 flex cursor-pointer items-center gap-2 overflow-visible rounded-3xl object-center transition-all select-none hover:bg-neutral-700/70 active:bg-neutral-700/70 w-9/10 md-7/10 lg:w-150"
 	>
 		<img
 			class="absolute inset-0 h-full w-full object-cover rounded-3xl z-2"
@@ -265,7 +265,7 @@
 				e.stopPropagation();
 			}}
 			bind:this={modalEl}
-			class="white w-11/12 border border-neutral-700/60 bg-neutral-800/60 bg-gradient-to-r shadow-2xl backdrop-blur-3xl sm:w-3/4 md:w-1/2 lg:w-1/3"
+			class="white w-11/12 border border-neutral-700/60 bg-neutral-800/60 bg-gradient-to-r shadow-2xl backdrop-blur-3xl w-full"
 		>
 			<div
 				bind:this={modalContentEl}

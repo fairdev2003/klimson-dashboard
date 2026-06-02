@@ -11,6 +11,7 @@
 	import { toast } from '$lib/dashboard/stores/toast';
 	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
 	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
+	import { slide } from 'svelte/transition';
 
 	let { data, params } = $props();
 
@@ -32,6 +33,7 @@
 	let fileInput: HTMLInputElement;
 	let files: FileList | null = $state(null);
 	let uploading = $state(false);
+	let additionalOptionsOpened = $state(false);
 
 	function navigateToDir(pathParts: string[], clickedIndex: number): string {
 		return `/dashboard/storage/${pathParts.slice(0, clickedIndex + 1).join('/')}`;
@@ -261,8 +263,39 @@
 					{/each}
 				{/if}
 			</div>
-			<div class="mt-2">
-				<HarcCheckBox bind:checked={storage_logic.delete_multiple_enabled} label="Delete Mode" />
+
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				onclick={() => {
+					additionalOptionsOpened = !additionalOptionsOpened;
+				}}
+				class="mt-2 active:bg-neutral-700 transition-colors duration-150 flex flex-col gap-2 bg-neutral-800/70 border-neutral-700 border p-3 rounded-lg w-65"
+			>
+				<div class="flex gap-1">
+					<div
+						class="cursor-pointer flex items-center justify-center transition-transform duration-300 ease-in-out origin-center"
+						class:rotate-180={additionalOptionsOpened}
+					>
+						<Icon icon="fe:arrow-up" width="20" height="20" />
+					</div>
+					<p class="text-sm text-neutral-200">Options</p>
+				</div>
+				<div
+					onclick={(e) => {
+						e.stopPropagation();
+					}}
+					class="z-10"
+				>
+					{#if additionalOptionsOpened}
+						<div class="p-4" in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+							<HarcCheckBox
+								bind:checked={storage_logic.delete_multiple_enabled}
+								label="Delete Mode"
+							/>
+						</div>
+					{/if}
+				</div>
 			</div>
 		</div>
 		<div class="flex gap-3">
