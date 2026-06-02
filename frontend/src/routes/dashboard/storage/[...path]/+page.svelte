@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import type { PageData } from './$types';
 	import { page } from '$app/state';
 	import { goto, invalidateAll } from '$app/navigation';
 	import StorageRecordTile from '../components/StorageRecordTile.svelte';
@@ -10,7 +9,8 @@
 	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
 	import { api } from '$lib/api/api';
 	import { toast } from '$lib/dashboard/stores/toast';
-	import { onMount } from 'svelte';
+	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
+	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
 
 	let { data, params } = $props();
 
@@ -184,41 +184,45 @@
 </div>
 
 {#if menuVisible && selectedItem}
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-
 	<div
-		style="position: fixed; top: {menuY}px; left: {menuX}px;"
-		class="bg-neutral-800 border border-neutral-700 shadow-xl rounded-lg p-2 z-50 w-40"
 		onmouseleave={() => (menuVisible = false)}
+		style="position: fixed; top: {menuY}px; left: {menuX}px;"
 	>
-		<p class="text-xs">{selectedItem?.name}</p>
-		<button
-			class="block w-full text-left p-2 hover:bg-neutral-700"
-			onclick={() => {
-				if (selectedItem?.is_dir) {
-					goto(`/dashboard/storage/${params.path ? params.path + '/' : ''}${selectedItem.name}`);
-				}
-				menuVisible = false;
-			}}
-		>
-			Otwórz
-		</button>
-		<button
-			onclick={async () => {
-				if (!selectedItem) return;
+		<div
+			class="size-50 bg-red-500 absolute bottom-1/2 right-1/2 translate-[50%] -z-4 mx-auto"
+		></div>
 
-				await RenameFileOrFolder(selectedItem.name);
-			}}
-			class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button
-		>
-		<button
-			onclick={async () => {
-				if (!selectedItem) return;
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="bg-neutral-800 border border-neutral-700 shadow-xl rounded-lg p-2 z-50 w-40">
+			<p class="text-xs">{selectedItem?.name}</p>
+			<button
+				class="block w-full text-left p-2 hover:bg-neutral-700"
+				onclick={() => {
+					if (selectedItem?.is_dir) {
+						goto(`/dashboard/storage/${params.path ? params.path + '/' : ''}${selectedItem.name}`);
+					}
+					menuVisible = false;
+				}}
+			>
+				Otwórz
+			</button>
+			<button
+				onclick={async () => {
+					if (!selectedItem) return;
 
-				await DeleteFileOrFolder(selectedItem.name, selectedItem.is_dir);
-			}}
-			class="block w-full text-left p-2 hover:bg-neutral-700 text-red-400">Usuń</button
-		>
+					await RenameFileOrFolder(selectedItem.name);
+				}}
+				class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button
+			>
+			<button
+				onclick={async () => {
+					if (!selectedItem) return;
+
+					await DeleteFileOrFolder(selectedItem.name, selectedItem.is_dir);
+				}}
+				class="block w-full text-left p-2 hover:bg-neutral-700 text-red-400">Usuń</button
+			>
+		</div>
 	</div>
 {/if}
 
@@ -256,6 +260,9 @@
 						</a>
 					{/each}
 				{/if}
+			</div>
+			<div class="mt-2">
+				<HarcCheckBox bind:checked={storage_logic.delete_multiple_enabled} label="Delete Mode" />
 			</div>
 		</div>
 		<div class="flex gap-3">

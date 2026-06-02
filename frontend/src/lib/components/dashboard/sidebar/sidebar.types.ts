@@ -2,6 +2,7 @@ type SidebarBase = {
 	icon?: string;
 	href: string;
 	name: string;
+	tooltip?: string;
 	description?: string;
 	disabled: boolean;
 };

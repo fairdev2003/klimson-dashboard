@@ -5,13 +5,10 @@
 
 	let { params } = $props();
 
-	// Używamy .filter(Boolean), żeby pozbyć się pustych elementów po splicie
 	let path_table = params.path.split('/').filter(Boolean);
 	let file_name = path_table[path_table.length - 1];
 
-	// Funkcja kodująca całą ścieżkę
 	function getFileUrl(path: string) {
-		// Encode poszczególnych części ścieżki, żeby nie zepsuć slashów
 		return path.split('/').map(encodeURIComponent).join('/');
 	}
 </script>
@@ -36,8 +33,8 @@
 		</a>
 	</div>
 
-	{#if file_name.endsWith('.png') || file_name.endsWith('.jpg') || file_name.endsWith('.webp') || file_name.endsWith('.jpeg') || file_name.endsWith('.gif')}
-		<div class="flex justify-center items-center mx-auto rounded-xl shadow-2xl">
+	{#if file_name.endsWith('.png') || file_name.endsWith('.jpg') || file_name.endsWith('.webp') || file_name.endsWith('.jpeg') || file_name.endsWith('.gif') || file_name.endsWith('.svg')}
+		<div class="flex flex-col justify-center items-center mx-auto rounded-xl shadow-2xl">
 			<img
 				src="{api.api_config.baseURL}interface/bucket/{getFileUrl(params.path)}"
 				alt={file_name}

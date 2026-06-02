@@ -55,11 +55,18 @@
 			name: 'File Storage',
 			disabled: false
 		},
+
 		{
 			icon: 'mdi:image',
 			href: '/dashboard/images',
-			name: 'Image Explorer',
-			disabled: false
+			name: 'Image Explorer (useless)',
+			disabled: true
+		},
+		{
+			icon: 'at-icons:gun',
+			href: '/dashboard/pg3d',
+			name: 'PG3D [ ARCHIVED ]',
+			disabled: true
 		},
 		{
 			icon: 'mdi:link',
