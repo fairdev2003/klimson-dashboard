@@ -40,7 +40,7 @@
 
 			tl.to(svgPathEl, {
 				strokeDashoffset: 0,
-				duration: 1.4,
+				duration: 0.9,
 				ease: 'linear'
 			})
 				.to(

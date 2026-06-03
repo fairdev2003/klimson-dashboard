@@ -2,9 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { api } from '$lib/api/api';
 	import type { TableData } from '$lib/api/requests/misc';
+	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
+
+	let loading = $state(false);
+	let index: number = $state(-1);
 
 	let tables: TableData[] = $state([]);
 
@@ -14,10 +18,13 @@
 		tables = response.data.tables;
 	});
 
-	function onDatabaseRecordClick(table_id: string) {
+	function onDatabaseRecordClick(table_id: string, indexClicked: number) {
+		loading = true;
+		index = indexClicked;
 		setTimeout(() => {
 			goto(`/dashboard/database/${table_id}`);
-		}, 150);
+			loading = false;
+		}, 1000);
 	}
 </script>
 
@@ -27,14 +34,21 @@
 	>
 		{#each tables as table, i}
 			<button
-				onclick={() => onDatabaseRecordClick(table.table)}
-				class="bg-neutral-800 cursor-pointer hover:bg-neutral-700 active:bg-neutral-700 duration-150 transition-colors flex items-center gap-2 px-3 border border-neutral-700 h-14 w-full"
+				onclick={() => onDatabaseRecordClick(table.table, i)}
+				class="bg-neutral-800 cursor-pointer hover:bg-neutral-700 active:bg-neutral-700 duration-150 transition-colors flex justify-between items-center gap-2 px-3 border border-neutral-700 h-14 w-full"
 			>
-				<Icon icon={table.icon} width="30" height="30" />
-				<div class="flex flex-col text-start">
-					<p class="text-sm font-bold">{table.name}</p>
-					<p class="text-xs text-neutral-400">{table.table}</p>
+				<div class="flex gap-2 items-center">
+					<Icon icon={table.icon} width="30" height="30" />
+					<div class="flex flex-col text-start">
+						<p class="text-sm font-bold">{table.name}</p>
+						<p class="text-xs text-neutral-400">{table.table}</p>
+					</div>
 				</div>
+				{#if loading && index === i}
+					<div class="loader pr-3">
+						<Loader theme="regular" />
+					</div>
+				{/if}
 			</button>
 		{/each}
 	</div>

@@ -179,7 +179,7 @@ export class Api extends ApiStatic {
  * });
  * ```
  */
-const api = new Api({ dev_server: 'https://api.klimson.dev' });
-// const api = new Api({ dev_server: 'http://localhost:8090' });
+// const api = new Api({ dev_server: 'https://api.klimson.dev' });
+const api = new Api({ dev_server: 'http://localhost:8090' });
 
 export { api };
