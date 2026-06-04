@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CustomizationSettings from '$lib/components/dashboard/settings/categories/CustomizationSettings.svelte';
 	import MainSettings from '$lib/components/dashboard/settings/categories/MainSettings.svelte';
 	import ServerSettings from '$lib/components/dashboard/settings/categories/ServerSettings.svelte';
 	import { settings_page_open, type SettingKey } from '$lib/components/dashboard/settings/store';
@@ -7,12 +8,13 @@
 
 	const settings_dictonary: Record<SettingKey, string> = {
 		main: 'Main Settings',
-		server: 'Server Configuration'
+		server: 'Server Configuration',
+		customization: 'Dashboard Customization'
 	};
 </script>
 
 <!-- category container -->
-<div class="col-span-2 lg:p-10">
+<div class="col-span-2 lg:p-10 mb-10">
 	<h1 class="font-bold">
 		<Heading>Categories</Heading>
 	</h1>
@@ -31,7 +33,7 @@
 </div>
 
 <!-- settings container -->
-<div class="col-span-8 lg:p-10 flex justify-start overflow-y-auto flex-col gap-5">
+<div class="col-span-8 lg:p-10 flex justify-start flex-col gap-5">
 	<h1 class="text-3xl font-bold">
 		{settings_dictonary[$settings_page_open]}
 	</h1>
@@ -43,6 +45,10 @@
 
 	{#if $settings_page_open == 'server'}
 		<ServerSettings />
+	{/if}
+
+	{#if $settings_page_open == 'customization'}
+		<CustomizationSettings />
 	{/if}
 </div>
 
