@@ -12,6 +12,7 @@
 		onchoose?: (e: DropdownOption) => void;
 		current_value: any;
 		label?: string;
+		error_text?: string;
 	};
 
 	function handleClickOutside(event: MouseEvent) {
@@ -27,7 +28,7 @@
 
 	let opened: boolean = $state(false);
 
-	let { options, onchoose, current_value = $bindable(), label }: Props = $props();
+	let { options, onchoose, current_value = $bindable(), label, error_text }: Props = $props();
 
 	let l = $derived(options.find((opt) => opt.value === current_value)?.key || 'Wybierz opcję');
 </script>
@@ -38,6 +39,7 @@
 		onclick={() => (opened = !opened)}
 	>
 		<p>{label || l}</p>
+
 		{#if opened}
 			<Icon icon="mynaui:chevron-up" width="20" height="20" />
 		{:else}

@@ -13,14 +13,14 @@
 	in:blur={{ duration: 300 }}
 >
 	<DropdownSettingsRecord
+		error_text="Disabled due production frontend"
 		title="Connecting enviroment"
+		disabled={!dev}
 		description="Choose the server you want to connect in! It will refresh your page!"
-		options={dev
-			? [
-					{ key: 'Production', value: 'https://api.klimson.dev' },
-					{ key: 'Development', value: 'http://localhost:8090' }
-				]
-			: [{ key: 'Production', value: 'https://api.klimson.dev' }]}
+		options={[
+			{ key: 'Production', value: 'https://api.klimson.dev' },
+			{ key: 'Development', value: 'http://localhost:8090' }
+		]}
 		bind:current_value={$base_url}
 		onchoose={(e) => {
 			debug.log(e.key);
