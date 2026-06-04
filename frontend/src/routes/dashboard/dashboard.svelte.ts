@@ -1,3 +1,4 @@
+import { preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
 import {
@@ -38,25 +39,19 @@ class DashboardClass {
 
 		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
 
-		// quizzes.set(quizzesResponse.data);
-		// questions.set(questionsResponse.data as any);
 		routes.set(routesResponse.data);
-		// blogs.set(blogsResponse.data);
-		// heros.set(herosResponse.data);
-		// contributors.set(contributorsResponse.data);
-		// permissionList.set(permissionListResponse.data);
 
-		// updateResponseTime("quizzesResponseTime", quizzesResponse.duration);
-		// updateResponseTime("questionsResponseTime", questionsResponse.duration);
 		updateResponseTime('routesResponseTime', routesResponse.duration);
-		// updateResponseTime("blogResponseTime", blogsResponse.duration);
-		// updateResponseTime("heroResponseTime", herosResponse.duration);
-		// updateResponseTime("contributorsResponseTime", contributorsResponse.duration);
-		// updateResponseTime("permissionListResponseTime", permissionListResponse.duration);
 
 		debug.system('Zesralem sie');
 
 		toast.success('Aktualne dane załadowane');
+
+		await preloadCode('/dashboard/database');
+		await preloadCode('/dashboard/context_storage');
+
+		dashboardLoadState.set('Lazy Loading dashboard components!');
+
 		dashboardLoaded.set(true);
 
 		return true;
