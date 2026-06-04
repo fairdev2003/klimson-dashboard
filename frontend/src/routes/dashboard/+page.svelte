@@ -12,6 +12,9 @@
 	import { dev } from '$app/environment';
 	import { api } from '$lib/api/api';
 	import { base_url } from '$lib/api/api.store';
+	import DiskSpaceWidget from './widgets/DiskSpaceWidget.svelte';
+	import Icon from '@iconify/svelte';
+	import { goto } from '$app/navigation';
 
 	// s
 
@@ -28,8 +31,8 @@
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
 </script>
 
-<div class=" p-5 text-white">
-	{#if dev}
+<div class=" p-5 text-white flex flex-col gap-5">
+	<!-- {#if dev}
 		<p>Panel na dev</p>
 	{:else}
 		<p>Panel na prod</p>
@@ -48,7 +51,34 @@
 				>{api.api_config.prod_front + '/dashboard'}</a
 			>
 		</p>
-	{/if}
+	{/if} -->
+
+	<div
+		class="flex justify-between gap-4 p-5 w-full bg-neutral-800/60 border border-neutral-700 rounded-xl items-center"
+	>
+		<div class="flex gap-4 items-center">
+			<img
+				width="40"
+				height="40"
+				class="rounded-full"
+				src="https://api.klimson.dev/storage/interface/random/banana.webp"
+				alt="me"
+			/>
+			<h1 class="text-xl font-bold">Witaj, cwel</h1>
+		</div>
+		<div class="flex">
+			<button
+				onclick={() => {
+					goto('/dashboard/settings');
+				}}
+				class="p-2 hover:bg-neutral-700 rounded-xl cursor-pointer"
+			>
+				<Icon icon="material-symbols:settings" width="30" height="30" />
+			</button>
+		</div>
+	</div>
+
+	<DiskSpaceWidget />
 </div>
 
 <div class="grid grid-cols-5 p-5 gap-5"></div>

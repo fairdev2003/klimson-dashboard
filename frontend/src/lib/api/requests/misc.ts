@@ -17,6 +17,13 @@ export type TableData = {
 	foreign_key: string;
 };
 
+export type DiskData = {
+	percentage: string;
+	used: string;
+	total: string;
+	label: string;
+};
+
 class Misc {
 	/**
 	 * Tworzy nową instancję ImageApi.
@@ -52,6 +59,14 @@ class Misc {
 				headers: { Authorization: `Bearer ${Api.token}` }
 			}
 		);
+
+		return response;
+	}
+
+	public async GetDisk(): Promise<ServerResponse<DiskData>> {
+		const response: ServerResponse<DiskData> = await this.api.get('/admin/disk', {
+			headers: { Authorization: `Bearer ${Api.token}` }
+		});
 
 		return response;
 	}

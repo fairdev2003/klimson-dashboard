@@ -5,6 +5,7 @@
 	import Icon from '@iconify/svelte';
 	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
 	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
+	import { base_url } from '$lib/api/api.store';
 
 	type Props = {
 		onclick: (e: MouseEvent) => void;
@@ -66,7 +67,7 @@
 {#snippet FolderIcon(name: string)}
 	{#if !is_dir && (name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.svg') || name.endsWith('.webp'))}
 		<img
-			src="{api.api_config.baseURL}interface/bucket/{slug}/{name}"
+			src="{$base_url}/interface/bucket/{slug}/{name}"
 			alt={name}
 			class="w-full h-full object-cover rounded-md border border-neutral-700"
 		/>

@@ -56,6 +56,9 @@ func (controller GlobalController) RegisterRoutes() {
 	// spotify
 	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)
 
+	// misc
+	controller.adminPath.GET("/disk", controller.GetStorageLeftPercentage)
+
 	// database crud
 	controller.adminPath.GET("/database/list/tables", controller.GetTables)
 	controller.adminPath.GET("/database/table/:table_name", controller.GetTableData)

@@ -47,10 +47,9 @@ class DashboardClass {
 
 		toast.success('Aktualne dane załadowane');
 
+		dashboardLoadState.set('Lazy Loading dashboard components!');
 		await preloadCode('/dashboard/database');
 		await preloadCode('/dashboard/context_storage');
-
-		dashboardLoadState.set('Lazy Loading dashboard components!');
 
 		dashboardLoaded.set(true);
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { api } from '$lib/api/api';
+	import { base_url } from '$lib/api/api.store.js';
 	import SFMCodeArea from '$lib/components/dashboard/sfm/(components)/SFMCodeArea.svelte';
 	import Icon from '@iconify/svelte';
 
@@ -36,7 +37,7 @@
 	{#if file_name.endsWith('.png') || file_name.endsWith('.jpg') || file_name.endsWith('.webp') || file_name.endsWith('.jpeg') || file_name.endsWith('.gif') || file_name.endsWith('.svg')}
 		<div class="flex flex-col justify-center items-center mx-auto rounded-xl shadow-2xl">
 			<img
-				src="{api.api_config.baseURL}interface/bucket/{getFileUrl(params.path)}"
+				src="{$base_url}/interface/bucket/{getFileUrl(params.path)}"
 				alt={file_name}
 				class="max-h-[70vh] w-auto rounded-lg object-contain"
 			/>
