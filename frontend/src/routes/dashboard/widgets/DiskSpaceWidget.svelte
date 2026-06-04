@@ -56,7 +56,7 @@
 			goto(route);
 		}, 100);
 	}}
-	class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col w-70 border gap-3 hover:ring-green-400 hover:ring-2 border-neutral-700 bg-neutral-800/60"
+	class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col max-w-100 w-full md:w-70 lg:w-70 border gap-3 hover:ring-green-400 hover:ring-2 border-neutral-700 bg-neutral-800/60"
 >
 	<div class="absolute group-hover:flex hidden w-full h-full bg-green-500/20"></div>
 	<div class="flex flex-col gap-3 p-5">
@@ -79,7 +79,7 @@
 		</div>
 
 		<div class="flex justify-between gap-1 items-center">
-			<div class="grid grid-cols-10 h-10 gap-1 w-3/4">
+			<div class="grid grid-cols-10 h-10 gap-1 w-50 lg:w-3/4">
 				{#each Array(10) as _, i}
 					<div class="blob-item bg-neutral-600 rounded-full col-span-1 h-10"></div>
 				{/each}

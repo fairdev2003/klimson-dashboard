@@ -15,7 +15,7 @@
 >
 	<DropdownSettingsRecord
 		error_text="Disabled due production frontend"
-		title="Connecting enviroment"
+		title="Connecting environment"
 		disabled={!dev}
 		description="Choose the server you want to connect in! It will refresh your page!"
 		options={[
