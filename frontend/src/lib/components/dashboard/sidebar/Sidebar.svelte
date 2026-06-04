@@ -91,18 +91,29 @@
 	];
 </script>
 
-<div class="sticky left-0 top-16.25 h-screen z-500 overflow-hidden flex flex-col m-5">
-	<SidebarUserLogged
-		name="cwel"
-		role="$root"
-		pfp_logo="https://api.klimson.dev/storage/interface/random/banana.webp"
-	/>
+<div
+	class="sticky left-0 top-16.25 h-screen z-500 overflow-hidden flex flex-col justify-between m-5"
+>
+	<div>
+		<SidebarUserLogged
+			name="cwel"
+			role="$root"
+			pfp_logo="https://api.klimson.dev/storage/interface/random/banana.webp"
+		/>
 
-	{#if $sidebar_open}
-		<nav class="flex flex-col" in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
-			{#each contents as content, i}
-				<SidebarItem {content} />
-			{/each}
-		</nav>
-	{/if}
+		{#if $sidebar_open}
+			<nav class="flex flex-col" in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+				{#each contents as content, i}
+					<SidebarItem {content} />
+				{/each}
+			</nav>
+		{/if}
+	</div>
+	<!-- svelte-ignore a11y_consider_explicit_label -->
+	<button
+		onclick={() => {
+			goto('/dashboard/settings');
+		}}
+		class="mb-25 bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700 h-12 w-full active:bg-neutral-800 cursor-pointer transition-colors duration-150"
+	></button>
 </div>

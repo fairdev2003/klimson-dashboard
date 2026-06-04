@@ -35,7 +35,7 @@
 	</header>
 
 	<div class="flex flex-1 overflow-hidden relative">
-		{#if !$isMobile}
+		{#if !$isMobile && $sidebar_open}
 			<aside
 				onclick={(e) => {
 					e.stopPropagation();
@@ -44,6 +44,10 @@
 			>
 				<Sidebar />
 			</aside>
+		{/if}
+
+		{#if !$sidebar_open}
+			<div class="h-full w-75 lg:static absolute"></div>
 		{/if}
 
 		{#if $mobile_sidebar_open}
@@ -56,11 +60,7 @@
 			</div>
 		{/if}
 
-		<main
-			in:fade={{ duration: 150 }}
-			out:fade={{ duration: 150 }}
-			class="flex-1 overflow-y-auto p-5"
-		>
+		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1 overflow-y-auto">
 			{@render children()}
 		</main>
 	</div>

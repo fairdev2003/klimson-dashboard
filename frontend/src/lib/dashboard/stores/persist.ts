@@ -42,7 +42,7 @@ export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 
-export const sidebar_open = writable<boolean>(false);
+export const sidebar_open = persistedWritable<boolean>('sidebar_open', true);
 export const mobile_sidebar_open = writable<boolean>(false);
 export const isMobile = writable(false);
 export const animation_preset = persistedWritable<AnimationPresetType>('animationPreset', 'blur');
