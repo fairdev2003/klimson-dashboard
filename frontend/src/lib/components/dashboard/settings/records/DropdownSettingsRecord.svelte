@@ -32,7 +32,7 @@
 
 <div
 	class:disabled
-	class="py-10 relative flex flex-col lg:flex-row lg:items-center lg:gap-0 gap-2 justify-between"
+	class="lg:py-10 relative flex flex-col lg:flex-row lg:items-center lg:gap-0 gap-2 justify-between"
 >
 	{#if disabled}
 		<div class="absolute w-full h-full z-100"></div>

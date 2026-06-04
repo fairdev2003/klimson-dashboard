@@ -14,7 +14,7 @@
 	let { value = $bindable(), title, description, placeholder }: Props = $props();
 </script>
 
-<div class="py-10 flex flex-col lg:flex-row lg:items-center lg:gap-0 gap-2 justify-between">
+<div class="lg:py-10 flex flex-col lg:flex-row lg:items-center lg:gap-0 gap-2 justify-between">
 	<div class="flex flex-col lg:w-150">
 		<Heading>{title}</Heading>
 		<p class="font-medium text-sm text-neutral-300">{description}</p>
