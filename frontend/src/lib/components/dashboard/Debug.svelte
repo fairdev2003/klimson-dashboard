@@ -46,14 +46,14 @@
 {#if $debugOn && loaded}
 	<div
 		bind:this={boxRef}
-		class="fixed z-[2000] flex flex-col shadow-2xl transition-shadow"
+		class="fixed z-2000 flex flex-col shadow-2xl transition-shadow"
 		style="left: {pos.x}px; bottom: {20 - pos.y}px; {isDragging ? 'z-index: 1000' : ''}"
 	>
 		{#if logOpened}
 			<div
 				role="presentation"
 				onmousedown={handleMouseDown}
-				class="flex w-[600px] cursor-grab items-center justify-between rounded-t-xl border-b border-neutral-800 bg-neutral-900 p-2 text-white active:cursor-grabbing"
+				class="flex w-full lg:w-150 cursor-grab items-center justify-between rounded-t-xl border-b border-neutral-800 bg-neutral-900 p-2 text-white active:cursor-grabbing"
 			>
 				<div class="flex items-center gap-2 px-2">
 					<Terminal class="h-3 w-3 text-blue-500" />
@@ -78,11 +78,11 @@
 
 			<div
 				bind:this={debugContainer}
-				class="flex h-[350px] w-[600px] flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
+				class="flex h-87.5 w-[calc(100vw-40px)] lg:w-150 flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
 			>
 				{#each $debug as a (a.date)}
 					<div class="flex gap-3 border-b border-white/5 pb-1 leading-relaxed last:border-0">
-						<span class="flex-shrink-0 text-neutral-600">
+						<span class=" text-neutral-600">
 							[{new Date(a.date).toLocaleTimeString()}]
 						</span>
 						<span
