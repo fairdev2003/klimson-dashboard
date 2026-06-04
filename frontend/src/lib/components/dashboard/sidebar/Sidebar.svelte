@@ -91,9 +91,7 @@
 	];
 </script>
 
-<div
-	class="sticky left-0 top-16.25 h-screen z-500 overflow-hidden flex flex-col justify-between m-5"
->
+<div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col justify-between m-5">
 	<div>
 		<SidebarUserLogged
 			name="cwel"
