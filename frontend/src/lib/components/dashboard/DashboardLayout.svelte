@@ -63,7 +63,7 @@
 		<main
 			in:fade={{ duration: 150 }}
 			out:fade={{ duration: 150 }}
-			class="flex-1 h-screen overflow-y-auto"
+			class="flex-1 h-[calc(100dvh-66px)] overflow-y-auto"
 		>
 			{@render children()}
 		</main>
