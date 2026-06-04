@@ -3,6 +3,14 @@
 	import DropdownSettingsRecord from '../records/DropdownSettingsRecord.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
 	import { animation_preset } from '$lib/dashboard/stores/persist';
+	import ButtonSettingsRecord from '../records/ButtonSettingsRecord.svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
+	import Modal from '$lib/components/Modal.svelte';
+	import InputSettingsRecord from '../records/InputSettingsRecord.svelte';
+	import { nickname } from '../store';
+	let value = $state('');
+
+	let orderOpened: boolean = $state(false);
 </script>
 
 <div
@@ -22,4 +30,29 @@
 			debug.log(e.key);
 		}}
 	/>
+	<ButtonSettingsRecord
+		onclick={() => {
+			orderOpened = !orderOpened;
+		}}
+		label="Edit"
+		title="Sidebar order"
+		description="Edit order of sidebar contents. This is saved on frontend client."
+	/>
+	<InputSettingsRecord
+		bind:value={$nickname}
+		title="Edit nickname"
+		placeholder="nickname"
+		description=""
+	/>
+	<Modal
+		exitMode={false}
+		title="Edit sidebar order"
+		bind:opened={orderOpened}
+		onClose={() => {
+			orderOpened = !orderOpened;
+		}}
+		className="w-100 overflow-hidden"
+	>
+		<div class="h-100"></div>
+	</Modal>
 </div>

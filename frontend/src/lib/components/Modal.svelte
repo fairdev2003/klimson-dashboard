@@ -7,6 +7,8 @@
 	import Button from './Button.svelte';
 	import { animation_preset, type AnimationPresetType } from '$lib/dashboard/stores/persist';
 	import { stopPropagation } from 'svelte/legacy';
+	import { debug } from '$lib/dashboard/stores/debug';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	type Props = {
 		opened: boolean;
@@ -51,7 +53,7 @@
 		children,
 		title,
 		onClose,
-		exitMode = true,
+		exitMode,
 		className = 'max-w-[1400px] h-[95%]',
 		editMode = false,
 		// experimental
@@ -182,7 +184,14 @@
 	{:else}
 		<div
 			class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
-			onclick={() => onClose?.()}
+			onclick={() => {
+				if (!exitMode) {
+					toast.warning('Only manual exit!');
+					return;
+				}
+
+				onClose?.();
+			}}
 		>
 			{@render Modal(false)}
 		</div>

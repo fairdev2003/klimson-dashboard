@@ -11,6 +11,7 @@
 	import { sidebar_open } from '$lib/dashboard/stores/store';
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
+	import { nickname } from '../settings/store';
 
 	let content_show: boolean = $state(true);
 
@@ -94,7 +95,7 @@
 <div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col justify-between m-5">
 	<div>
 		<SidebarUserLogged
-			name="cwel"
+			name={$nickname}
 			role="$root"
 			pfp_logo="https://api.klimson.dev/storage/interface/random/banana.webp"
 		/>

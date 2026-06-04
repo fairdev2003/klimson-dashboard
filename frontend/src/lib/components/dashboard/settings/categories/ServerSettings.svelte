@@ -4,6 +4,7 @@
 	import { dev } from '$app/environment';
 	import { debug } from '$lib/dashboard/stores/debug';
 	import { base_url } from '$lib/api/api.store';
+	import Heading from '../../typography/Heading.svelte';
 
 	let selectedServer: 'dev' | 'prod' = $state('prod');
 </script>

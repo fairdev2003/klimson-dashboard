@@ -6,6 +6,8 @@
 	import CheckboxSettingsRecord from '../records/CheckboxSettingsRecord.svelte';
 	import DropdownButton from '../components/DropdownButton.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
+	import ButtonSettingsRecord from '../records/ButtonSettingsRecord.svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
 </script>
 
 <div
