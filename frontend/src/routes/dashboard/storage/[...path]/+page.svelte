@@ -199,9 +199,7 @@
 		onmouseleave={() => (menuVisible = false)}
 		style="position: fixed; top: {menuY}px; left: {menuX}px;"
 	>
-		<div
-			class="size-50 bg-red-500 absolute bottom-1/2 right-1/2 translate-[50%] -z-4 mx-auto"
-		></div>
+		<div class="size-50 absolute bottom-1/2 right-1/2 translate-[50%] -z-4 mx-auto"></div>
 
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="bg-neutral-800 border border-neutral-700 shadow-xl rounded-lg p-2 z-50 w-40">

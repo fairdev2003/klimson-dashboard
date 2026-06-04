@@ -11,6 +11,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import { dev } from '$app/environment';
 	import { api } from '$lib/api/api';
+	import { base_url } from '$lib/api/api.store';
 
 	// s
 
@@ -36,7 +37,7 @@
 	<p>
 		Obecny serwer: <a
 			class="text-blue-500 hover:underline"
-			href={api.api_config.dev_server + '/v1/api'}>{api.api_config.dev_server}</a
+			href={api.api_config.dev_server + '/v1/api'}>{$base_url}</a
 		>
 	</p>
 	{#if dev}

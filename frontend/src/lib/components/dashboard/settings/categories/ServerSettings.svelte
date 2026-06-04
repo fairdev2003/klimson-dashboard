@@ -1,8 +1,30 @@
 <script lang="ts">
 	import { blur } from 'svelte/transition';
+	import DropdownSettingsRecord from '../records/DropdownSettingsRecord.svelte';
+	import { dev } from '$app/environment';
+	import { debug } from '$lib/dashboard/stores/debug';
+	import { base_url } from '$lib/api/api.store';
+
+	let selectedServer: 'dev' | 'prod' = $state('prod');
 </script>
 
 <div
 	class="flex flex-col border-t border-neutral-700 lg:w-3/4 lg:px-10"
 	in:blur={{ duration: 300 }}
-></div>
+>
+	<DropdownSettingsRecord
+		title="Connecting enviroment"
+		description="Choose the server you want to connect in! It will refresh your page!"
+		options={dev
+			? [
+					{ key: 'Production', value: 'https://api.klimson.dev' },
+					{ key: 'Development', value: 'http://localhost:8090' }
+				]
+			: [{ key: 'Production', value: 'https://api.klimson.dev' }]}
+		bind:current_value={$base_url}
+		onchoose={(e) => {
+			debug.log(e.key);
+			window.location.reload();
+		}}
+	/>
+</div>

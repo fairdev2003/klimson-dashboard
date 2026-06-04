@@ -6,6 +6,8 @@ import { DatabaseClass } from './requests/database';
 import { ContextStorage } from './requests/context_storage';
 import { PG3D } from './requests/pg3d';
 import { Storage } from './requests/storage';
+import { base_url } from './api.store';
+import { get } from 'svelte/store';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -104,7 +106,7 @@ export class Api extends ApiStatic {
 		if (params?.prod_prefix) this._prefix = params.prod_prefix;
 
 		this.api = axios.create({
-			baseURL: this._baseURL,
+			baseURL: get(base_url),
 			headers: {
 				Accept: 'application/json'
 			}
