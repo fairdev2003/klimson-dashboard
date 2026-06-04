@@ -103,8 +103,6 @@ export class Api extends ApiStatic {
 		if (params?.prod_version) this._version = params.prod_version;
 		if (params?.prod_prefix) this._prefix = params.prod_prefix;
 
-		console.log(`Operating API at: ${this._baseURL}`);
-
 		this.api = axios.create({
 			baseURL: this._baseURL,
 			headers: {

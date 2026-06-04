@@ -42,8 +42,6 @@ class Misc {
 			headers: { Authorization: `Bearer ${Api.token}` }
 		});
 
-		console.log(response.data);
-
 		return response;
 	}
 

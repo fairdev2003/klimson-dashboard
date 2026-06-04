@@ -39,7 +39,7 @@
 	<button
 		bind:this={btn}
 		onclick={openBox}
-		class="relative flex cursor-pointer items-center gap-1 border-1 border-neutral-700/60 bg-neutral-800/60 p-1 px-3"
+		class="relative flex cursor-pointer items-center gap-1 border-1 mr-5 border-neutral-700/60 bg-neutral-800/60 p-1 px-3"
 	>
 		<User size={13} />
 		<p>Jakub</p>

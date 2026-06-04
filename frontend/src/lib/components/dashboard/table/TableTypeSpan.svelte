@@ -8,9 +8,6 @@
 		column: TableData;
 	};
 	let { column }: Props = $props();
-	onMount(() => {
-		console.log('span', column);
-	});
 </script>
 
 {#if column.foreign_key === 'true'}

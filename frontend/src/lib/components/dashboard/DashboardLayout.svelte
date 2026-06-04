@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { contextMenuOptions } from '$lib/dashboard/stores/store';
 	import { type Snippet } from 'svelte';
-	import { sidebar_open } from '$lib/dashboard/stores/persist';
+	import { isMobile, mobile_sidebar_open, sidebar_open } from '$lib/dashboard/stores/persist';
 	import { fade } from 'svelte/transition';
 	import ContextMenu from './ContextMenu.svelte';
 
 	import Sidebar from './sidebar/Sidebar.svelte';
+	import CMSNavbar from './CMSNavbar.svelte';
 
 	type Props = {
 		children: Snippet;
@@ -27,31 +28,41 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	oncontextmenu={(e) => handleRightClick(e)}
-	class="relative mt-[65px] flex min-h-[calc(100vh-66px)] bg-neutral-950 text-white"
+	class="flex flex-col h-screen overflow-hidden bg-neutral-950 text-white"
 >
-	<div
-		class:hidden={!$sidebar_open}
-		class="shrink-0 self-stretch w-75 bg-neutral-900 border-t border-neutral-700 z-10
-           
-           /* 1. Domyślnie na małych ekranach: */
-           absolute inset-y-0 left-0 h-full
-           
-           /* 2. Na dużych ekranach (lg+): */
-           lg:static lg:flex lg:flex-col"
-	>
-		<Sidebar />
-	</div>
+	<header class="border-b h-[66px] border-neutral-700 flex items-center px-4 shrink-0">
+		<CMSNavbar />
+	</header>
 
-	<!-- Główna zawartość -->
-	<div
-		in:fade={{ duration: 150 }}
-		out:fade={{ duration: 150 }}
-		class="flex-1 flex-col overflow-x-auto duration-300"
-	>
-		<!-- <DashboardDock /> -->
-		<div class="mb-5 flex flex-col gap-5">
+	<div class="flex flex-1 overflow-hidden relative">
+		{#if !$isMobile}
+			<aside
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+				class="absolute lg:static z-20 h-full w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
+			>
+				<Sidebar />
+			</aside>
+		{/if}
+
+		{#if $mobile_sidebar_open}
+			<div class="lg:hidden absolute inset-0 bg-black/50 z-10">
+				<aside
+					class="absolute lg:static z-20 h-full w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
+				>
+					<Sidebar />
+				</aside>
+			</div>
+		{/if}
+
+		<main
+			in:fade={{ duration: 150 }}
+			out:fade={{ duration: 150 }}
+			class="flex-1 overflow-y-auto p-5"
+		>
 			{@render children()}
-		</div>
+		</main>
 	</div>
 
 	{#if showMenu}

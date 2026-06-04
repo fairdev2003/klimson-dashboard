@@ -13,7 +13,17 @@ import { get } from 'svelte/store';
 class DashboardClass {
 	constructor() {}
 
+	public art: string = `
+ ____ ___ _____ __  __    _       ______        _______ _    _   _ 
+/ ___|_ _| ____|  \\/  |  / \\     / ___\\ \\      / / ____| |  | | | |
+\\___ \\| ||  _| | |\\/| | / _ \\   | |    \\ \\ /\\ / /|  _| | |  | | | |
+ ___) | || |___| |  | |/ ___ \\  | |___  \\ V  V / | |___| |__| |_| |
+|____/___|_____|_|  |_/_/   \\_\\  \\____|  \\_/\\_/  |_____|_____\\___/ 
+`;
+
 	public async Load(): Promise<boolean> {
+		console.log(this.art);
+
 		dashboardLoadState.set('Autoryzacja');
 		dashboardLoaded.set(false);
 

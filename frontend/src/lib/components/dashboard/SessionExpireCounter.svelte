@@ -40,16 +40,12 @@
 		token = tokenString;
 		if (token) {
 			$userInfo = jwtDecode(token);
-			console.log($userInfo);
-			const exists = $accounts.some(acc => acc.login === $userInfo.login);
-			const newData = {...userInfo, token}
+			const exists = $accounts.some((acc) => acc.login === $userInfo.login);
+			const newData = { ...userInfo, token };
 
 			if (!exists) {
 				$accounts = [...$accounts];
-				console.log($accounts)
 			} else {
-				console.log("Konto o tym loginie już istnieje!");
-				console.log($accounts)
 			}
 		}
 

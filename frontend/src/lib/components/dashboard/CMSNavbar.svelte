@@ -7,46 +7,52 @@
 	import Icon from '@iconify/svelte';
 	import QuickActionButton from './QuickActionButton.svelte';
 	import { userInfo } from '$lib/dashboard/stores/store';
-	import { sidebar_open } from '$lib/dashboard/stores/persist';
+	import { isMobile, mobile_sidebar_open, sidebar_open } from '$lib/dashboard/stores/persist';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
-		console.log('Attached element:', element.clientHeight);
-
 		return () => {
 			console.log('Detached element:', element.clientHeight);
 		};
 	};
+
+	function toggleSidebar() {
+		if ($isMobile) {
+			$mobile_sidebar_open = !$mobile_sidebar_open;
+		} else {
+			$sidebar_open = !$sidebar_open;
+		}
+	}
 </script>
 
 <div
-	{@attach SendHeightInfo}
-	class="fixed top-0 z-50 flex w-full justify-between gap-1 border-b-1 border-neutral-700 bg-neutral-900 px-5 text-[14px] text-white"
+	class="fixed top-0 left-0 z-50 flex h-[66px] w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
 >
-	<!-- left navbar conten -->
-	<div class="flex items-center">
-		<div class="lg:flex hidden items-center">
-			<span class="text-blue-500">
+	<!-- Lewa strona -->
+	<div class="flex flex-1 items-center gap-4 min-w-0">
+		<!-- Logo (tylko desktop) -->
+		<div class="items-center shrink-0 md:hidden hidden lg:flex">
+			<span class="text-blue-500 mr-2">
 				<Icon icon="majesticons:lightning-bolt" width="30" height="30" />
 			</span>
-			{@render CMSTextLogo($userInfo.contributor)}
+			{@render CMSTextLogo()}
 		</div>
-		<div class="lg:hidden flex items-center min-h-[66px]">
-			<button
-				onclick={() => {
-					$sidebar_open = !$sidebar_open;
-				}}
-				class="text-white"
-			>
-				<Icon icon="material-symbols:menu" width="30" height="30" />
-			</button>
-		</div>
-		<div class="ml-5 flex gap-2">
+
+		<!-- Przycisk menu (mobile/desktop toggle) -->
+		<button
+			onclick={toggleSidebar}
+			class="p-2 hover:bg-neutral-800 rounded-md flex lg:hidden transition-colors"
+		>
+			<Icon icon="material-symbols:menu" width="30" height="30" />
+		</button>
+
+		<!-- Wyszukiwarka (min-w-0 pozwala jej się kurczyć) -->
+		<div class="flex-1 max-w-sm min-w-0">
 			<SearchNavbarBox />
-			<!-- <QuickActionButton /> -->
 		</div>
 	</div>
-	<!-- right navbar content -->
-	<div class="flex items-center gap-3">
+
+	<!-- Prawa strona -->
+	<div class="flex items-center gap-3 shrink-0">
 		<div class="hidden lg:flex">
 			<SessionExpireCounter />
 		</div>
@@ -55,7 +61,7 @@
 </div>
 
 {#snippet CMSTextLogo(contributor: boolean = false)}
-	<a href="/dashboard" class="w-20 cursor-pointer py-3 font-semibold text-blue-500 select-none">
+	<a href="/dashboard" class="cursor-pointer py-3 font-semibold text-blue-500 select-none mr-4">
 		{#if contributor}
 			<p>Harcquiz</p>
 			<p>for Contr.</p>

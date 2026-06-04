@@ -9,6 +9,8 @@
 	} from '$lib/dashboard/stores/data.store';
 
 	import Modal from '$lib/components/Modal.svelte';
+	import { dev } from '$app/environment';
+	import { api } from '$lib/api/api';
 
 	// s
 
@@ -25,7 +27,7 @@
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
 </script>
 
-<!-- <div class=" p-5 text-white">
+<div class=" p-5 text-white">
 	{#if dev}
 		<p>Panel na dev</p>
 	{:else}
@@ -46,7 +48,7 @@
 			>
 		</p>
 	{/if}
-</div> -->
+</div>
 
 <div class="grid grid-cols-5 p-5 gap-5"></div>
 

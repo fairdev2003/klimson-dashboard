@@ -37,7 +37,7 @@ export function persistentStore<T>(key: string, initial: T) {
 }
 
 export const page = writable<number>(0);
-export const sidebar_open = writable<boolean>(false);
+export const sidebar_open = writable<boolean>(true);
 export const summary_open = writable<boolean>(false);
 export const selectedSummaryType = writable<
 	undefined | 'quiz' | 'question' | 'answer' | 'blog' | 'debug'
