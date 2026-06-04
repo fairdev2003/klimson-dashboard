@@ -40,7 +40,7 @@
 				onclick={(e) => {
 					e.stopPropagation();
 				}}
-				class="absolute lg:static z-20 h-dvh w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
+				class="absolute lg:static z-20 w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
 			>
 				<Sidebar />
 			</aside>
@@ -53,14 +53,18 @@
 		{#if $mobile_sidebar_open}
 			<div class="lg:hidden absolute inset-0 bg-black/50 z-10">
 				<aside
-					class="absolute lg:static z-20 h-dvh w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
+					class="absolute lg:static z-20 w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
 				>
 					<Sidebar />
 				</aside>
 			</div>
 		{/if}
 
-		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1 overflow-y-auto">
+		<main
+			in:fade={{ duration: 150 }}
+			out:fade={{ duration: 150 }}
+			class="flex-1 h-screen overflow-y-auto"
+		>
 			{@render children()}
 		</main>
 	</div>
