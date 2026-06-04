@@ -47,7 +47,7 @@
 		{/if}
 
 		{#if !$sidebar_open}
-			<div class="h-dvh w-75 lg:static absolute"></div>
+			<div class="h-dvh w-75 lg:static hidden"></div>
 		{/if}
 
 		{#if $mobile_sidebar_open}
