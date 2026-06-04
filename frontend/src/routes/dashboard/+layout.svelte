@@ -20,6 +20,16 @@
 		$route = page.url.pathname;
 	});
 
+	onMount(() => {
+		const preventZoom = (e: any) => {
+			if (e.touches.length > 1) {
+				e.preventDefault();
+			}
+		};
+
+		document.addEventListener('touchstart', preventZoom, { passive: false });
+	});
+
 	let { children } = $props();
 
 	function redirectTo(e: HTMLDivElement) {
