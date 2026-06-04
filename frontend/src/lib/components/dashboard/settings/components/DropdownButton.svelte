@@ -55,6 +55,11 @@
 				{#each options as option}
 					<button
 						onclick={() => {
+							if (current_value === option.value) {
+								opened = false;
+
+								return;
+							}
 							current_value = option.value;
 
 							onchoose?.(option);
