@@ -15,6 +15,8 @@
 	import DiskSpaceWidget from './widgets/DiskSpaceWidget.svelte';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
+	import DatabaseWidget from './widgets/DatabaseWidget.svelte';
+	import SpotifyWidget from './widgets/SpotifyWidget.svelte';
 
 	// s
 
@@ -28,6 +30,7 @@
 	let loading: boolean = $state(false);
 
 	let BenchmarkModalOpened: boolean = $state(false);
+
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
 </script>
 
@@ -64,7 +67,7 @@
 				src="https://api.klimson.dev/storage/interface/random/banana.webp"
 				alt="me"
 			/>
-			<h1 class="text-xl font-bold">Witaj, cwel</h1>
+			<h1 class="text-xl font-bold">Witaj, Jakub</h1>
 		</div>
 		<div class="flex">
 			<button
@@ -78,7 +81,11 @@
 		</div>
 	</div>
 
-	<DiskSpaceWidget />
+	<div class="flex gap-5 lg:flex-row flex-col">
+		<DiskSpaceWidget />
+		<DatabaseWidget />
+		<SpotifyWidget />
+	</div>
 </div>
 
 <div class="grid grid-cols-5 p-5 gap-5"></div>

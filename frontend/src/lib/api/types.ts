@@ -36,7 +36,9 @@ export type ApiClassParams = {
  * console.log(response.duration); // -> czas odpowiedzi w ms
  * ```
  */
-export type ServerResponse<T> = AxiosResponse<T> & { duration: number };
+export type ServerResponse<T> = AxiosResponse<T & { message: string; error: string }> & {
+	duration: number;
+};
 
 export type BackendResponse = {
 	message: string;
