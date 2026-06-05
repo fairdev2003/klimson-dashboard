@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -16,10 +17,25 @@ import (
 )
 
 var (
-	apiPath   *gin.RouterGroup
-	wsPath    *gin.RouterGroup
-	adminPath *gin.RouterGroup
+	apiPath     *gin.RouterGroup
+	wsPath      *gin.RouterGroup
+	adminPath   *gin.RouterGroup
+	latestFiles []models.ListRecord
 )
+
+func AddRandomRecords() {
+	names := []string{"dokument.txt", "zdjecie.jpg", "projekt.go", "backup.zip", "notatki.md"}
+
+	for i := 0; i < 3; i++ {
+		record := models.ListRecord{
+			Name:         names[rand.Intn(len(names))],
+			IsDir:        rand.Intn(2) == 0,
+			ModifiedTime: time.Now().Add(time.Duration(-rand.Intn(1000)) * time.Hour),
+			Size:         rand.Int63n(1024 * 1024),
+		}
+		latestFiles = append(latestFiles, record)
+	}
+}
 
 func InitRoutes() {
 
@@ -150,6 +166,7 @@ func InitRoutes() {
 			hub.Send(map[string]float64{"cpu": cpuUsage[0]})
 		}
 	}()
-	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, hub)
+	AddRandomRecords()
+	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, hub, latestFiles)
 	newQuizController.RegisterRoutes()
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { nickname } from './settings/store';
+	import { nickname } from './settings/store.svelte';
 
 	type Props = {
 		name: string;

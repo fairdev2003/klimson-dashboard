@@ -30,7 +30,13 @@
 				/>
 				<div class="flex relative flex-col text-start gap3 justify-center w-full">
 					<h3 class="text-sm font-semibold truncate">{spotifyApp.getSong()}</h3>
-					<p class="text-xs text-neutral-400 font-semibold">{spotifyApp.getArtist()}</p>
+					<p class="text-xs text-neutral-400 font-semibold">
+						{spotifyApp.getArtist()}{spotifyApp.spotify.item.artists.length > 1 ? ', +' : ''}
+
+						{#if spotifyApp.spotify.item.artists.length > 1}
+							<span>{spotifyApp.spotify.item.artists.length - 1}</span>
+						{/if}
+					</p>
 					{#if spotifyApp.spotify.is_playing}
 						<div class="absolute right-5 top-1/2 translate-[50%]">
 							{@render AudioVisualizer()}

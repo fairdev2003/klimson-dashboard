@@ -11,7 +11,7 @@
 	import { sidebar_open } from '$lib/dashboard/stores/store';
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import { nickname } from '../settings/store';
+	import { nickname } from '../settings/store.svelte';
 
 	let content_show: boolean = $state(true);
 

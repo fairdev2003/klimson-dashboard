@@ -7,10 +7,13 @@
 	import { toast } from '$lib/dashboard/stores/toast';
 	import Modal from '$lib/components/Modal.svelte';
 	import InputSettingsRecord from '../records/InputSettingsRecord.svelte';
-	import { nickname } from '../store';
+	import { nickname } from '../store.svelte';
+	import { onMount, tick } from 'svelte';
+	import { settings_startup_modal } from '../../stores/main';
 	let value = $state('');
 
 	let orderOpened: boolean = $state(false);
+	let widgetOpened: boolean = $state(false);
 </script>
 
 <div
@@ -38,12 +41,27 @@
 		title="Sidebar order"
 		description="Edit order of sidebar contents. This is saved on frontend client."
 	/>
-	<InputSettingsRecord
-		bind:value={$nickname}
-		title="Edit nickname"
-		placeholder="nickname"
-		description=""
+	<ButtonSettingsRecord
+		onclick={() => {
+			orderOpened = !orderOpened;
+		}}
+		label="Edit"
+		title="System Widgets"
+		description="Decide what widgets will show up on dashboard home page."
 	/>
+
+	<Modal
+		exitMode={false}
+		title="Edit system widgets"
+		bind:opened={widgetOpened}
+		onClose={() => {
+			widgetOpened = !widgetOpened;
+		}}
+		className="w-100 overflow-hidden"
+	>
+		<div class="h-100"></div>
+	</Modal>
+
 	<Modal
 		exitMode={false}
 		title="Edit sidebar order"

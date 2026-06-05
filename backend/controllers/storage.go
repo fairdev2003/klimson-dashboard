@@ -9,6 +9,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/harc_quiz/backend/khttp"
+	"github.com/zgierz/harc_quiz/backend/logger"
+	"github.com/zgierz/harc_quiz/backend/models"
 )
 
 func (gc GlobalController) GetFile(c *gin.Context) {
@@ -40,13 +43,6 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 	c.File(fullPath)
 }
 
-type ListRecord struct {
-	Name         string    `json:"name"`
-	IsDir        bool      `json:"is_dir"`
-	ModifiedTime time.Time `json:"modified"`
-	Size         int64     `json:"file_size"`
-}
-
 func (gc GlobalController) UploadFile(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -62,7 +58,22 @@ func (gc GlobalController) UploadFile(c *gin.Context) {
 		return
 	}
 
+	newRecord := models.ListRecord{
+		Name:         file.Filename,
+		IsDir:        false,
+		ModifiedTime: time.Now(),
+		Size:         file.Size,
+	}
+
+	logger.ServerLog("Here!")
+	gc.Files = append(gc.Files, newRecord)
+
 	c.JSON(http.StatusOK, gin.H{"message": "Plik przesłany pomyślnie", "success": true})
+}
+
+func (gc GlobalController) GetLatesFiles(ctx *gin.Context) {
+	logger.ServerLog(gc.Files)
+	khttp.SuccessResponse(ctx, gin.H{"files": gc.Files})
 }
 
 func (gc GlobalController) CreateFolder(c *gin.Context) {
@@ -142,15 +153,14 @@ func (gc GlobalController) ListFiles(c *gin.Context) {
 		return
 	}
 
-	var fileList []ListRecord
+	var fileList []models.ListRecord
 	for _, entry := range entries {
-		// Pobieramy pełne informacje o pliku
 		info, err := entry.Info()
 		if err != nil {
-			continue // Jeśli nie da się pobrać info, pomijamy ten plik
+			continue
 		}
 
-		fileList = append(fileList, ListRecord{
+		fileList = append(fileList, models.ListRecord{
 			Name:         entry.Name(),
 			IsDir:        entry.IsDir(),
 			ModifiedTime: info.ModTime(),

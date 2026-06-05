@@ -43,6 +43,17 @@ class Storage {
 		return response;
 	}
 
+	public async GetLatestStorageRecords(): Promise<ServerResponse<{ files: StorageRecord[] }>> {
+		const response: ServerResponse<{ files: StorageRecord[] }> = await this.api.get(
+			`/admin/storage/latest`,
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
+
+		return response;
+	}
+
 	public async CreateFolder(
 		path: string,
 		folder: FolderCreationBody

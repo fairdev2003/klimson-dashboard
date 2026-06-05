@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/zgierz/harc_quiz/backend/helpers"
+	"github.com/zgierz/harc_quiz/backend/models"
 	"gorm.io/gorm"
 )
 
@@ -14,15 +15,17 @@ type GlobalController struct {
 	publicPath *gin.RouterGroup
 	adminPath  *gin.RouterGroup
 	Hub        *helpers.WSHub
+	Files      []models.ListRecord
 }
 
-func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *helpers.WSHub) GlobalController {
+func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *helpers.WSHub, files []models.ListRecord) GlobalController {
 	return GlobalController{
 		db:         db,
 		ctx:        ctx,
 		publicPath: publicPath,
 		adminPath:  adminPath,
 		Hub:        hub,
+		Files:      files,
 	}
 }
 
@@ -68,6 +71,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
+	controller.adminPath.GET("/storage/latest", controller.GetLatesFiles)
 
 	// context storage crud operations
 	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)

@@ -1,6 +1,7 @@
 import { preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
+import { dashboard_load_date } from '$lib/components/dashboard/stores/main';
 import {
 	dashboardLoadState,
 	routes,
@@ -21,6 +22,21 @@ class DashboardClass {
  ___) | || |___| |  | |/ ___ \\  | |___  \\ V  V / | |___| |__| |_| |
 |____/___|_____|_|  |_/_/   \\_\\  \\____|  \\_/\\_/  |_____|_____\\___/ 
 `;
+
+	private GetDateTime(): string {
+		const now = new Date();
+		const currentTime = now.toLocaleTimeString('us-US', {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit'
+		});
+		const currentDate = now.toLocaleDateString('us-US', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		});
+		return `${currentTime}, ${currentDate}`;
+	}
 
 	public async Load(): Promise<boolean> {
 		console.log(this.art);
@@ -46,6 +62,7 @@ class DashboardClass {
 		debug.system('Zesralem sie');
 
 		toast.success('Aktualne dane załadowane');
+		dashboard_load_date.set(this.GetDateTime());
 
 		dashboardLoadState.set('Lazy Loading dashboard components!');
 		await preloadCode('/dashboard/database');

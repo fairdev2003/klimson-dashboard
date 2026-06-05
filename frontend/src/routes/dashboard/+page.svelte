@@ -18,18 +18,20 @@
 	import DatabaseWidget from './widgets/DatabaseWidget.svelte';
 	import SpotifyWidget from './widgets/SpotifyWidget.svelte';
 	import DropdownButton from '$lib/components/dashboard/settings/components/DropdownButton.svelte';
-	import { settings_page_open, type SettingKey } from '$lib/components/dashboard/settings/store';
+	import {
+		settings_page_open,
+		type SettingKey
+	} from '$lib/components/dashboard/settings/store.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import CPUWidget from './widgets/CPUWidget.svelte';
-
-	// s
-
-	function tooltip(content: string): Attachment {
-		return (element) => {
-			const tooltip = tippy(element, { content });
-			return tooltip.destroy();
-		};
-	}
+	import WidgetContainer from './widgets/containers/WidgetContainer.svelte';
+	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
+	import {
+		dashboard_load_date,
+		settings_startup_modal
+	} from '$lib/components/dashboard/stores/main';
+	import { onMount } from 'svelte';
+	import SecondHubContainer from './widgets/containers/SecondHubContainer.svelte';
 
 	let loading: boolean = $state(false);
 
@@ -39,31 +41,11 @@
 </script>
 
 <div class=" p-5 text-white flex flex-col gap-5">
-	<!-- {#if dev}
-		<p>Panel na dev</p>
-	{:else}
-		<p>Panel na prod</p>
-	{/if}
-	<p>
-		Obecny serwer: <a
-			class="text-blue-500 hover:underline"
-			href={api.api_config.dev_server + '/v1/api'}>{$base_url}</a
-		>
-	</p>
-	{#if dev}
-		<p>
-			Panel na serwerze produkcyjnym: <a
-				class="text-blue-500 hover:underline"
-				href={api.api_config.prod_front + '/dashboard'}
-				>{api.api_config.prod_front + '/dashboard'}</a
-			>
-		</p>
-	{/if} -->
-
 	<div
-		class="flex justify-between gap-4 p-5 w-full bg-neutral-800/60 border border-neutral-700 rounded-xl items-center"
+		class="flex justify-between relative z-1 gap-4 overflow-hidden p-5 w-full bg-neutral-800/60 border border-neutral-700 rounded-xl items-center"
 	>
-		<div class="flex gap-4 items-center">
+		<!-- {@render GradientLeft()} -->
+		<div class="flex gap-4 relative items-center">
 			<img
 				class="rounded-full size-12.5"
 				src="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
@@ -71,18 +53,7 @@
 			/>
 			<h1 class="text-xl font-bold">Witaj, Jakub</h1>
 		</div>
-		<div class="flex gap-4 items-center">
-			<div class="hidden lg:flex">
-				<DropdownButton
-					label=""
-					set_w={false}
-					onchoose={(e) => {
-						$settings_page_open = e.value as SettingKey;
-						goto('/dashboard/settings');
-					}}
-					options={[{ key: 'Customize Dashboard', value: 'customization' }]}>Inne</DropdownButton
-				>
-			</div>
+		<div class="flex gap-4 relative items-center">
 			<button
 				onclick={() => {
 					goto('/dashboard/settings');
@@ -93,21 +64,32 @@
 			</button>
 		</div>
 	</div>
-
-	<div class="flex gap-5 lg:flex-row flex-col">
-		<DiskSpaceWidget />
-		<CPUWidget />
-		<DatabaseWidget />
-		<SpotifyWidget />
+	<div class="my-2 flex justify-between px-2">
+		<div class="flex flex-col">
+			<Heading>Dashboard</Heading>
+			<span class="text-sm font-md text-neutral-400">System load at: {$dashboard_load_date}</span>
+		</div>
+		<button
+			onclick={() => {
+				$settings_startup_modal = 'widgets';
+				$settings_page_open = 'customization';
+				goto('/dashboard/settings');
+			}}
+			class="p-2 hover:bg-neutral-700 rounded-xl cursor-pointer"
+		>
+			<Icon icon="boxicons:edit-filled" width="30" height="30" />
+		</button>
 	</div>
+
+	<WidgetContainer />
+
+	<SecondHubContainer />
 </div>
 
-<div class="grid grid-cols-5 p-5 gap-5"></div>
-
-{@render BenchmarkAll()}
-
-{#snippet BenchmarkAll()}
-	<div class="flex max-w-[550px] flex-col gap-4 rounded-lg p-5"></div>
+{#snippet GradientLeft()}
+	<div
+		class="absolute -left-5 w-50 h-50 rounded-full blur-[60px] pointer-events-none -z-10 bg-linear-to-tl bg-linear-to-tb from-blue-700 to-blue-500"
+	></div>
 {/snippet}
 
 <Modal
