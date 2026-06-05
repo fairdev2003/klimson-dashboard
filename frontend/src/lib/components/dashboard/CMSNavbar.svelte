@@ -18,6 +18,11 @@
 	function toggleSidebar() {
 		if ($isMobile) {
 			$mobile_sidebar_open = !$mobile_sidebar_open;
+			if (!$mobile_sidebar_open) {
+				document.body.style.overflow = 'hidden';
+				return;
+			}
+			document.body.style.overflow = 'auto';
 		} else {
 			$sidebar_open = !$sidebar_open;
 		}
