@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import SidebarUserLogged from '../SidebarUserLogged.svelte';
 	import { page } from '$app/state';
-	import { isMobile, route } from '$lib/dashboard/stores/persist';
+	import { isMobile, mobile_sidebar_open, route } from '$lib/dashboard/stores/persist';
 	import type { SidebarItems } from './sidebar.types';
 	import SidebarItem from './SidebarItem.svelte';
 	import { sidebar_open } from '$lib/dashboard/stores/store';
@@ -89,6 +89,14 @@
 			disabled: true
 		}
 	];
+
+	$effect(() => {
+		if ($mobile_sidebar_open) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+		}
+	});
 </script>
 
 <div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col justify-between m-5">
