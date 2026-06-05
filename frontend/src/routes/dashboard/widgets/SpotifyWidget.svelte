@@ -31,22 +31,29 @@
 				<div class="flex relative flex-col text-start gap3 justify-center w-full">
 					<h3 class="text-sm font-semibold truncate">{spotifyApp.getSong()}</h3>
 					<p class="text-xs text-neutral-400 font-semibold">{spotifyApp.getArtist()}</p>
-					<div class="absolute right-5 top-1/2 translate-[50%]">
-						{@render AudioVisualizer()}
-					</div>
+					{#if spotifyApp.spotify.is_playing}
+						<div class="absolute right-5 top-1/2 translate-[50%]">
+							{@render AudioVisualizer()}
+						</div>
+					{/if}
 				</div>
 			</div>
 			<div>
 				<div class="flex justify-between mt-4 mx-12">
 					<Icon icon="fluent:previous-20-filled" width="30" height="3s0" />
-
-					<Icon icon="material-symbols:pause" width="30" height="30" />
+					{#if spotifyApp.spotify.is_playing}
+						<Icon icon="material-symbols:pause" width="30" height="30" />
+					{:else}
+						<Icon icon="mdi:play" width="30" height="30" />
+					{/if}
 					<Icon icon="fluent:next-20-filled" width="30" height="30" />
 				</div>
 				<div class={`h-1 rounded-full bg-white/30 w-full mt-4`}>
 					<div
-						class="h-full rounded-full bg-green-400 transition-all duration-500 ease-linear"
-						style="width: {(spotifyApp.progress / spotifyApp.duration) * 100}%"
+						class:bg-green-500={spotifyApp.spotify.is_playing}
+						class="h-full rounded-full transition-all duration-500 ease-linear"
+						style="width: {spotifyApp.spotify.is_playing &&
+							(spotifyApp.progress / spotifyApp.duration) * 100}%"
 					></div>
 				</div>
 

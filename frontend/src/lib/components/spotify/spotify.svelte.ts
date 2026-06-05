@@ -6,7 +6,7 @@ import { setCustomIconsLoader } from '@iconify/svelte';
 
 class Spotify {
 	private readonly apiRoute = 'https://api.klimson.dev/spotify/currently_playing';
-	private pollingInterval = 4000;
+	private pollingInterval = 5000;
 	private progressInterval = 1000;
 	public gradient: string = $state('');
 
