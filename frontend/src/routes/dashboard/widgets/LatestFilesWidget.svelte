@@ -22,7 +22,7 @@
 		<h2 class="text-lg font-bold">Latest Files</h2>
 		<p class="text-xs text-neutral-300">See what files you add recently!</p>
 	</div>
-	<div class="flex flex-col gap-3 relative">
+	<div class="flex flex-col gap-3 relative w-full">
 		{#if files.length === 0}
 			<div class="absolute right-1/2 bottom-1/2 translate-1/2">
 				<p class="text-sm font-md text-neutral-400">No records :c</p>
