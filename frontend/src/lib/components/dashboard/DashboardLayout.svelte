@@ -47,7 +47,7 @@
 		{/if}
 
 		{#if !$sidebar_open}
-			<div class="h-dvh w-75 lg:static hidden"></div>
+			<div class="h-full w-75 lg:static hidden"></div>
 		{/if}
 
 		{#if $mobile_sidebar_open}
@@ -63,7 +63,7 @@
 		<main
 			in:fade={{ duration: 150 }}
 			out:fade={{ duration: 150 }}
-			class="flex-1 h-[calc(100dvh-66px)] overflow-y-auto"
+			class="flex-1 h-[calc(100vh-66px)] overflow-y-auto"
 		>
 			{@render children()}
 		</main>
