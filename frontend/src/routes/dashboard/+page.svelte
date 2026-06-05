@@ -72,15 +72,17 @@
 			<h1 class="text-xl font-bold">Witaj, Jakub</h1>
 		</div>
 		<div class="flex gap-4 items-center">
-			<DropdownButton
-				label=""
-				set_w={false}
-				onchoose={(e) => {
-					$settings_page_open = e.value as SettingKey;
-					goto('/dashboard/settings');
-				}}
-				options={[{ key: 'Customize Dashboard', value: 'customization' }]}>Inne</DropdownButton
-			>
+			<div class="hidden lg:flex">
+				<DropdownButton
+					label=""
+					set_w={false}
+					onchoose={(e) => {
+						$settings_page_open = e.value as SettingKey;
+						goto('/dashboard/settings');
+					}}
+					options={[{ key: 'Customize Dashboard', value: 'customization' }]}>Inne</DropdownButton
+				>
+			</div>
 			<button
 				onclick={() => {
 					goto('/dashboard/settings');
