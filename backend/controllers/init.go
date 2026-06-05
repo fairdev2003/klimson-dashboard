@@ -26,7 +26,35 @@ func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterG
 	}
 }
 
+func (controller GlobalController) RefreshCPU(ctx *gin.Context) {
+
+	conn, err := helpers.Upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		return
+	}
+
+	controller.Hub.Mu.Lock()
+	controller.Hub.Clients[conn] = true
+	controller.Hub.Mu.Unlock()
+
+	defer func() {
+		controller.Hub.Mu.Lock()
+		delete(controller.Hub.Clients, conn)
+		controller.Hub.Mu.Unlock()
+		conn.Close()
+	}()
+
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
+	}
+}
+
 func (controller GlobalController) RegisterRoutes() {
+
+	controller.publicPath.GET("/ws/stats/cpu", controller.RefreshCPU)
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")

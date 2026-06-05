@@ -70,7 +70,12 @@
 			name: 'File Storage',
 			disabled: false
 		},
-
+		{
+			icon: 'mdi:link',
+			href: '/dashboard/routes',
+			name: 'API Routes',
+			disabled: false
+		},
 		{
 			icon: 'mdi:image',
 			href: '/dashboard/images',
@@ -82,12 +87,6 @@
 			href: '/dashboard/pg3d',
 			name: 'PG3D [ ARCHIVED ]',
 			disabled: true
-		},
-		{
-			icon: 'mdi:link',
-			href: '/dashboard/routes',
-			name: 'API Routes',
-			disabled: true
 		}
 	];
 </script>
@@ -97,7 +96,7 @@
 		<SidebarUserLogged
 			name={$nickname}
 			role="$root"
-			pfp_logo="https://api.klimson.dev/storage/interface/random/banana.webp"
+			pfp_logo="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
 		/>
 
 		{#if $sidebar_open}

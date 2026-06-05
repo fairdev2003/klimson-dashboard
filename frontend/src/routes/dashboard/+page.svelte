@@ -17,6 +17,10 @@
 	import { goto } from '$app/navigation';
 	import DatabaseWidget from './widgets/DatabaseWidget.svelte';
 	import SpotifyWidget from './widgets/SpotifyWidget.svelte';
+	import DropdownButton from '$lib/components/dashboard/settings/components/DropdownButton.svelte';
+	import { settings_page_open, type SettingKey } from '$lib/components/dashboard/settings/store';
+	import { toast } from '$lib/dashboard/stores/toast';
+	import CPUWidget from './widgets/CPUWidget.svelte';
 
 	// s
 
@@ -61,15 +65,22 @@
 	>
 		<div class="flex gap-4 items-center">
 			<img
-				width="40"
-				height="40"
-				class="rounded-full"
-				src="https://api.klimson.dev/storage/interface/random/banana.webp"
+				class="rounded-full size-12.5"
+				src="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
 				alt="me"
 			/>
 			<h1 class="text-xl font-bold">Witaj, Jakub</h1>
 		</div>
-		<div class="flex">
+		<div class="flex gap-4 items-center">
+			<DropdownButton
+				label=""
+				set_w={false}
+				onchoose={(e) => {
+					$settings_page_open = e.value as SettingKey;
+					goto('/dashboard/settings');
+				}}
+				options={[{ key: 'Customize Dashboard', value: 'customization' }]}>Inne</DropdownButton
+			>
 			<button
 				onclick={() => {
 					goto('/dashboard/settings');
@@ -83,6 +94,7 @@
 
 	<div class="flex gap-5 lg:flex-row flex-col">
 		<DiskSpaceWidget />
+		<CPUWidget />
 		<DatabaseWidget />
 		<SpotifyWidget />
 	</div>

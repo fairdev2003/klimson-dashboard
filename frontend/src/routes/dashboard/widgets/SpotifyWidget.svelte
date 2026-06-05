@@ -50,9 +50,14 @@
 					></div>
 				</div>
 
-				<div class="flex justify-between mt-2">
+				<div class="flex justify-between mt-2 relative">
 					<p class="text-[11px] text-white">{spotifyApp.formatMs(spotifyApp.progress)}</p>
 					<p class="text-[11px] text-white">{spotifyApp.formatMs(spotifyApp.duration)}</p>
+				</div>
+				<div
+					class="absolute group-hover:flex hidden bottom-0 px-5 border-b-0 right-1/2 translate-x-1/2 rounded-t-lg border-2 p-1 border-neutral-700 bg-neutral-800"
+				>
+					<p class="text-xs text-white font-semibold">{spotifyApp.spotify?.device.name}</p>
 				</div>
 			</div>
 		</div>

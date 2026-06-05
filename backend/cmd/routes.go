@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/zgierz/harc_quiz/backend/controllers"
 	"github.com/zgierz/harc_quiz/backend/handlers"
 	"github.com/zgierz/harc_quiz/backend/helpers"
@@ -139,6 +141,15 @@ func InitRoutes() {
 
 	hub := helpers.NewHub()
 	go hub.Run()
+
+	go func() {
+		ticker := time.NewTicker(2 * time.Second)
+		for range ticker.C {
+			cpuUsage, _ := cpu.Percent(0, false)
+
+			hub.Send(map[string]float64{"cpu": cpuUsage[0]})
+		}
+	}()
 	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, hub)
 	newQuizController.RegisterRoutes()
 }

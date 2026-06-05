@@ -71,15 +71,15 @@
 				<p
 					class:text-violet-500={$base_url === 'https://api.klimson.dev'}
 					class:text-blue-500={$base_url !== 'https://api.klimson.dev'}
-					class="text-xs mt-1"
+					class="text-xs mt-1 font-semibold"
 				>
-					{$base_url === 'https://api.klimson.dev' ? 'mikrus' : 'dev'}
+					{$base_url === 'https://api.klimson.dev' ? 'mikrus' : 'arch'}
 				</p>
 			{/if}
 		</div>
 
 		<div class="flex justify-between gap-1 items-center">
-			<div class="grid grid-cols-10 h-10 gap-1 w-50 lg:w-3/4">
+			<div class="grid grid-cols-10 h-10 gap-1 w-50 lg:w-3/5">
 				{#each Array(10) as _, i}
 					<div class="blob-item bg-neutral-600 rounded-full col-span-1 h-10"></div>
 				{/each}

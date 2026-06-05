@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import type { Snippet } from 'svelte';
 	import { blur } from 'svelte/transition';
 
 	type DropdownOption = {
@@ -10,9 +11,11 @@
 	type Props = {
 		options: DropdownOption[];
 		onchoose?: (e: DropdownOption) => void;
-		current_value: any;
-		label?: string;
+		current_value?: any;
 		error_text?: string;
+		children?: Snippet;
+		set_w: boolean;
+		label: string;
 	};
 
 	function handleClickOutside(event: MouseEvent) {
@@ -28,17 +31,32 @@
 
 	let opened: boolean = $state(false);
 
-	let { options, onchoose, current_value = $bindable(), label, error_text }: Props = $props();
+	let {
+		options,
+		onchoose,
+		set_w = false,
+		current_value = $bindable(),
+		children,
+		error_text,
+		label
+	}: Props = $props();
 
 	let l = $derived(options.find((opt) => opt.value === current_value)?.key || 'Wybierz opcję');
 </script>
 
 <div class="relative">
 	<button
-		class="bg-neutral-800 dropdown-button flex items-center gap-1 justify-between min-w-50 px-4 p-2 border cursor-pointer hover:bg-neutral-700 border-neutral-700 rounded-xl"
+		class:min-w-50={set_w}
+		class="bg-neutral-800 dropdown-button flex items-center gap-1 justify-between px-4 p-2 border cursor-pointer hover:bg-neutral-700 border-neutral-700 rounded-xl"
 		onclick={() => (opened = !opened)}
 	>
-		<p>{label || l}</p>
+		{#if children}
+			{@render children?.()}
+		{:else if label}
+			<p>{label}</p>
+		{:else}
+			<p>{l}</p>
+		{/if}
 
 		{#if opened}
 			<Icon icon="mynaui:chevron-up" width="20" height="20" />
@@ -51,7 +69,7 @@
 		<div
 			in:blur={{ duration: 300 }}
 			out:blur={{ duration: 300 }}
-			class="absolute dropdown-container overflow-hidden top-full left-1/2 -translate-x-1/2 mt-2 bg-neutral-800 border border-neutral-700 w-48 z-50 rounded-md"
+			class="absolute dropdown-container w-50 overflow-hidden top-full left-1/2 -translate-x-1/2 mt-2 bg-neutral-800 border border-neutral-700 w-48 z-50 rounded-md"
 		>
 			<div class="flex flex-col">
 				{#each options as option}

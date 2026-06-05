@@ -10,7 +10,7 @@
 	type Props = {
 		options: DropdownOption[];
 		onchoose?: (e: DropdownOption) => void;
-		current_value: any;
+		current_value?: any;
 		label?: string;
 		title: string;
 		description: string;
@@ -43,7 +43,8 @@
 		<p class="text-red-500 text-xs">{error_text && disabled ? error_text : ''}</p>
 	</div>
 	<div class="">
-		<DropdownButton bind:current_value {label} {options} {onchoose} {error_text} />
+		<DropdownButton bind:current_value {options} set_w={true} {label} {onchoose} {error_text}
+		></DropdownButton>
 	</div>
 </div>
 

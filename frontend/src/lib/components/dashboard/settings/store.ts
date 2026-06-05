@@ -3,5 +3,10 @@ import { writable } from 'svelte/store';
 
 export type SettingKey = 'main' | 'server' | 'customization';
 
+export type DropdownOption = {
+	key: string;
+	value: string;
+};
+
 export const settings_page_open = persistedWritable<SettingKey>('settings_page_open', 'main');
 export const nickname = persistedWritable<string>('nickname', 'Jakub');
