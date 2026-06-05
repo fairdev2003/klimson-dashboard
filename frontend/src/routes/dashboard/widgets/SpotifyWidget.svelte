@@ -16,10 +16,10 @@
 		onclick={() => {
 			goto('/dashboard/spotify');
 		}}
-		class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 hover:ring-green-500 hover:ring-2 border-neutral-700 bg-neutral-800/60"
+		class="relative cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border hover:ring-green-500 hover:ring-2 border-neutral-700 bg-neutral-800/60"
 	>
 		<div class="absolute group-hover:flex hidden w-full h-full bg-green-500/20"></div>
-		<div class="p-5">
+		<div class="p-5 w-full">
 			<div class="flex gap-3">
 				<img
 					src={spotifyApp.getAlbumCover()}
@@ -28,8 +28,12 @@
 					class="rounded-full"
 					alt="album_cover"
 				/>
-				<div class="flex relative flex-col text-start gap3 justify-center w-full">
-					<h3 class="text-sm font-semibold truncate">{spotifyApp.getSong()}</h3>
+				<div class="flex relative flex-col text-start justify-center w-full">
+					<div class="w-full">
+						<h3 class="text-sm font-semibold truncate">
+							{spotifyApp.getSong()?.slice(0, 15)}{spotifyApp.getSong()?.length > 14 ? '...' : ''}
+						</h3>
+					</div>
 					<p class="text-xs text-neutral-400 font-semibold">
 						{spotifyApp.getArtist()}{spotifyApp.spotify.item.artists.length > 1 ? ', +' : ''}
 
