@@ -10,7 +10,7 @@
 	});
 </script>
 
-{#key spotifyApp.spotify?.item?.name}
+{#if spotifyApp.spotify?.item?.name}
 	<button
 		in:blur={{ duration: 300 }}
 		onclick={() => {
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 	</button>
-{/key}
+{/if}
 
 {#snippet AudioVisualizer()}
 	<div class="visualizer flex gap-1">

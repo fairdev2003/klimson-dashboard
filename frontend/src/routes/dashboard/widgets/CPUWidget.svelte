@@ -9,15 +9,19 @@
 
 	let ws_connection_opened = $state(false);
 
+	type CPUObjectType = {
+		cpu: number;
+	};
+
 	onMount(() => {
-		const statement = base_url == 'https://api.klimson.dev';
+		const statement = $base_url == 'https://api.klimson.dev';
 		const replace = statement ? 'https://' : 'http://';
 		const websocket = statement ? 'wss://' : 'ws://';
 
 		const socket = new WebSocket(`${$base_url.replace(replace, websocket)}/ws/stats/cpu`);
 
 		socket.onmessage = (event) => {
-			const data = JSON.parse(event.data);
+			const data: CPUObjectType = JSON.parse(event.data);
 			cpu = data.cpu;
 		};
 
