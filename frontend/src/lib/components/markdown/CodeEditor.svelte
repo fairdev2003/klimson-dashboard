@@ -18,11 +18,20 @@
 	onMount(() => {
 		if (!editorContainer) return;
 		if (browser) {
+			monaco.editor.defineTheme('theme', {
+				base: 'vs-dark',
+				inherit: true,
+				rules: [{ token: 'comment', foreground: 'ffa500', fontStyle: 'italic' }],
+				colors: {
+					'editor.background': '#171717'
+				}
+			});
+
 			editor = monaco.editor.create(editorContainer, {
 				value: value,
 				language: language,
-				theme: 'vs-dark',
-				automaticLayout: true
+				automaticLayout: true,
+				theme: 'theme'
 			});
 
 			editor.onDidChangeModelContent(() => {
@@ -46,5 +55,5 @@
 </script>
 
 {#if browser}
-	<div bind:this={editorContainer} class="h-[500px] w-full border border-neutral-700"></div>
+	<div bind:this={editorContainer} class="h-[500px] w-full border border-neutral-900"></div>
 {/if}

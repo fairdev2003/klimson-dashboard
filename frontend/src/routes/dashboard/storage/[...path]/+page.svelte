@@ -120,11 +120,28 @@
 		}
 	}
 
+	async function AddNewFile() {
+		const newName = prompt('Podaj nazwę pliku:');
+
+		try {
+			const path = `${params.path || ''}/${newName}`;
+			const res = await api.storage.AddFile(path);
+
+			if (res.data.success) {
+				toast.success('Zmieniono nazwę!');
+				await invalidateAll();
+				return res.data.success;
+			}
+		} catch (e) {
+			toast.error('Błąd podczas zmiany nazwy');
+			return false;
+		}
+	}
+
 	async function DeleteFileOrFolder(name: string, isDir: boolean) {
 		let confirmDelete = false;
 
 		if (isDir) {
-			// Dodatkowe potwierdzenie dla folderu
 			const input = prompt(
 				`To jest folder. Czy na pewno chcesz usunąć "${name}" wraz z całą zawartością? Wpisz nazwę folderu, aby potwierdzić:`
 			);
@@ -317,6 +334,13 @@
 				onclick={() => {
 					fileInput.click();
 				}}>Upload a file</Button
+			>
+			<Button
+				theme="base"
+				disabled={uploading}
+				onclick={() => {
+					AddNewFile();
+				}}>Add new file</Button
 			>
 			<Button
 				theme="secondary"

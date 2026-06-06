@@ -69,6 +69,18 @@ class Storage {
 		return response;
 	}
 
+	public async AddFile(path: string): Promise<ServerResponse<{}>> {
+		const response: ServerResponse<{}> = await this.api.post(
+			`/admin/storage/interface/new-file/${path}`,
+			{ content: '' },
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
+
+		return response;
+	}
+
 	public async CreateFolder(
 		path: string,
 		folder: FolderCreationBody

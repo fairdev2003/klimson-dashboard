@@ -24,6 +24,11 @@
 
 <button
 	onclick={(e) => {
+		if (name.endsWith('.md')) {
+			goto(`/dashboard/markdown/editor/${slug}/${name}`);
+			return;
+		}
+
 		if (storage_logic.delete_multiple_enabled) {
 			deleteOn = !deleteOn;
 			return;

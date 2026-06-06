@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/api';
 	import Button from '$lib/components/dashboard/settings/components/Button.svelte';
 	import CodeEditor from '$lib/components/markdown/CodeEditor.svelte';
+	import { toast } from '$lib/dashboard/stores/toast.js';
 	import { marked, type Tokens } from 'marked';
 	import { onMount, tick } from 'svelte';
 
@@ -49,9 +50,9 @@
 </script>
 
 <div class="h-dvh p-10">
-	<div class="relative w-full h-1/2 z-1">
+	<div class="relative z-1">
 		{#if loading}
-			<div class="w-full h-full absolute z-2 bg-blue-500/50"></div>
+			<div class="w-full h-full absolute z-50 bg-blue-500/50"></div>
 		{/if}
 		<!-- <textarea bind:value={markdown} class="h-full bg-transparent w-full"></textarea> -->
 		<CodeEditor
@@ -60,10 +61,21 @@
 			onchange={(e: string) => (markdown = e)}
 		/>
 	</div>
-	<div class="flex justify-end">
+	<div class="flex justify-end mt-10">
 		<Button label="Wyslij dane" onclick={SendFile}></Button>
 	</div>
-	<div class="prose prose-invert">
+	<div class="prose prose-invert flex max-w-none flex-col w-4xl mx-auto justify-center">
 		{@html markdownHTML}
 	</div>
 </div>
+
+<svelte:document
+	onkeydown={async (e) => {
+		if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+			e.preventDefault();
+
+			e.stopPropagation();
+			await SendFile();
+		}
+	}}
+/>

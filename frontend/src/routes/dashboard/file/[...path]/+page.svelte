@@ -43,6 +43,10 @@
 			/>
 		</div>
 	{/if}
+	{#if file_name.endsWith('.md')}
+		{@const url = `/dashboard/markdown/editor/${getFileUrl(params.path)}`}
+		<a href={url}>{url}</a>
+	{/if}
 	{#if file_name.endsWith('.sfm')}
 		<SFMCodeArea
 			program_link="{api.api_config.baseURL}interface/bucket/{getFileUrl(params.path)}"

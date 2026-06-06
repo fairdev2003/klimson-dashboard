@@ -74,6 +74,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
 	controller.adminPath.POST("/storage/interface/edit-file/*filepath", controller.PushChangedTextFile)
+	controller.adminPath.POST("/storage/interface/new-file/*filepath", controller.NewFile)
 	controller.adminPath.GET("/storage/latest", controller.GetLatesFiles)
 
 	// context storage crud operations

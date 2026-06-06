@@ -22,6 +22,29 @@ func (gc GlobalController) GetFile(c *gin.Context) {
 	c.File(fullPath)
 }
 
+func (gc GlobalController) NewFile(ctx *gin.Context) {
+	filePath := ctx.Param("filepath")
+
+	fullPath := "./static/uploads" + filePath
+
+	var requestBody struct {
+		Content string `json:"content"`
+	}
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+		khttp.BadRequestResponse(ctx, nil, err.Error())
+		return
+	}
+
+	err := os.WriteFile(fullPath, []byte(requestBody.Content), 0644)
+	if err != nil {
+		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		return
+	}
+
+	khttp.SuccessResponse(ctx, "Success!")
+
+}
+
 func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 	filePath := c.Param("filepath")
 
