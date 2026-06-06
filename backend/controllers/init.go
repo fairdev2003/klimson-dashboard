@@ -64,13 +64,16 @@ func (controller GlobalController) RegisterRoutes() {
 	storagePath.GET("/file/*filepath", controller.GetFile)
 	storagePath.GET("/list/*folder", controller.ListFiles)
 	storagePath.GET("/interface/*folder", controller.Interface)
+
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
 	// protected file storage
+
 	controller.adminPath.POST("/storage/interface/create-folder/*folder", controller.CreateFolder)
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
+	controller.adminPath.POST("/storage/interface/edit-file/*filepath", controller.PushChangedTextFile)
 	controller.adminPath.GET("/storage/latest", controller.GetLatesFiles)
 
 	// context storage crud operations

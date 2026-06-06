@@ -77,16 +77,10 @@
 			disabled: false
 		},
 		{
-			icon: 'mdi:image',
-			href: '/dashboard/images',
-			name: 'Image Explorer (useless)',
-			disabled: true
-		},
-		{
-			icon: 'at-icons:gun',
-			href: '/dashboard/pg3d',
-			name: 'PG3D [ ARCHIVED ]',
-			disabled: true
+			icon: 'streamline-block:content-copy',
+			href: '/dashboard/content_manager',
+			name: 'Content Manager',
+			disabled: false
 		}
 	];
 

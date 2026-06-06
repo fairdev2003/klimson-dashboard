@@ -1,0 +1,32 @@
+<script lang="ts">
+	import { marked, type Tokens } from 'marked';
+
+	let { params, data } = $props();
+
+	let markdown = $state(data.markdown || '');
+
+	const renderer = {
+		heading(token: Tokens.Heading) {
+			return `<h${token.depth} class="font-bold text-2xl my-4">${token.text}</h${token.depth}>`;
+		},
+
+		link(token: Tokens.Link) {
+			return `<a href="${token.href}" class="text-blue-500" target="_blank">${token.text}</a>`;
+		}
+	};
+
+	marked.use({ renderer });
+
+	let markdownHTML = $derived.by(() => {
+		const newMarked = marked.parse(markdown);
+		console.log(newMarked);
+		return newMarked;
+	});
+</script>
+
+<div class="h-dvh p-10">
+	<textarea bind:value={markdown} class="h-1/2 bg-transparent w-full"></textarea>
+	<div class="prose prose-invert">
+		{@html markdownHTML}
+	</div>
+</div>

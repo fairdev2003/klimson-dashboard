@@ -43,6 +43,28 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 	c.File(fullPath)
 }
 
+func (gc *GlobalController) PushChangedTextFile(c *gin.Context) {
+	filePath := c.Param("filepath")
+
+	var requestBody struct {
+		Content string `json:"content"`
+	}
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Błędne dane", "success": false})
+		return
+	}
+
+	fullPath := filepath.Join("./static/uploads", filePath)
+
+	err := os.WriteFile(fullPath, []byte(requestBody.Content), 0644)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err, "success": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Plik zapisany pomyślnie", "success": true})
+}
+
 func (gc GlobalController) UploadFile(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {

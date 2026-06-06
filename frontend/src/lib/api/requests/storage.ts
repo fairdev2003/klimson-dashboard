@@ -54,6 +54,21 @@ class Storage {
 		return response;
 	}
 
+	public async PushChangedTextFile(
+		content: { content: string },
+		path: string
+	): Promise<ServerResponse> {
+		const response: ServerResponse = await this.api.post(
+			`/admin/storage/interface/edit-file/${path}`,
+			content,
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
+
+		return response;
+	}
+
 	public async CreateFolder(
 		path: string,
 		folder: FolderCreationBody
