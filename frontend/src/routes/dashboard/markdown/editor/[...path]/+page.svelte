@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { api } from '$lib/api/api';
+	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import Button from '$lib/components/dashboard/settings/components/Button.svelte';
 	import CodeEditor from '$lib/components/markdown/CodeEditor.svelte';
 	import { toast } from '$lib/dashboard/stores/toast.js';
@@ -46,13 +47,16 @@
 
 		requestedMarkdownFile = response.data;
 		loading = false;
+		toast.success('Zapisano');
 	}
 </script>
 
 <div class="h-dvh p-10">
 	<div class="relative z-1">
 		{#if loading}
-			<div class="w-full h-full absolute z-50 bg-blue-500/50"></div>
+			<div class="w-full h-full absolute z-50 bg-blue-500/50 flex justify-center items-center">
+				<Loader />
+			</div>
 		{/if}
 		<!-- <textarea bind:value={markdown} class="h-full bg-transparent w-full"></textarea> -->
 		<CodeEditor
@@ -73,7 +77,6 @@
 	onkeydown={async (e) => {
 		if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
 			e.preventDefault();
-
 			e.stopPropagation();
 			await SendFile();
 		}
