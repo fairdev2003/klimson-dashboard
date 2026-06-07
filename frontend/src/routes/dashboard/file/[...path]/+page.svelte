@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { api } from '$lib/api/api';
-	import { base_url } from '$lib/api/api.store.js';
+	import { base_url } from '$lib/api/api.store';
 	import SFMCodeArea from '$lib/components/dashboard/sfm/(components)/SFMCodeArea.svelte';
+	import { toast } from '$lib/dashboard/stores/toast.js';
 	import Icon from '@iconify/svelte';
 
 	let { params } = $props();
@@ -27,10 +28,19 @@
 		</button>
 		<h1 class="text-xl font-bold text-neutral-100">{file_name}</h1>
 		<a
-			href="{api.api_config.baseURL}interface/bucket/{getFileUrl(params.path)}"
+			href="{$base_url}/interface/bucket/{getFileUrl(params.path)}"
 			class="text-sm text-neutral-400 hover:underline cursor-pointer break-all"
 		>
 			API Reference URL
+		</a>
+		<a
+			onclick={() => {
+				navigator.clipboard.writeText(`${$base_url}/interface/bucket/${getFileUrl(params.path)}`);
+				toast.success('URL Copied to clipboard!', 2000);
+			}}
+			class="text-sm text-neutral-400 hover:underline cursor-pointer break-all"
+		>
+			Copy URL
 		</a>
 	</div>
 

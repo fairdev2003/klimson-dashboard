@@ -6,11 +6,12 @@
 	// 1. Definicja propsów z użyciem interfejsu lub typu
 	interface Props {
 		value: string;
+		file: string;
 		language?: string; // Opcjonalny, domyślnie 'markdown'
 		onchange: (value: string) => void;
 	}
 
-	let { value = $bindable(), language = 'markdown', onchange }: Props = $props();
+	let { value = $bindable(), language = 'markdown', onchange, file }: Props = $props();
 
 	let editorContainer: HTMLDivElement | undefined = $state();
 	let editor: monaco.editor.IStandaloneCodeEditor | undefined = $state();
@@ -54,6 +55,11 @@
 	});
 </script>
 
-{#if browser}
-	<div bind:this={editorContainer} class="h-[500px] w-full border border-neutral-900"></div>
-{/if}
+<div class="border border-neutral-700">
+	{#if browser}
+		<div class="w-full bg-neutral-900/50 p-1">
+			<code class="text-sm">{file}</code>
+		</div>
+		<div bind:this={editorContainer} class="h-[500px] w-full"></div>
+	{/if}
+</div>

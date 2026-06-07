@@ -12,6 +12,8 @@
 	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
 	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
 	import { slide } from 'svelte/transition';
+	import { explorer } from '$lib/components/dashboard/storage/file.svelte';
+	import { base_url } from '$lib/api/api.store';
 
 	let { data, params } = $props();
 
@@ -239,6 +241,25 @@
 					await RenameFileOrFolder(selectedItem.name);
 				}}
 				class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button
+			>
+			<button
+				onclick={async () => {
+					explorer.showExplorer({
+						open: true,
+						acceptedFileTypes: ['.java', '.rar', '.py'],
+						startingPath: `/`
+					});
+				}}
+				class="block w-full text-left p-2 hover:bg-neutral-700">Przenieś Plik</button
+			>
+			<button
+				onclick={() => {
+					const copyContent = `${$base_url}/interface/bucket/${params.path}/${selectedItem?.name}`;
+					navigator.clipboard.writeText(copyContent);
+					toast.info(copyContent);
+					menuVisible = false;
+				}}
+				class="block w-full text-left p-2 hover:bg-neutral-700">Kopiuj link</button
 			>
 			<button
 				onclick={async () => {

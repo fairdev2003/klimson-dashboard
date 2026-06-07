@@ -49,6 +49,14 @@
 		loading = false;
 		toast.success('Zapisano');
 	}
+
+	function AddImage() {
+		const url = prompt('Image link');
+
+		console.log(markdown.split('\n'));
+		const newImageLine = `![image](${url})`;
+		markdown = markdown + '\n' + newImageLine;
+	}
 </script>
 
 <div class="h-dvh p-10">
@@ -58,8 +66,9 @@
 				<Loader />
 			</div>
 		{/if}
-		<!-- <textarea bind:value={markdown} class="h-full bg-transparent w-full"></textarea> -->
+
 		<CodeEditor
+			file={params.path.split('/')[params.path.split('/').length - 1]}
 			bind:value={markdown}
 			language="markdown"
 			onchange={(e: string) => (markdown = e)}
@@ -67,8 +76,9 @@
 	</div>
 	<div class="flex justify-end mt-10">
 		<Button label="Wyslij dane" onclick={SendFile}></Button>
+		<Button label="Dodaj zdjecie" onclick={AddImage}></Button>
 	</div>
-	<div class="prose prose-invert flex max-w-none flex-col w-4xl mx-auto justify-center">
+	<div class="prose prose-invert flex max-w-none flex-col w-4xl mx-auto justify-center pb-10">
 		{@html markdownHTML}
 	</div>
 </div>

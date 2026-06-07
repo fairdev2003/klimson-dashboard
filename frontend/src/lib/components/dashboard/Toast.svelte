@@ -41,7 +41,7 @@
 </script>
 
 <div
-	class="fixed top-5 right-1/2 translate-x-1/2 z-[150] flex flex-col gap-3 transition-all duration-300"
+	class="absolute z-51 h-auto flex flex-col gap-3 transition-all duration-300 w-full max-w-sm px-4"
 	class:bottom-20={$debugOn}
 	class:bottom-5={!$debugOn}
 >
@@ -49,7 +49,7 @@
 		<div
 			animate:flip={{ duration: 300 }}
 			transition:blur={{ duration: 400 }}
-			class="flex min-w-50 flex-col rounded-lg justify-between overflow-hidden text-white shadow-xl {colors[
+			class="flex flex-col rounded-lg justify-between overflow-hidden text-white shadow-xl {colors[
 				t.type
 			]}"
 		>
