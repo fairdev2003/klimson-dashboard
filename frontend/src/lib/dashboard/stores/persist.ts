@@ -3,6 +3,7 @@ import { browser } from '$app/environment';
 import type { Quiz } from '../../../routes/dashboard/quizzes/types';
 import type { Contributor } from '../../../routes/dashboard/contributors/types';
 import type { JWT } from './store';
+import type { CodeEditorTheme } from '$lib/components/markdown/markdown';
 
 export function persistedWritable<T>(key: string, initialValue: T) {
 	let storedValue: T | null = null;
@@ -32,13 +33,15 @@ export function persistedWritable<T>(key: string, initialValue: T) {
 
 export type DashboardSettings = {
 	allowToSaveQuizWithoutQuestions: boolean;
+	code_theme: CodeEditorTheme;
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
 export const debugOn = persistedWritable<boolean>('debug_on', true);
 export const lastSearched = persistedWritable<Quiz[]>('last_searched', []);
 export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_settings', {
-	allowToSaveQuizWithoutQuestions: false
+	allowToSaveQuizWithoutQuestions: false,
+	code_theme: 'classic'
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 

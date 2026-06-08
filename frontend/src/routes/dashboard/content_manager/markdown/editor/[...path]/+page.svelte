@@ -4,8 +4,22 @@
 	import Button from '$lib/components/dashboard/settings/components/Button.svelte';
 	import CodeEditor from '$lib/components/markdown/CodeEditor.svelte';
 	import { toast } from '$lib/dashboard/stores/toast.js';
-	import { marked, type Tokens } from 'marked';
+	import { Marked, type Tokens } from 'marked';
+	import { markedHighlight } from 'marked-highlight';
+	import 'highlight.js/styles/atom-one-dark.min.css';
+
+	const marked = new Marked(
+		markedHighlight({
+			langPrefix: 'hljs language-', // Klasy wymagane przez Highlight.js
+			highlight(code, lang) {
+				const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+				return hljs.highlight(code, { language }).value;
+			}
+		})
+	);
+
 	import { onMount, tick } from 'svelte';
+	import hljs from 'highlight.js';
 
 	let { params, data } = $props();
 
@@ -92,3 +106,15 @@
 		}
 	}}
 />
+
+<style>
+	.prose pre {
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
+	}
+
+	.prose code {
+		background-color: transparent !important;
+	}
+</style>

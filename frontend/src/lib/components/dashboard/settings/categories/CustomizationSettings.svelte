@@ -2,7 +2,7 @@
 	import { blur } from 'svelte/transition';
 	import DropdownSettingsRecord from '../records/DropdownSettingsRecord.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
-	import { animation_preset } from '$lib/dashboard/stores/persist';
+	import { animation_preset, dashboard_config } from '$lib/dashboard/stores/persist';
 	import ButtonSettingsRecord from '../records/ButtonSettingsRecord.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import Modal from '$lib/components/Modal.svelte';
@@ -10,6 +10,7 @@
 	import { nickname } from '../store.svelte';
 	import { onMount, tick } from 'svelte';
 	import { settings_startup_modal } from '../../stores/main';
+	import { codeEditorTheme } from '$lib/components/markdown/markdown';
 	let value = $state('');
 
 	let orderOpened: boolean = $state(false);
@@ -29,6 +30,20 @@
 			{ key: 'Klimson Animation', value: 'klimson' }
 		]}
 		bind:current_value={$animation_preset}
+		onchoose={(e) => {
+			debug.log(e.key);
+		}}
+	/>
+
+	<DropdownSettingsRecord
+		title="Code Editor Theme"
+		description="Choose Theme of your code editor built in dashboard!"
+		options={[
+			{ key: 'Classic', value: 'classic' },
+			{ key: 'Dracula Theme', value: 'dracula' },
+			{ key: 'Light (type any)', value: 'normal' }
+		]}
+		bind:current_value={$dashboard_config.code_theme}
 		onchoose={(e) => {
 			debug.log(e.key);
 		}}

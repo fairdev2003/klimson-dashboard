@@ -32,15 +32,16 @@
 	<h1 class="font-bold">
 		<Heading>Categories</Heading>
 	</h1>
-	<div class="mt-5 flex flex-col gap-1">
+	<div class="mt-5 flex flex-col gap-3">
 		{#each settings as { slug, name }}
-			<a
+			<button
 				onclick={() => {
 					$settings_page_open = slug;
 				}}
-				class:text-blue-500={$settings_page_open === slug}
-				class="hover:text-blue-500 text-sm font-semibold cursor-pointer transition-colors">{name}</a
-			>
+				class:selected={$settings_page_open === slug}
+				class="text-start p-3 px-4 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-sm font-semibold cursor-pointer transition-colors"
+				>{name}
+			</button>
 		{/each}
 	</div>
 </div>
@@ -64,6 +65,6 @@
 	@import 'tailwindcss';
 
 	.selected {
-		@apply text-blue-500;
+		@apply text-blue-400 bg-blue-500/20 hover:bg-blue-500/40;
 	}
 </style>
