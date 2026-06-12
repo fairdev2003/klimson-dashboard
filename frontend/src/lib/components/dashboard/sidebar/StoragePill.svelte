@@ -48,7 +48,10 @@
 		</p>
 	</div>
 	<div class="w-full h-0.5 bg-neutral-500">
-		<div style="width: {Number(percent) * 100}%;" class="h-0.5 bg-green-500"></div>
+		<div
+			style="width: {Number(percent) * 100}%;"
+			class="h-0.5 bg-green-500 transition-all delay-150 duration-500"
+		></div>
 	</div>
 	<div>
 		<p class="text-xs text-neutral-400">

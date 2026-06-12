@@ -5,14 +5,16 @@
 	import StoragePill from './StoragePill.svelte';
 </script>
 
-{#if $dashboard_config.sidebar_preference === 'profile'}
-	<SidebarUserLogged
-		name={$nickname}
-		role="$root"
-		pfp_logo="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
-	/>
-{/if}
+<div class="flex flex-col gap-3">
+	{#if $dashboard_config.sidebar_preference.includes('profile')}
+		<SidebarUserLogged
+			name={$nickname}
+			role="$root"
+			pfp_logo="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
+		/>
+	{/if}
 
-{#if $dashboard_config.sidebar_preference === 'storage'}
-	<StoragePill />
-{/if}
+	{#if $dashboard_config.sidebar_preference.includes('storage')}
+		<StoragePill />
+	{/if}
+</div>

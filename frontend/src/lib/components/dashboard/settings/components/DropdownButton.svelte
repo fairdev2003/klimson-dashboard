@@ -41,7 +41,7 @@
 		label
 	}: Props = $props();
 
-	let l = $derived(options.find((opt) => opt.value === current_value)?.key || 'Wybierz opcję');
+	let l = $derived(options.find((opt) => opt.value === current_value)?.key || 'Select an option');
 </script>
 
 <div class="relative">

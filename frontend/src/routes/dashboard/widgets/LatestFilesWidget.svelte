@@ -20,7 +20,7 @@
 >
 	<div class="flex flex-col">
 		<h2 class="text-lg font-bold">Latest Files</h2>
-		<p class="text-xs text-neutral-300">See what files you add recently!</p>
+		<p class="text-xs text-neutral-300">See what files you added recently!</p>
 	</div>
 	<div class="flex flex-col gap-3 relative w-full">
 		{#if files.length === 0}

@@ -3,6 +3,11 @@ import type { Component } from 'svelte';
 
 export type SettingKey = 'main' | 'server' | 'customization' | 'account';
 
+export type MultipleCheckboxItem = {
+	key: string;
+	value: string;
+};
+
 export type DropdownOption = {
 	key: string;
 	value: string;

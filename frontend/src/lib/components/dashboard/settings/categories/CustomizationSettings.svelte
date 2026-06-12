@@ -11,10 +11,13 @@
 	import { onMount, tick } from 'svelte';
 	import { settings_startup_modal } from '../../stores/main';
 	import { codeEditorTheme } from '$lib/components/markdown/markdown';
+	import MultipleSettingsRecord from '../records/MultipleSettingsRecord.svelte';
 	let value = $state('');
 
 	let orderOpened: boolean = $state(false);
 	let widgetOpened: boolean = $state(false);
+
+	let list = $state(['apple', 'pineapple']);
 </script>
 
 <div
@@ -48,18 +51,34 @@
 			debug.log(e.key);
 		}}
 	/>
-	<DropdownSettingsRecord
-		title="Sidebar Pill"
-		description="Select which pill will be displayed at the top of the sidebar!"
+	<MultipleSettingsRecord
+		title="🍎 Choose fruits"
+		description="Choose what fruits you want to see on the dashboard!"
 		options={[
-			{ key: 'User Card', value: 'profile' },
-			{ key: 'Storage', value: 'storage' }
+			{ key: '🍎 Apple', value: 'apple' },
+			{ key: '🍉 Watermelon', value: 'watermelon' },
+			{ key: '🍇 Grape', value: 'grape' },
+			{ key: '🍒 Cherry', value: 'cherry' },
+			{ key: '🍍 Pineapple', value: 'pineapple' }
+		]}
+		bind:current_value={list}
+		onchoose={(e) => {
+			debug.log(e.key);
+		}}
+	/>
+	<MultipleSettingsRecord
+		title="Choose sidebar pills"
+		description="Choose what pill will be displayed on the top-level of the sidebar"
+		options={[
+			{ key: 'User Pill', value: 'profile' },
+			{ key: 'Storage Pill', value: 'storage' }
 		]}
 		bind:current_value={$dashboard_config.sidebar_preference}
 		onchoose={(e) => {
 			debug.log(e.key);
 		}}
 	/>
+
 	<ButtonSettingsRecord
 		onclick={() => {
 			orderOpened = !orderOpened;

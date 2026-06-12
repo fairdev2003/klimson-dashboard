@@ -36,7 +36,7 @@ export type SideBarPillPreferences = 'profile' | 'storage';
 export type DashboardSettings = {
 	allowToSaveQuizWithoutQuestions: boolean;
 	code_theme: CodeEditorTheme;
-	sidebar_preference: SideBarPillPreferences;
+	sidebar_preference: SideBarPillPreferences[];
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
@@ -45,7 +45,7 @@ export const lastSearched = persistedWritable<Quiz[]>('last_searched', []);
 export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_settings', {
 	allowToSaveQuizWithoutQuestions: false,
 	code_theme: 'classic',
-	sidebar_preference: 'profile'
+	sidebar_preference: ['profile']
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 

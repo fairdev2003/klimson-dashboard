@@ -53,12 +53,13 @@
 			{current_page}
 		</h1>
 	{/key}
-
-	{#each settings as setting}
-		{#if setting.slug === $settings_page_open}
-			<setting.component />
-		{/if}
-	{/each}
+	<div class="">
+		{#each settings as setting}
+			{#if setting.slug === $settings_page_open}
+				<setting.component />
+			{/if}
+		{/each}
+	</div>
 </div>
 
 <style>
