@@ -4,6 +4,7 @@
 	import Icon from '@iconify/svelte';
 	import type { SidebarItemType } from './sidebar.types';
 	import { toast } from '$lib/dashboard/stores/toast';
+	import { fade } from 'svelte/transition';
 
 	type Props = { content: SidebarItemType };
 	let { content }: Props = $props();
@@ -25,14 +26,20 @@
 		class:normal={!statement}
 		class:selected={statement}
 		class:disabled={content.disabled}
-		class="flex items-center px-3 cursor-pointer transition-colors border-x border-b h-10 gap-3"
+		class="flex overflow-hidden relative items-center px-3 cursor-pointer rounded-lg transition-colors h-10 gap-3"
 	>
-		{#if content.icon}
-			<Icon icon={content.icon} />
+		<div class="flex gap-2 ml-1 items-center">
+			{#if content.icon}
+				<Icon icon={content.icon} />
+			{/if}
+
+			<p class="text-neutral-300 text-sm">
+				{content.name}
+			</p>
+		</div>
+		{#if statement}
+			<div in:fade={{ duration: 100 }} class="w-1 h-full left-0 bg-white/80 absolute"></div>
 		{/if}
-		<p class="text-neutral-300 text-sm">
-			{content.name}
-		</p>
 	</div>
 {/if}
 
@@ -44,7 +51,7 @@
 	}
 
 	.selected {
-		@apply bg-blue-700/60 font-bold hover:bg-blue-700 border-blue-500 border text-white;
+		@apply bg-blue-700/60 font-bold hover:bg-blue-700  text-white;
 	}
 
 	.normal {

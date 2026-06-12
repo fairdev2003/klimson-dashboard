@@ -51,7 +51,7 @@
 				src="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
 				alt="me"
 			/>
-			<h1 class="text-xl font-bold">Witaj, Jakub</h1>
+			<h1 class="text-xl font-bold">Welcome, Jakub</h1>
 		</div>
 		<div class="flex gap-4 relative items-center">
 			<button
@@ -66,7 +66,7 @@
 	</div>
 	<div class="my-2 flex justify-between px-2">
 		<div class="flex flex-col">
-			<Heading>Dashboard</Heading>
+			<Heading>Hub</Heading>
 			<span class="text-sm font-md text-neutral-400">System load at: {$dashboard_load_date}</span>
 		</div>
 		<button

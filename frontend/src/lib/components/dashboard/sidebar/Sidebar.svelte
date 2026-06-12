@@ -12,6 +12,7 @@
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { nickname } from '../settings/store.svelte';
+	import SidebarPill from './SidebarPill.svelte';
 
 	let content_show: boolean = $state(true);
 
@@ -37,7 +38,7 @@
 	};
 
 	const contents: SidebarItems = [
-		{ icon: 'material-symbols:home', href: '/dashboard', name: 'Main Page', disabled: false },
+		{ icon: 'material-symbols:home', href: '/dashboard', name: 'Hub', disabled: false },
 		{
 			icon: 'material-symbols:database',
 			href: '/dashboard/database',
@@ -71,6 +72,13 @@
 			disabled: false
 		},
 		{
+			icon: 'mdi:tools',
+			href: '/dashboard/tools',
+			name: 'Tools',
+			disabled: false
+		},
+
+		{
 			icon: 'mdi:link',
 			href: '/dashboard/routes',
 			name: 'API Routes',
@@ -80,7 +88,7 @@
 			icon: 'streamline-block:content-copy',
 			href: '/dashboard/content_manager',
 			name: 'Content Manager',
-			disabled: false
+			disabled: true
 		}
 	];
 
@@ -95,14 +103,14 @@
 
 <div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col justify-between m-5">
 	<div>
-		<SidebarUserLogged
-			name={$nickname}
-			role="$root"
-			pfp_logo="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
-		/>
+		<SidebarPill />
 
 		{#if $sidebar_open}
-			<nav class="flex flex-col" in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+			<nav
+				class="flex flex-col gap-2 mt-3"
+				in:slide={{ duration: 300 }}
+				out:slide={{ duration: 300 }}
+			>
 				{#each contents as content, i}
 					<SidebarItem {content} />
 				{/each}

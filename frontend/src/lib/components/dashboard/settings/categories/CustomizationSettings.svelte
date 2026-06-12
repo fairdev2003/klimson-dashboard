@@ -48,6 +48,18 @@
 			debug.log(e.key);
 		}}
 	/>
+	<DropdownSettingsRecord
+		title="Sidebar Pill"
+		description="Select which pill will be displayed at the top of the sidebar!"
+		options={[
+			{ key: 'User Card', value: 'profile' },
+			{ key: 'Storage', value: 'storage' }
+		]}
+		bind:current_value={$dashboard_config.sidebar_preference}
+		onchoose={(e) => {
+			debug.log(e.key);
+		}}
+	/>
 	<ButtonSettingsRecord
 		onclick={() => {
 			orderOpened = !orderOpened;
