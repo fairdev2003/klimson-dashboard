@@ -25,7 +25,7 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 			"clan_id": clan_id,
 		}).
 		SetSuccessResult(&extResp).
-		Post("https://modfs.top/api/get_clan_info")
+		Post("https://asteroidpg3d.xyz/api/get_clan_info")
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -82,7 +82,7 @@ func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
 			"player_id": player_id,
 		}).
 		SetSuccessResult(&extResp).
-		Post("https://modfs.top/api/get_player_info")
+		Post("https://asteroidpg3d.xyz/api/get_player_info")
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

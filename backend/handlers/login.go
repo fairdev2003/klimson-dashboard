@@ -13,7 +13,7 @@ import (
 func GenerateRootToken(isContributor bool) (string, error) {
 
 	claims := jwt.MapClaims{
-		"exp":         time.Now().Add(time.Hour * 2).Unix(),
+		"exp":         time.Now().Add(time.Hour * 24 * 7).Unix(),
 		"permissions": "root",
 		"contributor": false,
 		"name":        "Jakub Klimkiewicz",

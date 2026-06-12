@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { blur } from 'svelte/transition';
 
 	type Props = {
 		checked: boolean;
@@ -13,20 +12,18 @@
 	onclick={() => {
 		checked = !checked;
 	}}
-	class="border-neutral-700 hover:border-white/80 transition-colors cursor-pointer grid grid-cols-2 p-0.5 gap-0.5 w-16 h-8 border-2"
+	class="border-neutral-700 hover:border-blue-500/80 hover:bg-blue-500/30 transition-colors duration-300 cursor-pointer
+           flex items-center rounded-lg w-16 h-8 border-2 bg-neutral-900 p-0.5 relative"
 >
-	{#if checked}
-		<div class="col-span-1"></div>
-		<div
-			in:blur={{ duration: 300 }}
-			class="bg-green-500 col-span-1 flex items-center justify-center"
-		>
-			<Icon icon="icon-park-solid:correct" width="20" height="20" />
-		</div>
-	{:else}
-		<div in:blur={{ duration: 300 }} class="bg-red-500 col-span-1 flex items-center justify-center">
-			<Icon icon="mingcute:close-fill" width="20" height="20" />
-		</div>
-		<div class="col-span-1"></div>
-	{/if}
+	<div
+		class="h-full w-6 rounded-md flex items-center justify-center
+               transition-all duration-300 ease-in-out shadow-sm
+               {checked ? 'translate-x-8 bg-green-500' : 'translate-x-0 bg-neutral-500'}"
+	>
+		{#if checked}
+			<Icon icon="icon-park-solid:correct" width="18" height="18" />
+		{:else}
+			<Icon icon="mingcute:close-fill" width="18" height="18" />
+		{/if}
+	</div>
 </button>

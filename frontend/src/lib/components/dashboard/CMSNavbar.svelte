@@ -58,9 +58,6 @@
 
 	<!-- Prawa strona -->
 	<div class="flex items-center gap-3 shrink-0">
-		<div class="hidden lg:flex">
-			<SessionExpireCounter />
-		</div>
 		<UserSettings />
 	</div>
 </div>

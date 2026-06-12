@@ -26,4 +26,19 @@
 		title="Sidebar Force Open"
 		description="Force the sidebar to open on mobile devices. Can be broken due to errors now!"
 	/>
+
+	<ButtonSettingsRecord
+		title="Reset Dashboard config"
+		description="It will dump all of your dashboard configuration"
+		label="Process"
+		onclick={() => {
+			const p = confirm('Are you sure to process with this one?');
+			if (p) {
+				localStorage.setItem('dashboard_config', '{}');
+				window.location.reload();
+			} else {
+				toast.info('Process is denied!');
+			}
+		}}
+	/>
 </div>
