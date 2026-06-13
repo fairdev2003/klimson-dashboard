@@ -1,87 +1,156 @@
 <script lang="ts">
-	import gsap from 'gsap';
+	import { goto } from '$app/navigation';
+	import Icon from '@iconify/svelte';
+	import { fade } from 'svelte/transition';
 	let value: string = $state('');
 	let opened: boolean = $state(false);
 
 	let boxRef: HTMLDivElement | null = null;
-	let inputContainerRef: HTMLDivElement | null = null;
+	let inputContainerRef: HTMLInputElement | null = null;
 
-	function handleClickOutside(e: MouseEvent) {
-		if (!opened) return;
+	// Logika wyszukiwania
 
-		if (inputContainerRef && !inputContainerRef.contains(e.target as Node)) {
-			gsap.to(boxRef, {
-				height: '50px',
-				opacity: 0,
-				duration: 0.3,
-				onComplete: () => {
-					opened = false;
-				}
-			});
+	type Route = {
+		name: string;
+		url: string;
+		icon: string;
+		description: string;
+	};
+
+	const routes: Route[] = [
+		{
+			name: 'Hub',
+			icon: 'mynaui:home',
+			description: 'Main page',
+			url: '/dashboard'
+		},
+		{
+			name: 'Database Editor',
+			icon: 'mynaui:database',
+			description: 'Edit your database records',
+			url: '/dashboard/database'
+		},
+		{
+			name: 'Context Storage',
+			icon: 'material-symbols:store',
+			description: 'Manage persistent context',
+			url: '/dashboard/context_storage'
+		},
+		{
+			name: 'Spotify',
+			icon: 'mynaui:music',
+			description: 'Spotify integration settings',
+			url: '/dashboard/spotify'
+		},
+		{
+			name: 'Tools',
+			icon: 'mynaui:cog',
+			description: 'Utility tools',
+			url: '/dashboard/tools'
+		},
+		{
+			name: 'File Storage',
+			icon: 'mynaui:folder',
+			description: 'Manage uploaded files',
+			url: '/dashboard/storage'
+		},
+		{
+			name: 'PG3D',
+			icon: 'mdi:controller',
+			description: 'Pixel Gun 3D dashboard',
+			url: '/dashboard/pg3d'
+		},
+		{
+			name: 'API Routes',
+			icon: 'material-symbols:api',
+			description: 'Manage API endpoints',
+			url: '/dashboard/routes'
+		},
+		{
+			name: 'Content Manager',
+			icon: 'mdi:pencil',
+			description: 'Manage application content',
+			url: '/dashboard/content_manager'
 		}
-	}
+	];
+
+	const searchedRoutes = $derived(
+		value === '' ? routes : routes.filter((e) => e.name.toLowerCase().includes(value.toLowerCase()))
+	);
 
 	$effect(() => {
 		if (opened) {
-			gsap.fromTo(
-				boxRef,
-				{ height: '70px', opacity: 0 },
-				{
-					height: '400px',
-					opacity: 1,
-					duration: 0.3,
-					onComplete: () => {
-						inputContainerRef?.focus();
-					}
-				}
-			);
+			inputContainerRef?.focus();
 		}
 	});
 </script>
 
-<div class="relative hidden h-[50px] justify-center w-[500px] md:flex lg:flex">
-	{#if !opened}
-		<input
-			class="h-full w-full bg-transparent border-1 border-neutral-700/60 rounded-xl placeholder-neutral-500 ring-0 outline-none select-none focus:outline-none"
-			bind:value
-			onclick={() => {
-				opened = true;
-			}}
-			placeholder="Kliknij aby wyszukać"
-		/>
-	{/if}
+<div class="relative hidden justify-center w-[500px] md:flex lg:flex">
+	<input
+		class="h-[50px] w-full bg-neutral-800 border border-neutral-700/60 rounded-xl px-4 outline-none"
+		bind:value
+		onclick={() => {
+			opened = true;
+		}}
+		placeholder="Click to search"
+	/>
 
 	{#if opened}
 		<div
-			class="bg-black/50 fixed inset-1 w-full h-full z-90"
+			class="bg-black/50 fixed inset-0 z-90"
 			onclick={() => {
-				gsap.to(boxRef, {
-					height: '70px',
-					duration: 0.3,
-					onComplete: () => {
-						opened = false;
-					}
-				});
+				opened = false;
 			}}
 		></div>
+
 		<div
-			bind:this={boxRef}
-			onclick={(e) => {
-				e.stopPropagation();
-			}}
-			class="absolute w-[500px] border border-neutral-700 p-3 z-100 h-100 bg-neutral-900 rounded-xl overflow-hidden"
+			in:fade={{ duration: 300 }}
+			out:fade={{ duration: 300 }}
+			class="absolute w-[500px] border border-neutral-700 p-3 z-100 bg-neutral-900 rounded-xl"
+			onclick={(e) => e.stopPropagation()}
 		>
 			<input
 				bind:this={inputContainerRef}
-				class="w-full bg-neutral-800 outline-0 p-3 focus:outline-0 active:outline-0 rounded-lg focus:border-0 active:border-0 border-0"
+				bind:value
+				class="w-full bg-neutral-800 p-3 rounded-lg border-0 outline-none"
+				placeholder="Search..."
 			/>
+			<div class="mt-3 h-[300px] overflow-auto">
+				<div class="flex gap-3 flex-col">
+					{#if searchedRoutes.length > 0}
+						<p class="font-black">Dashboard routes</p>
+						{#each searchedRoutes as search_route}
+							<button
+								onclick={() => {
+									goto(search_route.url);
+									opened = false;
+								}}
+								class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-4 transition-colors"
+							>
+								<div
+									class="flex items-center justify-center size-8 bg-neutral-900 rounded-md shrink-0"
+								>
+									<Icon icon={search_route.icon} width="20" height="20" class="text-neutral-300" />
+								</div>
+								<div class="flex flex-col">
+									<p class="font-black text-start text-neutral-200">{search_route.name}</p>
+									<p class="text-xs text-start text-neutral-400">{search_route.description}</p>
+								</div>
+							</button>
+						{/each}
+					{:else}
+						<p class="text-neutral-500 p-3">No results found</p>
+					{/if}
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>
 
-<style>
-	input:invalid {
-		outline: none;
-		box-shadow: none;
-	}
-</style>
+<svelte:document
+	onkeydown={(e) => {
+		if (e.key === 'Escape' && opened) {
+			opened = false;
+		}
+	}}
+/>

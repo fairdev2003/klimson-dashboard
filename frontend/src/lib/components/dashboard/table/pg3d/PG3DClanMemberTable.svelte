@@ -10,14 +10,22 @@
 	import PlayerDataModa from './PlayerDataModal.svelte';
 	import PlayerDataModal from './PlayerDataModal.svelte';
 
-	const columns: (keyof ClanMember)[] = ['id', 'level', 'name', 'rank', 'valor'];
+	const columns: (keyof ClanMember | 'asteroid')[] = [
+		'id',
+		'level',
+		'name',
+		'rank',
+		'valor',
+		'asteroid'
+	];
 
 	const columnsDict = {
 		id: 'ID',
 		level: 'Member Level',
 		name: 'Nickname',
 		rank: 'Clan Rank',
-		valor: 'Valor Points'
+		valor: 'Valor Points',
+		asteroid: 'Asteroid Record'
 	};
 
 	type Props = {

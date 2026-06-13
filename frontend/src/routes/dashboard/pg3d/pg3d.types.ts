@@ -57,10 +57,18 @@ export interface PlayerData {
 	info: PlayerInfo;
 }
 
+export interface Weapon {
+	index: string;
+	level: number;
+	name: string;
+	rarity: number;
+}
+
 export interface PlayerInfo {
 	avatar: string;
 	username: string;
 	avatar_count: number;
+	current_loadout: number;
 	banned: 'Yes' | 'No' | string;
 	cape: string;
 	clan: PlayerClan | null;
@@ -76,6 +84,7 @@ export interface PlayerInfo {
 	match_history: MatchHistoryItem[];
 	modules: PlayerModules;
 	pets_count: number;
+	weapons: Weapon[];
 	searched_player_id: string;
 	sets_count: number;
 	skins: PlayerSkin[];

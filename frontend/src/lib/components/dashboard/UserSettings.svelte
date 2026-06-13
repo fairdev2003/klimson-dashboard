@@ -39,10 +39,10 @@
 	<button
 		bind:this={btn}
 		onclick={openBox}
-		class="relative flex cursor-pointer items-center gap-1 border-1 mr-5 border-neutral-700/60 bg-neutral-800/60 p-1 px-3"
+		class="relative flex cursor-pointer items-center gap-1 mr-5 bg-neutral-800 p-3 px-7 rounded-xl"
 	>
-		<User size={13} />
-		<p>Jakub</p>
+		<User size={15} />
+		<p class="font-black truncate max-w-15">{$userInfo.name}</p>
 	</button>
 	{#if open}
 		{@render SearchContent()}
@@ -122,7 +122,7 @@
 		bind:this={boxRef}
 		in:fade={{ duration: 150 }}
 		out:fade={{ duration: 150 }}
-		class="absolute top-8 -right-0 z-10 w-[400px] border-1 border-neutral-700/60 bg-neutral-800"
+		class="absolute right-0 -top-1 z-10 w-[400px] border-1 border-neutral-700/60 rounded-xl bg-neutral-800"
 	>
 		<div class="flex flex-col">
 			{@render DisplayBasicUserInfo()}

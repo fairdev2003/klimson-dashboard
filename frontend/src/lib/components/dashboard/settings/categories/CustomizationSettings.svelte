@@ -12,6 +12,7 @@
 	import { settings_startup_modal } from '../../stores/main';
 	import { codeEditorTheme } from '$lib/components/markdown/markdown';
 	import MultipleSettingsRecord from '../records/MultipleSettingsRecord.svelte';
+	import SampleDragNDrop from './SampleDragNDrop.svelte';
 	let value = $state('');
 
 	let orderOpened: boolean = $state(false);
@@ -89,7 +90,7 @@
 	/>
 	<ButtonSettingsRecord
 		onclick={() => {
-			orderOpened = !orderOpened;
+			widgetOpened = !widgetOpened;
 		}}
 		label="Edit"
 		title="System Widgets"
@@ -103,9 +104,9 @@
 		onClose={() => {
 			widgetOpened = !widgetOpened;
 		}}
-		className="w-100 overflow-hidden"
+		className="w-100 h-130 overflow-hidden"
 	>
-		<div class="h-100"></div>
+		<SampleDragNDrop />
 	</Modal>
 
 	<Modal

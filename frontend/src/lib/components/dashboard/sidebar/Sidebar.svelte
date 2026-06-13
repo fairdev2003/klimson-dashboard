@@ -101,7 +101,7 @@
 	});
 </script>
 
-<div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col justify-between m-5">
+<div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col m-5">
 	<div>
 		<SidebarPill />
 
@@ -118,10 +118,4 @@
 		{/if}
 	</div>
 	<!-- svelte-ignore a11y_consider_explicit_label -->
-	<button
-		onclick={() => {
-			goto('/dashboard/settings');
-		}}
-		class="mb-25 bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700 h-12 w-full active:bg-neutral-800 cursor-pointer transition-colors duration-150"
-	></button>
 </div>

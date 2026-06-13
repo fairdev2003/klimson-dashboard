@@ -185,7 +185,7 @@
 		<div
 			class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
 			onclick={() => {
-				if (!exitMode) {
+				if (exitMode) {
 					toast.warning('Only manual exit!');
 					return;
 				}
@@ -210,7 +210,7 @@
 		onclick={(e) => {
 			e.stopPropagation();
 		}}
-		class={`${d ? 'absolute' : 'relative'} ${className} border border-neutral-700 bg-neutral-900 text-white `}
+		class={`${d ? 'absolute' : 'relative'} ${className} border border-neutral-700 rounded-xl bg-neutral-900 text-white `}
 	>
 		<!-- HEADER -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -219,9 +219,8 @@
 				e.stopPropagation();
 			}}
 			onmousedown={handleMouseDown}
-			class="flex h-10 items-center justify-between border-b border-neutral-700 px-4"
+			class="flex h-10 items-center justify-end px-4"
 		>
-			<p class="truncate text-sm font-semibold">{title}</p>
 			<button
 				onclick={() => {
 					if (editMode) {
@@ -231,7 +230,7 @@
 
 					onClose?.();
 				}}
-				class="text-neutral-400 hover:text-white"
+				class="text-neutral-400 cursor-pointer hover:text-white"
 			>
 				<X />
 			</button>
