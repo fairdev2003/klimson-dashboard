@@ -38,6 +38,7 @@ export type DashboardSettings = {
 	code_theme: CodeEditorTheme;
 	sidebar_preference: SideBarPillPreferences[];
 	dock: boolean;
+	dock_custom_name: string;
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
@@ -47,7 +48,8 @@ export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_
 	allowToSaveQuizWithoutQuestions: false,
 	code_theme: 'classic',
 	sidebar_preference: ['profile'],
-	dock: false
+	dock: false,
+	dock_custom_name: 'Dashboard Dock'
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 

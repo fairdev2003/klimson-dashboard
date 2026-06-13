@@ -9,20 +9,21 @@
 	import { toast } from '$lib/dashboard/stores/toast';
 	import EditingFile from './boxes/EditingFile.svelte';
 	import { blur } from 'svelte/transition';
+	import Dashboard from '../../../../routes/dashboard/dashboard.svelte';
+	import { goto } from '$app/navigation';
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 {#if $dashboard_config.dock}
 	<div
 		in:blur={{ duration: 300 }}
 		out:blur={{ duration: 300 }}
-		class="m-3 h-17 p-4 flex rounded-xl items-center sticky justify-between border-neutral-700/60 bg-neutral-900"
+		class="m-3 h-17 p-4 flex justify-between rounded-xl items-center sticky j border-neutral-700/60 bg-neutral-900"
 	>
 		<div class="flex h-full">
-			<div class="flex flex-col justify-end">
-				{@render Tabs()}
-			</div>
 			<div class="flex items-center gap-5">
-				<div class="flex gap-2">
+				<div class="flex gap-2 w-full items-center">
 					<div
 						onclick={() => {
 							window.history.back();
@@ -47,9 +48,17 @@
 					>
 						<Icon icon="zondicons:reload" width="25" height="25" />
 					</div>
-					<EditingFile />
+					<Dashboard.dock_component />
 				</div>
 			</div>
+		</div>
+		<div
+			onclick={() => {
+				goto('/dashboard/settings');
+			}}
+			class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
+		>
+			<Icon icon="material-symbols:settings" width="25" height="25" />
 		</div>
 	</div>
 {/if}

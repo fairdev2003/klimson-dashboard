@@ -1,6 +1,7 @@
 import { preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
+import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 import { dashboard_load_date } from '$lib/components/dashboard/stores/main';
 import {
 	dashboardLoadState,
@@ -10,10 +11,13 @@ import {
 } from '$lib/dashboard/stores/data.store';
 import { debug } from '$lib/dashboard/stores/debug';
 import { toast } from '$lib/dashboard/stores/toast';
+import type { Component } from 'svelte';
 import { get } from 'svelte/store';
 
 class DashboardClass {
 	constructor() {}
+
+	public dock_component: Component = $state(BaseDockComponent);
 
 	public art: string = `
  ____ ___ _____ __  __    _       ______        _______ _    _   _ 

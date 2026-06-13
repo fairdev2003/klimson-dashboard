@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 </script>
 
-{#if $route.includes('/file')}
+{#if $route && $route.includes('/file')}
 	<div
 		class="py-2 items-center flex gap-1 px-3 rounded-xl bg-neutral-700 border-neutral-800 border text-sm text-neutral-200"
 	>

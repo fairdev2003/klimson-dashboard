@@ -24,7 +24,7 @@
 
 <button
 	onclick={(e) => {
-		if (name.endsWith('.md') || name.endsWith('.txt')) {
+		if (name.endsWith('.md') || name.endsWith('.txt') || name.endsWith('.json')) {
 			goto(`/dashboard/content_manager/markdown/editor/${slug}/${name}`);
 			return;
 		}
