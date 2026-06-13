@@ -41,29 +41,6 @@
 </script>
 
 <div class=" p-5 text-white flex flex-col gap-5">
-	<div
-		class="flex justify-between relative z-1 gap-4 overflow-hidden p-5 w-full bg-neutral-800/60 border border-neutral-700 rounded-xl items-center"
-	>
-		<!-- {@render GradientLeft()} -->
-		<div class="flex gap-4 relative items-center">
-			<img
-				class="rounded-full size-12.5"
-				src="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
-				alt="me"
-			/>
-			<h1 class="text-xl font-bold">Welcome, Jakub</h1>
-		</div>
-		<div class="flex gap-4 relative items-center">
-			<button
-				onclick={() => {
-					goto('/dashboard/settings');
-				}}
-				class="p-2 hover:bg-neutral-700 rounded-xl cursor-pointer"
-			>
-				<Icon icon="material-symbols:settings" width="30" height="30" />
-			</button>
-		</div>
-	</div>
 	<div class="my-2 flex justify-between px-2">
 		<div class="flex flex-col">
 			<Heading>Hub</Heading>

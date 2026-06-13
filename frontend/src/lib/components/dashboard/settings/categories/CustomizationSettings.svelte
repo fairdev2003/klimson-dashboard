@@ -13,6 +13,7 @@
 	import { codeEditorTheme } from '$lib/components/markdown/markdown';
 	import MultipleSettingsRecord from '../records/MultipleSettingsRecord.svelte';
 	import SampleDragNDrop from './SampleDragNDrop.svelte';
+	import CheckboxSettingsRecord from '../records/CheckboxSettingsRecord.svelte';
 	let value = $state('');
 
 	let orderOpened: boolean = $state(false);
@@ -52,20 +53,11 @@
 			debug.log(e.key);
 		}}
 	/>
-	<MultipleSettingsRecord
-		title="🍎 Choose fruits"
-		description="Choose what fruits you want to see on the dashboard!"
-		options={[
-			{ key: '🍎 Apple', value: 'apple' },
-			{ key: '🍉 Watermelon', value: 'watermelon' },
-			{ key: '🍇 Grape', value: 'grape' },
-			{ key: '🍒 Cherry', value: 'cherry' },
-			{ key: '🍍 Pineapple', value: 'pineapple' }
-		]}
-		bind:current_value={list}
-		onchoose={(e) => {
-			debug.log(e.key);
-		}}
+	<CheckboxSettingsRecord
+		beta
+		bind:checked={$dashboard_config.dock}
+		title="Dashboard Dock"
+		description="Enables dashboard dock"
 	/>
 	<MultipleSettingsRecord
 		title="Choose sidebar pills"

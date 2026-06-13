@@ -56,6 +56,7 @@ class DashboardClass {
 		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
 
 		routes.set(routesResponse.data);
+		console.log(routesResponse.data);
 
 		updateResponseTime('routesResponseTime', routesResponse.duration);
 

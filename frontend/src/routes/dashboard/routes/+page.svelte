@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import { api } from '$lib/api/api';
 	import { routes } from '$lib/dashboard/stores/data.store';
+	import type { RoutesResponse } from './types';
+	import { blur } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import { base_url } from '$lib/api/api.store';
 
 	onMount(async () => {
 		if ($routes) return;
@@ -9,17 +13,101 @@
 		$routes = response.data;
 		console.log('Routes', $routes);
 	});
+
+	let searchBoxValue = $state('');
+	let category = $state('');
+
+	const filtered_routes = $derived.by(() => {
+		let result =
+			category === ''
+				? $routes
+				: $routes.filter((e) => e.path.toLowerCase().includes(category.toLowerCase()));
+
+		if (searchBoxValue !== '') {
+			const query = searchBoxValue.toLowerCase();
+			result = result.filter(
+				(e) => e.method.toLowerCase().includes(query) || e.path.toLowerCase().includes(query)
+			);
+		}
+
+		return result;
+	});
+	type FastSearchItem = {
+		name: string;
+		path: string;
+		color: string;
+	};
+
+	const fastSearchList: FastSearchItem[] = [
+		{
+			name: 'Storage',
+			path: '/storage',
+			color: 'text-violet-500 bg-violet-800/40 hover:bg-violet-800/60'
+		},
+		{
+			name: 'Database',
+			path: '/database',
+			color: 'text-pink-500 bg-pink-800/40 hover:bg-pink-800/60'
+		},
+		{
+			name: 'Pixel Gun 3D',
+			path: '/pg3d',
+			color: 'text-purple-500 bg-purple-800/40 hover:bg-purple-800/60'
+		},
+		{
+			name: 'Spotify',
+			path: '/spotify',
+			color: 'text-green-500 bg-green-800/40 hover:bg-green-800/60'
+		},
+		{
+			name: 'Private',
+			path: '/admin',
+			color: 'text-slate-400 bg-slate-400/40 hover:bg-slate-400/60'
+		}
+	];
 </script>
 
 <div class="overflow-x-auto text-white">
-	<div class="grid grid-cols-2 gap-5 p-5">
-		{#each $routes as route, i}
-			<div class="flex gap-1 border border-neutral-800/60 bg-neutral-900/60 p-2">
-				{@render Method(route.method)}
-				<a class="text-blue-500 hover:underline" href={api.api_config.host + route.path}
-					>{route.path}</a
+	<div class="flex flex-col w-4xl mx-auto gap-5 p-5">
+		<input
+			bind:value={searchBoxValue}
+			placeholder="Search Server Api routes..."
+			class="flex gap-1 rounded-xl bg-neutral-900 p-4"
+		/>
+
+		<div class="flex flex-wrap gap-1.5 items-center">
+			{#each fastSearchList as { color, name, path }}
+				<span
+					onclick={() => {
+						if (category === path) {
+							category = '';
+							return;
+						}
+
+						category = path;
+					}}
+					class:opacity-30={category != path && category != ''}
+					class="p-1 px-2 rounded-full {color} text-xs cursor-pointer">{name}</span
 				>
-			</div>
+			{/each}
+		</div>
+
+		{#each filtered_routes as route, i}
+			<button
+				onclick={() => {
+					window.location.href = $base_url + route.path;
+				}}
+				in:blur={{ duration: 300 }}
+				class="flex gap-4 rounded-xl items-center bg-neutral-900 hover:bg-neutral-800 transition-colors cursor-pointer p-4"
+			>
+				{@render Method(route.method)}
+				<div class="flex">
+					<span class="text-purple-600 font-black"> {`${$base_url}`}</span>
+					<p class="text-blue-500 hover:underline">
+						{route.path}
+					</p>
+				</div>
+			</button>
 		{/each}
 	</div>
 </div>
@@ -27,16 +115,29 @@
 {#snippet Method(method: string)}
 	<div class="w-20">
 		{#if method === 'GET'}
-			<p class="text-green-500">{method}</p>
+			<div class="bg-green-500/50 p-1 rounded-lg flex justify-center">
+				<p class="text-green-500 font-black">{method}</p>
+			</div>
 		{/if}
 		{#if method === 'POST'}
-			<p class="text-yellow-500">{method}</p>
+			<div class="bg-yellow-500/50 p-1 rounded-lg flex justify-center">
+				<p class="text-yellow-500 font-black">{method}</p>
+			</div>
 		{/if}
 		{#if method === 'PUT'}
-			<p class="text-blue-500">{method}</p>
+			<div class="bg-blue-500/50 p-1 rounded-lg flex justify-center">
+				<p class="text-blue-500 font-black">{method}</p>
+			</div>
 		{/if}
 		{#if method === 'DELETE'}
-			<p class="text-red-500">{method}</p>
+			<div class="bg-red-500/50 p-1 rounded-lg flex justify-center">
+				<p class="text-red-500 font-black">{method}</p>
+			</div>
+		{/if}
+		{#if method === 'HEAD'}
+			<div class="bg-purple-700/20 p-1 rounded-lg flex justify-center">
+				<p class="text-purple-700 font-black">{method}</p>
+			</div>
 		{/if}
 	</div>
 {/snippet}

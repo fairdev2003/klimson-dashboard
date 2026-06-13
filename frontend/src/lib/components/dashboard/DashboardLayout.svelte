@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { contextMenuOptions } from '$lib/dashboard/stores/store';
 	import { type Snippet } from 'svelte';
-	import { isMobile, mobile_sidebar_open, sidebar_open } from '$lib/dashboard/stores/persist';
+	import {
+		dashboard_config,
+		isMobile,
+		mobile_sidebar_open,
+		sidebar_open
+	} from '$lib/dashboard/stores/persist';
 	import { fade } from 'svelte/transition';
 	import ContextMenu from './ContextMenu.svelte';
 
 	import Sidebar from './sidebar/Sidebar.svelte';
 	import CMSNavbar from './CMSNavbar.svelte';
+	import DashboardDock from './dock/DashboardDock.svelte';
 
 	type Props = {
 		children: Snippet;
@@ -60,12 +66,15 @@
 			</div>
 		{/if}
 
-		<main
-			in:fade={{ duration: 150 }}
-			out:fade={{ duration: 150 }}
-			class="flex-1 h-[calc(100dvh-66px)] overflow-y-auto"
-		>
-			{@render children()}
+		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1">
+			<DashboardDock />
+			<div
+				class:dock-invisible={!$dashboard_config.dock}
+				class:dock-visible={$dashboard_config.dock}
+				class=""
+			>
+				{@render children()}
+			</div>
 		</main>
 	</div>
 
@@ -78,3 +87,15 @@
 		/>
 	{/if}
 </div>
+
+<style>
+	@import 'tailwindcss';
+
+	.dock-visible {
+		@apply h-[calc(100dvh-66px-100px)] overflow-y-auto;
+	}
+
+	.dock-invisible {
+		@apply h-[calc(100dvh-66px)] overflow-y-auto;
+	}
+</style>
