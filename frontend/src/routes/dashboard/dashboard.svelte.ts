@@ -12,12 +12,12 @@ import {
 import { debug } from '$lib/dashboard/stores/debug';
 import { toast } from '$lib/dashboard/stores/toast';
 import type { Component } from 'svelte';
-import { get } from 'svelte/store';
+import { get, writable } from 'svelte/store';
+
+export const dockComponent = writable<any>(BaseDockComponent);
 
 class DashboardClass {
 	constructor() {}
-
-	public dock_component: Component = $state(BaseDockComponent);
 
 	public art: string = `
  ____ ___ _____ __  __    _       ______        _______ _    _   _ 

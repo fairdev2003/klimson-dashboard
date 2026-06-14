@@ -8,9 +8,9 @@
 	import { base_url } from '$lib/api/api.store';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import EditingFile from './boxes/EditingFile.svelte';
-	import { blur } from 'svelte/transition';
-	import Dashboard from '../../../../routes/dashboard/dashboard.svelte';
+	import Dashboard, { dockComponent } from '../../../../routes/dashboard/dashboard.svelte';
 	import { goto } from '$app/navigation';
+	import { blur } from 'svelte/transition';
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -48,7 +48,11 @@
 					>
 						<Icon icon="zondicons:reload" width="25" height="25" />
 					</div>
-					<Dashboard.dock_component />
+					{#key $dockComponent}
+						<div in:blur={{ duration: 300 }}>
+							<svelte:component this={$dockComponent} />
+						</div>
+					{/key}
 				</div>
 			</div>
 		</div>

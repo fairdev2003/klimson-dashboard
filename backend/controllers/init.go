@@ -88,6 +88,7 @@ func (controller GlobalController) RegisterRoutes() {
 	// pg3d
 	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)
 	controller.publicPath.GET("/pg3d/player_data/:player_id", controller.GetPlayerData)
+	controller.publicPath.GET("/pg3d/clan/valor_history/:clan_id", controller.GetValorHistory)
 
 	// spotify
 	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)

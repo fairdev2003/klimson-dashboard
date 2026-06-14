@@ -6,8 +6,12 @@
 	import { blur } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { base_url } from '$lib/api/api.store';
+	import RoutesDocky from '$lib/components/dashboard/dock/boxes/RoutesDocky.svelte';
+	import DashboardDock from '$lib/components/dashboard/dock/DashboardDock.svelte';
+	import { dockComponent } from '../dashboard.svelte';
 
 	onMount(async () => {
+		dockComponent.set(RoutesDocky);
 		if ($routes) return;
 		const response = await api.misc.GetRoutes();
 		$routes = response.data;

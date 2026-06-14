@@ -32,12 +32,18 @@
 	} from '$lib/components/dashboard/stores/main';
 	import { onMount } from 'svelte';
 	import SecondHubContainer from './widgets/containers/SecondHubContainer.svelte';
+	import { dockComponent } from './dashboard.svelte';
+	import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 
 	let loading: boolean = $state(false);
 
 	let BenchmarkModalOpened: boolean = $state(false);
 
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
+
+	onMount(() => {
+		dockComponent.set(BaseDockComponent);
+	});
 </script>
 
 <div class=" p-5 text-white flex flex-col gap-5">
