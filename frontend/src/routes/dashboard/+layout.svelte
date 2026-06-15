@@ -1,7 +1,6 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <script lang="ts">
-	import f from '$lib/assets/dashboard.png';
 	import CMSNavbar from '$lib/components/dashboard/CMSNavbar.svelte';
 	import DashboardLayout from '$lib/components/dashboard/DashboardLayout.svelte';
 	import Loader from '$lib/components/dashboard/Loader.svelte';
@@ -66,8 +65,10 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={f} />
-	<title>Panel Admina</title>
+	<link
+		rel="icon"
+		href="https://api.klimson.dev/interface/bucket/blackout_bot/8107-admin-badge-blue.favicon"
+	/>
 	<meta name="description" content="Panel Admina HarcQuiz" />
 </svelte:head>
 

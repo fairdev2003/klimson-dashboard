@@ -32,3 +32,8 @@
 		</div>
 	{/if}
 </div>
+
+<svelte:head>
+	<title>Viewing {table_data?.table}</title>
+	<meta name="description" content="View databases" />
+</svelte:head>

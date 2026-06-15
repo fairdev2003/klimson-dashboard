@@ -99,3 +99,8 @@
 		</div>
 	</div>
 </Modal>
+
+<svelte:head>
+	<title>Context Storage</title>
+	<meta name="description" content="View databases" />
+</svelte:head>

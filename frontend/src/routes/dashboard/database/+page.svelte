@@ -57,3 +57,8 @@
 		{/each}
 	</div>
 </div>
+
+<svelte:head>
+	<title>Database Editor</title>
+	<meta name="description" content="View databases" />
+</svelte:head>

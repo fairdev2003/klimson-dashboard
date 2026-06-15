@@ -188,7 +188,7 @@
 	}
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
 	{@render StorageHeader()}
 	<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 p-4">
 		{#each data.storage_file_list as { file_size, is_dir, modified, name }}
@@ -218,13 +218,31 @@
 		onmouseleave={() => (menuVisible = false)}
 		style="position: fixed; top: {menuY}px; left: {menuX}px;"
 	>
-		<div class="size-50 absolute bottom-1/2 right-1/2 translate-[50%] -z-4 mx-auto"></div>
+		<div class="size-70 absolute bottom-1/2 right-1/2 translate-[50%] -z-4 mx-auto"></div>
 
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="bg-neutral-800 border border-neutral-700 shadow-xl rounded-lg p-2 z-50 w-40">
-			<p class="text-xs">{selectedItem?.name}</p>
+		<div class="bg-neutral-800 border border-neutral-700 shadow-xl rounded-lg p-2 z-50 w-80">
+			<div class="flex gap-1 mb-2 items-center">
+				<div
+					class="bg-neutral-900/60 text-neutral-400 flex justify-center items-center rounded-lg size-10"
+				>
+					<Icon icon="mdi:file" width="20" height="20" />
+				</div>
+				<div class="flex flex-col p-2">
+					<p class="text-xs font-black truncate">{selectedItem?.name}</p>
+					<p class="text-xs text-neutral-400 truncate">
+						{new Date(selectedItem?.modified).toLocaleString('pl-PL', {
+							day: '2-digit',
+							month: '2-digit',
+							year: '2-digit',
+							hour: '2-digit',
+							minute: '2-digit'
+						})}
+					</p>
+				</div>
+			</div>
 			<button
-				class="block w-full text-left p-2 hover:bg-neutral-700"
+				class="px-3 block w-full text-left p-2 hover:bg-neutral-700 cursor-pointer rounded-lg transition-colors"
 				onclick={() => {
 					if (selectedItem?.is_dir) {
 						goto(`/dashboard/storage/${params.path ? params.path + '/' : ''}${selectedItem.name}`);
@@ -240,7 +258,8 @@
 
 					await RenameFileOrFolder(selectedItem.name);
 				}}
-				class="block w-full text-left p-2 hover:bg-neutral-700">Zmien nazwe</button
+				class="px-3 block w-full text-left p-2 hover:bg-neutral-700 cursor-pointer rounded-lg transition-colors"
+				>Zmien nazwe</button
 			>
 			<button
 				onclick={async () => {
@@ -250,7 +269,8 @@
 						startingPath: `/`
 					});
 				}}
-				class="block w-full text-left p-2 hover:bg-neutral-700">Przenieś Plik</button
+				class="px-3 block w-full text-left p-2 hover:bg-neutral-700 cursor-pointer rounded-lg transition-colors"
+				>Przenieś Plik</button
 			>
 			<button
 				onclick={() => {
@@ -259,7 +279,8 @@
 					toast.info(copyContent);
 					menuVisible = false;
 				}}
-				class="block w-full text-left p-2 hover:bg-neutral-700">Kopiuj link</button
+				class="px-3 block w-full text-left p-2 hover:bg-neutral-700 cursor-pointer rounded-lg transition-colors"
+				>Kopiuj link</button
 			>
 			<button
 				onclick={async () => {
@@ -267,7 +288,8 @@
 
 					await DeleteFileOrFolder(selectedItem.name, selectedItem.is_dir);
 				}}
-				class="block w-full text-left p-2 hover:bg-neutral-700 text-red-400">Usuń</button
+				class="px-3 block w-full text-left p-2 hover:bg-neutral-700 cursor-pointer rounded-lg transition-colors"
+				>Usuń</button
 			>
 		</div>
 	</div>
@@ -276,18 +298,9 @@
 {#snippet StorageHeader()}
 	<input type="file" class="hidden" bind:this={fileInput} onchange={UploadFile} />
 	<div
-		class="p-4 bg-neutral-900 border lg:border-l-0 border-neutral-700 lg:flex-row flex flex-col gap-4 justify-between lg:items-center"
+		class="p-4 bg-neutral-900 m-4 rounded-xl lg:flex-row flex flex-col gap-4 justify-between lg:items-center"
 	>
 		<div class="flex flex-col gap-2">
-			<button
-				onclick={() => {
-					history.back();
-				}}
-				class="flex gap-1 items-center text-blue-500 hover:underline"
-			>
-				<Icon icon="lets-icons:back" />
-				<p>Back</p>
-			</button>
 			<p>Listed: {data.storage_file_list && data.storage_file_list.length} files</p>
 
 			<div class="flex gap-3">
@@ -311,7 +324,7 @@
 
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<div
+			<!-- <div
 				onclick={() => {
 					additionalOptionsOpened = !additionalOptionsOpened;
 				}}
@@ -346,7 +359,7 @@
 						</div>
 					{/if}
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="flex gap-3">
 			<Button

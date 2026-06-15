@@ -118,3 +118,8 @@
 		</div>
 	</div>
 {/snippet}
+
+<svelte:head>
+	<title>Dashboard Hub</title>
+	<meta name="description" content="Panel Admina HarcQuiz" />
+</svelte:head>
