@@ -30,7 +30,7 @@
 </script>
 
 <div
-	class="fixed top-0 left-0 z-50 flex h-[66px] w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
+	class="absolute top-0 left-0 flex h-[66px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
 >
 	<!-- Lewa strona -->
 	<div class="flex flex-1 items-center gap-4 min-w-0">

@@ -11,15 +11,17 @@
 	import Dashboard, { dockComponent } from '../../../../routes/dashboard/dashboard.svelte';
 	import { goto } from '$app/navigation';
 	import { blur } from 'svelte/transition';
+	import Modal from '$lib/components/Modal.svelte';
+
+	let bookmarkModalOpened: boolean = $state(false);
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 {#if $dashboard_config.dock}
 	<div
-		in:blur={{ duration: 300 }}
-		out:blur={{ duration: 300 }}
-		class="m-3 h-17 p-4 flex justify-between rounded-xl items-center sticky j border-neutral-700/60 bg-neutral-900"
+		style="position: sticky; top: 10px;"
+		class="m-3 h-17 p-4 flex justify-between rounded-xl items-center z-100 inset-0 border-neutral-700/60 bg-neutral-900"
 	>
 		<div class="flex h-full">
 			<div class="flex items-center gap-5">
@@ -49,9 +51,7 @@
 						<Icon icon="zondicons:reload" width="25" height="25" />
 					</div>
 					{#key $dockComponent}
-						<div in:blur={{ duration: 300 }}>
-							<svelte:component this={$dockComponent} />
-						</div>
+						<svelte:component this={$dockComponent} />
 					{/key}
 				</div>
 			</div>

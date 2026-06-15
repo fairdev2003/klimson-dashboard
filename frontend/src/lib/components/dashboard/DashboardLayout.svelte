@@ -57,7 +57,7 @@
 		{/if}
 
 		{#if $mobile_sidebar_open}
-			<div class="lg:hidden absolute inset-0 bg-black/50 z-10">
+			<div class="lg:hidden absolute inset-0 bg-black/50 z-110">
 				<aside
 					class="absolute overflow-hidden lg:static z-20 w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
 				>

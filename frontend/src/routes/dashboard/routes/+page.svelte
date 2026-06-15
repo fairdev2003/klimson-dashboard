@@ -72,7 +72,7 @@
 </script>
 
 <div class="overflow-x-auto text-white">
-	<div class="flex flex-col w-4xl mx-auto gap-5 p-5">
+	<div class="flex flex-col lg:w-4xl mx-auto gap-5 p-5">
 		<input
 			bind:value={searchBoxValue}
 			placeholder="Search Server Api routes..."
@@ -81,6 +81,8 @@
 
 		<div class="flex flex-wrap gap-1.5 items-center">
 			{#each fastSearchList as { color, name, path }}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<span
 					onclick={() => {
 						if (category === path) {
@@ -91,7 +93,7 @@
 						category = path;
 					}}
 					class:opacity-30={category != path && category != ''}
-					class="p-1 px-2 rounded-full {color} text-xs cursor-pointer">{name}</span
+					class="p-1 px-2 rounded-full {color} text-xs cursor-pointer truncate">{name}</span
 				>
 			{/each}
 		</div>
@@ -102,10 +104,10 @@
 					window.location.href = $base_url + route.path;
 				}}
 				in:blur={{ duration: 300 }}
-				class="flex gap-4 rounded-xl items-center bg-neutral-900 hover:bg-neutral-800 transition-colors cursor-pointer p-4"
+				class="flex overflow-hidden w-auto gap-4 rounded-xl truncate items-center bg-neutral-900 hover:bg-neutral-800 transition-colors cursor-pointer p-4"
 			>
 				{@render Method(route.method)}
-				<div class="flex">
+				<div class="flex truncate">
 					<span class="text-purple-600 font-black"> {`${$base_url}`}</span>
 					<p class="text-blue-500 hover:underline">
 						{route.path}

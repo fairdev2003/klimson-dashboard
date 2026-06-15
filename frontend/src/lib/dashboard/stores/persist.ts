@@ -1,7 +1,5 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import type { Quiz } from '../../../routes/dashboard/quizzes/types';
-import type { Contributor } from '../../../routes/dashboard/contributors/types';
 import type { JWT } from './store';
 import type { CodeEditorTheme } from '$lib/components/markdown/markdown';
 
@@ -33,23 +31,31 @@ export function persistedWritable<T>(key: string, initialValue: T) {
 
 export type SideBarPillPreferences = 'profile' | 'storage';
 
+export type Bookmark = {
+	name: string;
+	slug: string;
+	href: string;
+	color: string;
+};
+
 export type DashboardSettings = {
 	allowToSaveQuizWithoutQuestions: boolean;
 	code_theme: CodeEditorTheme;
 	sidebar_preference: SideBarPillPreferences[];
 	dock: boolean;
 	dock_custom_name: string;
+	bookmarks: Bookmark[];
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
 export const debugOn = persistedWritable<boolean>('debug_on', true);
-export const lastSearched = persistedWritable<Quiz[]>('last_searched', []);
 export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_settings', {
 	allowToSaveQuizWithoutQuestions: false,
 	code_theme: 'classic',
 	sidebar_preference: ['profile'],
 	dock: false,
-	dock_custom_name: 'Dashboard Dock'
+	dock_custom_name: 'Dashboard Dock',
+	bookmarks: []
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 

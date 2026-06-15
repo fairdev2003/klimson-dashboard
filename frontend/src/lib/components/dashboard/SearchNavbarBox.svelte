@@ -85,7 +85,7 @@
 	});
 </script>
 
-<div class="relative hidden justify-center w-[500px] md:flex lg:flex">
+<div class="relative hidden justify-center w-[500px] md:flex lg:flex z-100">
 	<input
 		class="h-[50px] w-full bg-neutral-800 border border-neutral-700/60 rounded-xl px-4 outline-none"
 		bind:value
@@ -106,7 +106,7 @@
 		<div
 			in:fade={{ duration: 300 }}
 			out:fade={{ duration: 300 }}
-			class="absolute w-[500px] border border-neutral-700 p-3 z-100 bg-neutral-900 rounded-xl"
+			class="fixed w-[500px] border border-neutral-700 p-3 z-200 bg-neutral-900 rounded-xl"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<input
