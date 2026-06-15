@@ -24,41 +24,72 @@
 
 		bookmarkModalOpened = false;
 	}
+	let deleteOn: boolean = $state(false);
+	let deleteModalOpened: boolean = $state(false);
+	let selectedBookmarkToDelete: Bookmark | undefined = $state();
 
 	const bookmark_color_pallete = [
-		'bg-violet-400',
-		'bg-red-400',
-		'bg-green-400',
-		'bg-indigo-400',
-		'bg-amber-400',
-		'bg-orange-400',
-		'bg-yellow-400'
+		'bg-violet-800',
+		'bg-red-800',
+		'bg-green-800',
+		'bg-indigo-800',
+		'bg-amber-800',
+		'bg-orange-800',
+		'bg-yellow-800',
+		'bg-neutral-800'
 	];
+
+	function DeleteBookmark(slug: string) {
+		const currentBookmarks = $dashboard_config.bookmarks || [];
+
+		$dashboard_config.bookmarks = currentBookmarks.filter((bookmark) => bookmark.slug !== slug);
+
+		deleteModalOpened = false;
+	}
 </script>
 
 <div class="justify-between w-full text-start flex gap-1 h-full">
-	<div class="flex gap-2 items-center">
-		<p class="font-black">Dashboard Hub</p>
-		{#each $dashboard_config.bookmarks as bookmark}
+	<div class="flex gap-2 items-center justify-between">
+		<div class="flex gap-10 items-center">
+			<p class="font-black">Dashboard Hub</p>
+			<div class="flex gap-2">
+				{#each $dashboard_config.bookmarks as bookmark}
+					<button
+						onclick={() => {
+							if (deleteOn) {
+								selectedBookmarkToDelete = bookmark;
+								deleteModalOpened = !deleteModalOpened;
+								return;
+							}
+							window.open(bookmark.href, '_blank', 'noopener,noreferrer');
+						}}
+						class="p-2 px-3 hidden lg:flex gap-1 transition-colors {bookmark.color} cursor-pointer rounded-lg items-center"
+					>
+						<p class="text-xs">{bookmark.name}</p>
+					</button>
+				{/each}
+			</div>
+		</div>
+		<div class="flex gap-2">
 			<button
 				onclick={() => {
-					document.location.href = bookmark.href;
+					bookmarkModalOpened = !bookmarkModalOpened;
 				}}
-				class="p-2 px-3 hidden lg:flex gap-1 transition-colors {bookmark.color} cursor-pointer rounded-lg items-center"
+				class="p-2 px-3 hidden lg:flex gap-1 transition-colors bg-neutral-800 cursor-pointer rounded-lg items-center hover:bg-neutral-700"
 			>
 				<Icon icon="material-symbols:bookmark" width="15" height="15" />
-				<p class="text-xs">{bookmark.name}</p>
+				<p class="text-xs">Add Bookmark</p>
 			</button>
-		{/each}
-		<button
-			onclick={() => {
-				bookmarkModalOpened = !bookmarkModalOpened;
-			}}
-			class="p-2 px-3 hidden lg:flex gap-1 transition-colors bg-neutral-800 cursor-pointer rounded-lg items-center hover:bg-neutral-700"
-		>
-			<Icon icon="material-symbols:bookmark" width="15" height="15" />
-			<p class="text-xs">Add Bookmark</p>
-		</button>
+			<button
+				onclick={() => {
+					deleteOn = !deleteOn;
+				}}
+				class:delete-on={deleteOn}
+				class="p-2 px-3 hidden border-2 border-neutral-800 lg:flex gap-1 transition-colors bg-neutral-800 cursor-pointer rounded-lg items-center hover:bg-neutral-700"
+			>
+				<Icon icon="mdi:trash" width="15" height="15" />
+			</button>
+		</div>
 	</div>
 	<!-- <p class="animated-gradient-text font-black text-sm">{$dashboard_config.dock_custom_name}</p> -->
 </div>
@@ -94,6 +125,11 @@
 				{#each bookmark_color_pallete as color}
 					<button
 						onclick={() => {
+							if (bookmark.color === color) {
+								bookmark.color = '';
+								return;
+							}
+
 							bookmark.color = color;
 						}}
 						class:selected-color-box={color === bookmark.color}
@@ -124,11 +160,38 @@
 	</div>
 </Modal>
 
+<Modal
+	bind:opened={deleteModalOpened}
+	onClose={() => {
+		deleteModalOpened = !deleteModalOpened;
+	}}
+	title="Are u sure?"
+	className="w-100"
+>
+	<p>Are you sure you want to delete this bookmark?</p>
+	<div class="flex justify-end mt-5">
+		<Button
+			onclick={() => {
+				if (selectedBookmarkToDelete) {
+					DeleteBookmark(selectedBookmarkToDelete.slug);
+				}
+			}}
+			size="small"
+			theme="danger"
+		>
+			Delete
+		</Button>
+	</div>
+</Modal>
+
 <style>
 	@import 'tailwindcss';
 
 	.selected-color-box {
 		@apply border-2 border-green-500 bg-green-500/50;
+	}
+	.delete-on {
+		@apply border-2 border-red-500 bg-red-500/50;
 	}
 
 	input[type='color'] {

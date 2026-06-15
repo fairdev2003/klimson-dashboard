@@ -21,11 +21,11 @@
 {#if $dashboard_config.dock}
 	<div
 		style="position: sticky; top: 10px;"
-		class="m-3 h-17 p-4 flex justify-between rounded-xl items-center z-100 inset-0 border-neutral-700/60 bg-neutral-900"
+		class="m-3 h-17 p-4 flex justify-between items-center rounded-xl z-100 inset-0 border-neutral-700/60 bg-neutral-900"
 	>
-		<div class="flex h-full">
+		<div class="flex h-full items-center">
 			<div class="flex items-center gap-5">
-				<div class="flex gap-2 w-full items-center">
+				<div class="flex justify-center gap-2 items-center">
 					<div
 						onclick={() => {
 							window.history.back();
