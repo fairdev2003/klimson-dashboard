@@ -64,6 +64,11 @@
 			color: 'text-green-500 bg-green-800/40 hover:bg-green-800/60'
 		},
 		{
+			name: 'Context Storage',
+			path: '/context_storage',
+			color: 'text-indigo-500 bg-indigo-800/40 hover:bg-indigo-800/60'
+		},
+		{
 			name: 'Private',
 			path: '/admin',
 			color: 'text-slate-400 bg-slate-400/40 hover:bg-slate-400/60'
@@ -101,7 +106,7 @@
 		{#each filtered_routes as route, i}
 			<button
 				onclick={() => {
-					window.location.href = $base_url + route.path;
+					window.open($base_url + route.path, '_blank', 'noopener,noreferrer');
 				}}
 				in:blur={{ duration: 300 }}
 				class="flex overflow-hidden w-auto gap-4 rounded-xl truncate items-center bg-neutral-900 hover:bg-neutral-800 transition-colors cursor-pointer p-4"

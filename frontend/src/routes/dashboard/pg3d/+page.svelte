@@ -19,9 +19,9 @@
 	});
 </script>
 
-<div>
+<div class="relative w-full h-full overflow-hidden background-container">
 	{#if $clan_info}
-		<div class="p-4">
+		<div class="p-4 z-10">
 			<PG3DClanMemberTable members={$clan_info.members} />
 		</div>
 	{:else}
@@ -30,3 +30,16 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	.background-container {
+		background-image: url('https://cdnb.artstation.com/p/assets/images/images/051/094/853/large/elena-dudnakova-summer-party-remastering-lottery.jpg?1656441766');
+
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		width: 100%;
+		min-height: 100vh;
+	}
+</style>

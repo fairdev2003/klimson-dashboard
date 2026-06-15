@@ -57,10 +57,10 @@
 	}
 </script>
 
-<div class="w-full max-w-full overflow-x-auto shadow-sm flex flex-col gap-4">
+<div class="w-full max-w-full overflow-x-auto shadow-sm flex flex-col gap-4 pb-10">
 	<div class="w-full overflow-x-auto">
 		<table
-			class="w-7xl mx-auto min-w-max border-collapse text-left text-sm border border-neutral-600 text-white"
+			class="w-7xl mx-auto min-w-max border-collapse text-left rounded-xl overflow-hidden text-sm border border-neutral-600 text-white"
 		>
 			<thead class="bg-neutral-800 text-xs tracking-wider">
 				<tr>
