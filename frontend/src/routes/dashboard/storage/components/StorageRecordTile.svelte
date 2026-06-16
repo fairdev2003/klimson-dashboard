@@ -107,7 +107,7 @@
 	}
 
 	.tile_normal {
-		@apply bg-neutral-950 border border-neutral-700 hover:border-neutral-400 hover:bg-neutral-800;
+		@apply bg-neutral-900 transition-colors hover:bg-neutral-800;
 	}
 
 	.delete_checkbox {

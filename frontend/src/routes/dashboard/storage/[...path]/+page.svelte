@@ -14,6 +14,7 @@
 	import { slide } from 'svelte/transition';
 	import { explorer } from '$lib/components/dashboard/storage/file.svelte';
 	import { base_url } from '$lib/api/api.store';
+	import { debug } from '$lib/dashboard/stores/debug';
 
 	let { data, params } = $props();
 
@@ -27,6 +28,7 @@
 		menuX = e.clientX;
 		menuY = e.clientY;
 		selectedItem = item;
+
 		menuVisible = true;
 	}
 
@@ -186,11 +188,37 @@
 			return false;
 		}
 	}
+
+	$effect(() => {
+		const currentPath = page.url.pathname.replace(/\/$/, '');
+		storage_logic.selected_path = `${currentPath}/${name}`;
+	});
 </script>
 
 <div class="flex flex-col gap-2">
 	{@render StorageHeader()}
-	<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 p-4">
+	<div class="h-10 w-full flex justify-between items-center px-4">
+		<div>
+			{storage_logic.selected_path}
+		</div>
+		<button
+			onclick={() => {
+				if (storage_logic.view === 'boxes-view') {
+					storage_logic.view = 'list_view';
+					return;
+				}
+				storage_logic.view = 'boxes-view';
+			}}
+			class="p-2 hover:bg-neutral-700 rounded-xl cursor-pointer"
+		>
+			<Icon icon="material-symbols:list" width="30" height="30" />
+		</button>
+	</div>
+	<div
+		class:boxes-view={storage_logic.view === 'boxes-view'}
+		class:list-view={storage_logic.view === 'list_view'}
+		class="gap-4 p-4"
+	>
 		{#each data.storage_file_list as { file_size, is_dir, modified, name }}
 			<StorageRecordTile
 				onrightclick={(e) => handleRightClick(e, { is_dir, name, file_size, modified })}
@@ -205,7 +233,8 @@
 
 					if (is_dir && !success) {
 						const currentPath = page.url.pathname.replace(/\/$/, '');
-						goto(`${currentPath}/${name}`);
+						// goto(`${currentPath}/${name}`);
+						goto(storage_logic.selected_path + '' + name);
 					}
 				}}
 			/>
@@ -214,6 +243,7 @@
 </div>
 
 {#if menuVisible && selectedItem}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		onmouseleave={() => (menuVisible = false)}
 		style="position: fixed; top: {menuY}px; left: {menuX}px;"
@@ -237,7 +267,7 @@
 							year: '2-digit',
 							hour: '2-digit',
 							minute: '2-digit'
-						})}
+						})} | {storage_logic.formatBytes(selectedItem?.file_size)}
 					</p>
 				</div>
 			</div>
@@ -321,45 +351,6 @@
 					{/each}
 				{/if}
 			</div>
-
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<!-- <div
-				onclick={() => {
-					additionalOptionsOpened = !additionalOptionsOpened;
-				}}
-				class="mt-2 active:bg-neutral-700 transition-colors duration-150 flex flex-col gap-2 bg-neutral-800/70 border-neutral-700 border p-3 rounded-lg w-65"
-			>
-				<div class="flex gap-1">
-					<div
-						class="cursor-pointer flex items-center justify-center transition-transform duration-300 ease-in-out origin-center"
-						class:rotate-180={additionalOptionsOpened}
-					>
-						<Icon icon="fe:arrow-up" width="20" height="20" />
-					</div>
-					<p class="text-sm text-neutral-200">Options</p>
-				</div>
-				<div
-					onclick={(e) => {
-						e.stopPropagation();
-					}}
-					class="z-10"
-				>
-					{#if additionalOptionsOpened}
-						<div
-							class="p-4 flex flex-col gap-2"
-							in:slide={{ duration: 300 }}
-							out:slide={{ duration: 300 }}
-						>
-							<HarcCheckBox
-								bind:checked={storage_logic.delete_multiple_enabled}
-								label="Delete Mode"
-							/>
-							<HarcCheckBox bind:checked={storage_logic.edit_enabled} label="Edit Mode" />
-						</div>
-					{/if}
-				</div>
-			</div> -->
 		</div>
 		<div class="flex gap-3">
 			<Button
@@ -405,4 +396,13 @@
 <svelte:window onpaste={HandlePaste} />
 
 <style>
+	@import 'tailwindcss';
+
+	.list-view {
+		@apply flex flex-col gap-4;
+	}
+
+	.boxes-view {
+		@apply grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))];
+	}
 </style>
