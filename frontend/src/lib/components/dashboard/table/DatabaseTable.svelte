@@ -38,7 +38,7 @@
 	});
 </script>
 
-<div class="w-full max-w-full overflow-x-auto shadow-sm flex flex-col gap-4">
+<div class="overflow-x-auto shadow-sm flex flex-col gap-4 max-w-7xl">
 	<div class="flex flex-col gap-1">
 		<a class="flex gap-1 items-center text-blue-500 hover:underline" href="/dashboard/database">
 			<Icon icon="lets-icons:back" />
@@ -56,7 +56,7 @@
 		</h1>
 	</div>
 
-	<div class="w-full overflow-x-auto">
+	<div class="w-full overflow-x-auto rounded-t-lg">
 		<table
 			class="w-full min-w-max border-collapse text-left text-sm border border-neutral-600 text-white"
 		>

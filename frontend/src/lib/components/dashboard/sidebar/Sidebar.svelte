@@ -58,17 +58,17 @@
 			name: 'Context Storage',
 			disabled: false
 		},
-		{
-			icon: 'mdi:spotify',
-			href: '/dashboard/spotify',
-			name: 'Spotify',
-			disabled: false
-		},
 
 		{
 			icon: 'mdi:files',
 			href: '/dashboard/storage',
 			name: 'File Storage',
+			disabled: false
+		},
+		{
+			icon: 'mdi:files',
+			href: '/dashboard/v2/storage',
+			name: 'V2 Storage',
 			disabled: false
 		},
 		{

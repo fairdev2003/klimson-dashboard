@@ -1,3 +1,5 @@
+import type { StorageRecord } from '$lib/api/requests/storage';
+
 class Storage {
 	constructor() {}
 
@@ -9,6 +11,7 @@ class Storage {
 
 	public delete_multiple_enabled: boolean = $state(false);
 	public edit_enabled: boolean = $state(false); // for mobile
+	public storage_records: StorageRecord[] | undefined = $state();
 
 	public selected_path: string = $state('/');
 

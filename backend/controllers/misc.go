@@ -12,7 +12,7 @@ import (
 )
 
 func GetDiskUsage() (uint64, uint64, error) {
-	usage, err := disk.Usage("/root")
+	usage, err := disk.Usage("/home")
 	if err != nil {
 		return 0, 0, err
 	}

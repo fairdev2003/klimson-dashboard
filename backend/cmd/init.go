@@ -98,7 +98,8 @@ func AutoMigrateModels() {
 
 func StartGinServer() {
 	server = gin.New()
-	server.Static("/uploads", "./static/uploads")
+
+	server.Static("/static", "/var/file_storage")
 	InitRoutes()
 
 	server.NoRoute(func(c *gin.Context) {

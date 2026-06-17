@@ -23,10 +23,15 @@
 	let deleteLoading: boolean = $state(false);
 
 	let updateModalOpened: boolean = $state(false);
+	let actionModalOpened: boolean = $state(false);
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	onclick={() => {}}
+	onclick={() => {
+		actionModalOpened = !actionModalOpened;
+	}}
 	class="relative group bg-neutral-900 rounded-xl p-2 hover:bg-neutral-800 cursor-pointer items-center transition-colors w-55 h-30"
 >
 	<div class="flex justify-between group-hover:justify-end flex-col h-full p-3">
@@ -47,7 +52,7 @@
 			onclick={() => {
 				updateModalOpened = !updateModalOpened;
 			}}
-			class="flex justify-center size-8 items-center transition-colors cursor-pointer text-green-500 hover:text-green-600 flex-col"
+			class="flex justify-center size-8 hover:scale-90 items-center transition-colors cursor-pointer text-green-500 hover:text-green-600 flex-col"
 		>
 			<Icon icon="mdi:edit" width="25" height="25" />
 		</button>
@@ -55,12 +60,26 @@
 			onclick={() => {
 				deletionModalOpened = !deletionModalOpened;
 			}}
-			class="flex text-red-500 size-8 hover:text-red-600 cursor-pointer transition-colors justify-center items-center flex-col"
+			class="flex text-red-500 size-8 hover:scale-90 hover:text-red-600 cursor-pointer transition-colors justify-center items-center flex-col"
 		>
 			<Icon icon="mdi:trash" width="25" height="25" />
 		</button>
 	</div>
 </div>
+
+<Modal
+	title="Editing context content"
+	bind:opened={actionModalOpened}
+	onClose={() => {
+		actionModalOpened = false;
+	}}
+	className="w-130"
+>
+	<div class="grid grid-cols-2 gap-4 rounded-xl">
+		<button class="h-40 col-span-1 bg-neutral-800/60 border border-neutral-700 rounded-xl"></button>
+		<button class="h-40 col-span-1 bg-neutral-800/60 border border-neutral-700 rounded-xl"></button>
+	</div>
+</Modal>
 
 <Modal
 	title="Editing context content"

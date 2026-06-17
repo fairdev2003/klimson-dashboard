@@ -59,6 +59,8 @@ func (controller GlobalController) RegisterRoutes() {
 
 	controller.publicPath.GET("/ws/stats/cpu", controller.RefreshCPU)
 
+	controller.RegisterV2StorageEndpoints()
+
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")
 	storagePath.GET("/file/*filepath", controller.GetFile)
@@ -68,7 +70,6 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
 	// protected file storage
-
 	controller.adminPath.POST("/storage/interface/create-folder/*folder", controller.CreateFolder)
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
@@ -84,6 +85,10 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/context_storage/public/single/:key", controller.GetPublicContextStorage)
 	controller.adminPath.DELETE("/context_storage/delete/:id", controller.DeleteContextStorageRecord)
 	controller.adminPath.GET("/context_storage/private/single/:key", controller.GetPrivateContext)
+
+	controller.adminPath.POST("/v2/storage/new-file/*folder", controller.UploadNewFile)
+	controller.adminPath.GET("/v2/storage/get/*filepath", controller.GetRecords)
+	controller.adminPath.POST("/v2/storage/create-folder", controller.CreateV2Folder)
 
 	// pg3d
 	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)

@@ -24,4 +24,5 @@ var MigratableModels = []MigrationType{
 	{Model: &Permission{}, Name: "Permissions", Icon: "material-symbols:key-rounded"},
 	{Model: &Role{}, Name: "Role", Icon: "mingcute:hat-fill"},
 	{Model: &ContextStorage{}, Name: "Context Storage", Icon: "material-symbols:contextual-token"},
+	{Model: &Storage{}, Name: "File Storage", Icon: "material-symbols:storage"},
 }

@@ -8,6 +8,7 @@ import { PG3D } from './requests/pg3d';
 import { Storage } from './requests/storage';
 import { base_url } from './api.store';
 import { get } from 'svelte/store';
+import { StorageV2 } from './requests/storagev2';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -157,6 +158,10 @@ export class Api extends ApiStatic {
 
 	public get storage() {
 		return new Storage(this.api);
+	}
+
+	public get storage_v2() {
+		return new StorageV2(this.api);
 	}
 }
 

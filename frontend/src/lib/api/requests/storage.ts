@@ -105,7 +105,6 @@ class Storage {
 	): Promise<ServerResponse<{ message: string; success: boolean }>> {
 		const pathname = path ? path : '';
 
-		// Tworzymy FormData tutaj
 		const formData = new FormData();
 		formData.append('file', file);
 
@@ -114,7 +113,7 @@ class Storage {
 			formData,
 			{
 				headers: {
-					'Content-Type': 'multipart/form-data', // Axios automatycznie doda boundary
+					'Content-Type': 'multipart/form-data',
 					Authorization: `Bearer ${Api.token}`
 				}
 			}
