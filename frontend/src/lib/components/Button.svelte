@@ -4,7 +4,7 @@
 	import Loader from './dashboard/Loader.svelte';
 
 	const buttonStyles = tv({
-		base: 'cursor-pointer px-4 py-2 self-start flex gap-2 items-center text-white',
+		base: 'cursor-pointer px-4 py-2 self-start flex gap-2 items-center text-white ',
 		variants: {
 			theme: {
 				base: 'bg-primary border-1 border-secondary hover:bg-secondary',
@@ -21,8 +21,8 @@
 				false: 'cursor-pointer'
 			},
 			size: {
-				small: 'text-sm px-2 py-1',
-				medium: 'text-base px-4 py-2',
+				small: 'text-sm px-3 py-1 rounded-lg',
+				medium: 'text-base px-4 py-2 rounded-lg',
 				large: 'text-lg px-6 py-3'
 			}
 		},

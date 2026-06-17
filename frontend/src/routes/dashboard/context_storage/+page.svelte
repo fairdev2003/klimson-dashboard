@@ -39,7 +39,7 @@
 </script>
 
 <div>
-	<div class="flex p-4 justify-between border border-neutral-700 bg-neutral-900 items-center">
+	<div class="flex justify-between m-4 p-2 rounded-xl items-center">
 		<Heading>Context Storage</Heading>
 		<Button
 			onclick={() => {

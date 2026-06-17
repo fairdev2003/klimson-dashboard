@@ -12,10 +12,7 @@
 		search_alliases: string;
 	};
 
-	const tool_records: ToolRecord[] = [
-		{ component: IpView, search_alliases: 'ip' },
-		{ component: IpView, search_alliases: 'siema' }
-	];
+	const tool_records: ToolRecord[] = [{ component: IpView, search_alliases: 'ip' }];
 
 	const filtered_records = $derived.by(() => {
 		let result: ToolRecord[] = [];

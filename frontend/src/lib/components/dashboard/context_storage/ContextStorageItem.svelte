@@ -26,7 +26,8 @@
 </script>
 
 <div
-	class="relative group bg-neutral-900 border border-neutral-700 items-center transition-colors w-55 h-30"
+	onclick={() => {}}
+	class="relative group bg-neutral-900 rounded-xl p-2 hover:bg-neutral-800 cursor-pointer items-center transition-colors w-55 h-30"
 >
 	<div class="flex justify-between group-hover:justify-end flex-col h-full p-3">
 		<div class="flex gap-2 items-center group-hover:hidden">

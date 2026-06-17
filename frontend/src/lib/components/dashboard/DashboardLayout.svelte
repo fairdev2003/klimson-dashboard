@@ -36,7 +36,7 @@
 	oncontextmenu={(e) => handleRightClick(e)}
 	class="flex flex-col h-screen overflow-hidden bg-neutral-950 text-white"
 >
-	<header class="border-b h-[66px] border-neutral-700 flex items-center px-4 shrink-0">
+	<header class="border-b h-[80px] border-neutral-700 flex items-center px-4 shrink-0">
 		<CMSNavbar />
 	</header>
 
@@ -92,7 +92,7 @@
 	@import 'tailwindcss';
 
 	.dock-visible {
-		@apply h-[calc(100dvh-66px-100px)] overflow-y-auto;
+		@apply h-[calc(100dvh-80px-100px)] overflow-y-auto;
 	}
 
 	.dock-invisible {

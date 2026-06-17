@@ -30,12 +30,12 @@
 </script>
 
 <div
-	class="absolute top-0 left-0 flex h-[66px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
+	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
 >
 	<!-- Lewa strona -->
-	<div class="flex flex-1 items-center gap-4 min-w-0">
+	<div class="flex flex-1 items-center min-w-0">
 		<!-- Logo (tylko desktop) -->
-		<div class="items-center shrink-0 md:hidden hidden lg:flex">
+		<div class="items-center shrink-0 md:hidden hidden lg:flex w-40 justify-center">
 			<span class="text-blue-500 mr-2">
 				<Icon icon="majesticons:lightning-bolt" width="30" height="30" />
 			</span>
