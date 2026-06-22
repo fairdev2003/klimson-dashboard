@@ -8,6 +8,7 @@
 	import { context_storage } from './context_storage.store';
 	import Check from '../Check.svelte';
 	import HarcCheckBox from '../HarcCheckBox.svelte';
+	import { debug } from '$lib/dashboard/stores/debug';
 
 	type Props = {
 		context_record: ContextStorageType;
@@ -109,6 +110,8 @@
 					const response = await api.context_storage.GetPrivateContextStorages();
 
 					$context_storage = response.data;
+
+					debug.success('Context successfully updated!');
 
 					updateLoading = false;
 					updateModalOpened = false;

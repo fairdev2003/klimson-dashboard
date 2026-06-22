@@ -57,6 +57,12 @@ export const contents: SidebarItems = [
 	},
 
 	{
+		icon: 'ri:todo-fill',
+		href: '/dashboard/todo',
+		name: 'Todo List',
+		disabled: false
+	},
+	{
 		icon: 'mdi:link',
 		href: '/dashboard/routes',
 		name: 'API Routes',
@@ -64,7 +70,7 @@ export const contents: SidebarItems = [
 	},
 	{
 		icon: 'mdi:user-key',
-		href: '/dashboard/users',
+		href: '/dashboard/users?label=acc',
 		name: 'CMS Access',
 		disabled: false
 	},

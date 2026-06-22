@@ -34,6 +34,7 @@ func GenerateRootToken(isContributor bool) (string, error) {
 func GenerateToken(contributor models.Contributor) (string, error) {
 
 	claims := jwt.MapClaims{
+		"id":          contributor.ID,
 		"exp":         time.Now().Add(time.Hour * 2).Unix(),
 		"permissions": contributor.Permissions,
 		"contributor": true,

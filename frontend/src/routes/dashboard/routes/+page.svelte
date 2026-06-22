@@ -9,13 +9,13 @@
 	import RoutesDocky from '$lib/components/dashboard/dock/boxes/RoutesDocky.svelte';
 	import DashboardDock from '$lib/components/dashboard/dock/DashboardDock.svelte';
 	import { dockComponent } from '../dashboard.svelte';
+	import { debug } from '$lib/dashboard/stores/debug';
 
 	onMount(async () => {
 		dockComponent.set(RoutesDocky);
 		if ($routes) return;
 		const response = await api.misc.GetRoutes();
 		$routes = response.data;
-		console.log('Routes', $routes);
 	});
 
 	let searchBoxValue = $state('');
@@ -72,6 +72,11 @@
 			name: 'Private',
 			path: '/admin',
 			color: 'text-slate-400 bg-slate-400/40 hover:bg-slate-400/60'
+		},
+		{
+			name: 'Websocket',
+			path: '/ws',
+			color: 'text-blue-400 bg-blue-400/40 hover:bg-blue-400/60'
 		}
 	];
 </script>
@@ -90,6 +95,10 @@
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<span
 					onclick={() => {
+						$routes?.forEach((r, i) => {
+							debug.log(`endpoint ${i + 1}`, r);
+						});
+
 						if (category === path) {
 							category = '';
 							return;
@@ -101,6 +110,15 @@
 					class="p-1 px-2 rounded-full {color} text-xs cursor-pointer truncate">{name}</span
 				>
 			{/each}
+			<span
+				onclick={() => {
+					$routes?.forEach((r, i) => {
+						debug.log(`endpoint ${i + 1}`, r);
+					});
+				}}
+				class="p-1 px-2 rounded-full text-xs cursor-pointer truncate border-neutral-700 border bg-neutral-800"
+				>Dump endpoints</span
+			>
 		</div>
 
 		{#each filtered_routes as route, i}
@@ -111,7 +129,7 @@
 				in:blur={{ duration: 300 }}
 				class="flex overflow-hidden w-auto gap-4 rounded-xl truncate items-center bg-neutral-900 hover:bg-neutral-800 transition-colors cursor-pointer p-4"
 			>
-				{@render Method(route.method)}
+				{@render Method(route.path.includes('ws') ? 'WS' : route.method)}
 				<div class="flex truncate">
 					<span class="text-purple-600 font-black"> {`${$base_url}`}</span>
 					<p class="text-blue-500 hover:underline">
@@ -128,6 +146,11 @@
 		{#if method === 'GET'}
 			<div class="bg-green-500/50 p-1 rounded-lg flex justify-center">
 				<p class="text-green-500 font-black">{method}</p>
+			</div>
+		{/if}
+		{#if method === 'WS'}
+			<div class="bg-orange-500/50 p-1 rounded-lg flex justify-center">
+				<p class="text-orange-500 font-black">WS</p>
 			</div>
 		{/if}
 		{#if method === 'POST'}

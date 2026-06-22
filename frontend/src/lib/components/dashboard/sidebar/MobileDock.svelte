@@ -49,7 +49,7 @@
 	</div>
 	<div
 		style="scrollbar-width: none; -ms-overflow-style: none;"
-		class="flex flex-col px-4 pb-4 overflow-auto scrollbar-hide"
+		class="flex flex-col px-4 my-8 pb-4 overflow-auto scrollbar-hide w-full"
 	>
 		{#each contents as content}
 			<a href={content.href}>{content.name}</a>

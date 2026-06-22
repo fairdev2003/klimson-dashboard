@@ -54,7 +54,7 @@ class DashboardClass {
 		});
 
 		if (!verify.data.access) return false;
-		debug.log('Autoryzacja poprawna');
+		debug.log('Authorization is successful');
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
 		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
@@ -70,7 +70,7 @@ class DashboardClass {
 
 		updateResponseTime('routesResponseTime', routesResponse.duration);
 
-		debug.system('Zesralem sie');
+		debug.system('Server is up and ready!');
 
 		toast.success('Aktualne dane załadowane');
 		dashboard_load_date.set(this.GetDateTime());
