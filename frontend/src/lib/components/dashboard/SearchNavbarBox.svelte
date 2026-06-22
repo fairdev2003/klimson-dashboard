@@ -68,10 +68,10 @@
 			url: '/dashboard/routes'
 		},
 		{
-			name: 'Content Manager',
-			icon: 'mdi:pencil',
-			description: 'Manage application content',
-			url: '/dashboard/content_manager'
+			name: 'CMS Access',
+			icon: 'mdi:user-key',
+			description: 'Manage user content access',
+			url: '/dashboard/users'
 		}
 	];
 

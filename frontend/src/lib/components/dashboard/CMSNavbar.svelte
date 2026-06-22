@@ -37,7 +37,7 @@
 		<!-- Logo (tylko desktop) -->
 		<div class="items-center shrink-0 md:hidden hidden lg:flex w-40 justify-center">
 			<span class="text-blue-500 mr-2">
-				<Icon icon="majesticons:lightning-bolt" width="30" height="30" />
+				<Icon icon="fluent:brain-20-filled" width="35" height="35" />
 			</span>
 			{@render CMSTextLogo()}
 		</div>
@@ -68,8 +68,8 @@
 			<p>Harcquiz</p>
 			<p>for Contr.</p>
 		{:else}
-			<p>Klimson</p>
-			<p>CMS</p>
+			<p>klimson.dev</p>
+			<p>station</p>
 		{/if}
 	</a>
 {/snippet}

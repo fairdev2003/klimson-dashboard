@@ -13,6 +13,7 @@
 	import Sidebar from './sidebar/Sidebar.svelte';
 	import CMSNavbar from './CMSNavbar.svelte';
 	import DashboardDock from './dock/DashboardDock.svelte';
+	import MobileDock from './sidebar/MobileDock.svelte';
 
 	type Props = {
 		children: Snippet;
@@ -36,11 +37,13 @@
 	oncontextmenu={(e) => handleRightClick(e)}
 	class="flex flex-col h-screen overflow-hidden bg-neutral-950 text-white"
 >
+	<MobileDock />
+
 	<header class="border-b h-[80px] border-neutral-700 flex items-center px-4 shrink-0">
 		<CMSNavbar />
 	</header>
 
-	<div class="flex flex-1 overflow-hidden relative">
+	<div class="flex flex-1 relative">
 		{#if !$isMobile && $sidebar_open}
 			<aside
 				onclick={(e) => {
@@ -56,22 +59,12 @@
 			<div class="h-full w-75 lg:static hidden"></div>
 		{/if}
 
-		{#if $mobile_sidebar_open}
-			<div class="lg:hidden absolute inset-0 bg-black/50 z-110">
-				<aside
-					class="absolute overflow-hidden lg:static z-20 w-75 bg-neutral-900 border-r border-neutral-700 transition-all"
-				>
-					<Sidebar />
-				</aside>
-			</div>
-		{/if}
-
 		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1">
 			<DashboardDock />
 			<div
 				class:dock-invisible={!$dashboard_config.dock}
 				class:dock-visible={$dashboard_config.dock}
-				class=""
+				class="pb-16 lg:pb-0"
 			>
 				{@render children()}
 			</div>

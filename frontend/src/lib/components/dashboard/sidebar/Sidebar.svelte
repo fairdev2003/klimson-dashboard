@@ -6,13 +6,15 @@
 	import SidebarUserLogged from '../SidebarUserLogged.svelte';
 	import { page } from '$app/state';
 	import { isMobile, mobile_sidebar_open, route } from '$lib/dashboard/stores/persist';
-	import type { SidebarItems } from './sidebar.types';
+	import { contents, type SidebarItems } from './sidebar.types';
 	import SidebarItem from './SidebarItem.svelte';
 	import { sidebar_open } from '$lib/dashboard/stores/store';
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { nickname } from '../settings/store.svelte';
 	import SidebarPill from './SidebarPill.svelte';
+	import PagesSelector from './PagesSelector.svelte';
+	import SidebarToggler from './SidebarToggler.svelte';
 
 	let content_show: boolean = $state(true);
 
@@ -37,61 +39,6 @@
 		name: string;
 	};
 
-	const contents: SidebarItems = [
-		{ icon: 'material-symbols:home', href: '/dashboard', name: 'Hub', disabled: false },
-		{
-			icon: 'material-symbols:database',
-			href: '/dashboard/database',
-			name: 'Database Editor',
-			disabled: false
-
-			// child: [
-			// 	{
-			// 		name: 'Users Database',
-			// 		href: '/dashboard/database/users'
-			// 	}
-			// ]
-		},
-		{
-			icon: 'mdi:bucket',
-			href: '/dashboard/context_storage',
-			name: 'Context Storage',
-			disabled: false
-		},
-
-		{
-			icon: 'mdi:files',
-			href: '/dashboard/storage',
-			name: 'File Storage',
-			disabled: false
-		},
-		{
-			icon: 'mdi:files',
-			href: '/dashboard/v2/storage',
-			name: 'V2 Storage',
-			disabled: false
-		},
-		{
-			icon: 'mdi:tools',
-			href: '/dashboard/tools',
-			name: 'Tools',
-			disabled: false
-		},
-
-		{
-			icon: 'mdi:link',
-			href: '/dashboard/routes',
-			name: 'API Routes',
-			disabled: false
-		},
-		{
-			icon: 'streamline-block:content-copy',
-			href: '/dashboard/content_manager',
-			name: 'Content Manager',
-			disabled: true
-		}
-	];
-
 	$effect(() => {
 		if ($mobile_sidebar_open) {
 			document.body.style.overflow = 'hidden';
@@ -103,7 +50,9 @@
 
 <div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col m-5">
 	<div>
+		<SidebarToggler />
 		<SidebarPill />
+		<PagesSelector />
 
 		{#if $sidebar_open}
 			<nav

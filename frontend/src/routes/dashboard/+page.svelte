@@ -47,8 +47,8 @@
 	});
 </script>
 
-<div in:blur={{ duration: 300 }} class=" p-5 text-white flex flex-col gap-5">
-	<div class="my-2 flex justify-between px-2">
+<div in:blur={{ duration: 300 }} class=" p-8 py-4 text-white flex flex-col gap-5">
+	<div class="my-2 flex justify-between">
 		<div class="flex flex-col">
 			<Heading>Hub</Heading>
 			<span class="text-sm font-md text-neutral-400">System load at: {$dashboard_load_date}</span>
