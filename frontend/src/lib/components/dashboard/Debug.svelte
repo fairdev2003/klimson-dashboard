@@ -210,6 +210,7 @@
 				}
 				case 'clear': {
 					debug.clear();
+					return;
 				}
 				default: {
 					debug.warn(`Unknown command: ${commandLineValue}`);
