@@ -24,7 +24,6 @@
 		socket.onmessage = (event) => {
 			const data: CPUObjectType = JSON.parse(event.data);
 			cpu = data.cpu;
-			debug.log('Cpu percent: ', cpu);
 		};
 
 		socket.onopen = (event) => {
