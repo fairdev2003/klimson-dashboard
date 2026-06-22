@@ -1,5 +1,5 @@
 import type { AxiosInstance } from 'axios';
-import type { ClanResponse, PlayerData } from '../../../routes/dashboard/pg3d/pg3d.types';
+import type { ClanInfo, ClanResponse, PlayerData } from '../../../routes/dashboard/pg3d/pg3d.types';
 import type { ServerResponse } from '../types';
 
 class PG3D {
@@ -13,6 +13,22 @@ class PG3D {
 		return response;
 	}
 
+	public async HardWarInfo(
+		second_clan_id: string
+	): Promise<{
+		blackout: ServerResponse<ClanResponse>;
+		second_clan: ServerResponse<ClanResponse>;
+	}> {
+		const blackout_id = '31259536';
+
+		const [blackout, second_clan] = await Promise.all([
+			this.GetClanInfo(blackout_id),
+			this.GetClanInfo(second_clan_id)
+		]);
+
+		return { blackout, second_clan };
+	}
+
 	public async GetPlayerData(player_id: string): Promise<ServerResponse<PlayerData>> {
 		const response: ServerResponse<PlayerData> = await this.api.get(
 			`/pg3d/player_data/${player_id}`
@@ -20,8 +36,6 @@ class PG3D {
 
 		return response;
 	}
-
-	///pg3d/player_data/:player_id
 }
 
 export { PG3D };

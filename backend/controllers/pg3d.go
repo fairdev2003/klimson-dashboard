@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/imroc/req/v3"
+	"github.com/zgierz/harc_quiz/backend/logger"
 )
 
 func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
@@ -33,7 +34,7 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 	}
 
 	if !resp.IsSuccessState() {
-		ctx.JSON(http.StatusBadGateway, gin.H{"error": "External API returned non-200 status"})
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": resp.Status})
 		return
 	}
 
@@ -41,6 +42,8 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 	if rawString == "" {
 		rawString = resp.String()
 	}
+
+	logger.ServerLog("Received Json with id: " + clan_id + ": " + rawString)
 
 	if rawString == "" || rawString == "{}" {
 		ctx.JSON(http.StatusOK, gin.H{

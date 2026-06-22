@@ -155,18 +155,20 @@ func InitRoutes() {
 
 	})
 
-	hub := helpers.NewHub()
-	go hub.Run()
+	cpu_hub := helpers.NewHub("cpu")
+	logger_ws := helpers.NewHub("logger")
+	go cpu_hub.Run()
+	go logger_ws.Run()
 
 	go func() {
 		ticker := time.NewTicker(2 * time.Second)
 		for range ticker.C {
 			cpuUsage, _ := cpu.Percent(0, false)
 
-			hub.Send(map[string]float64{"cpu": cpuUsage[0]})
+			cpu_hub.Send(map[string]float64{"cpu": cpuUsage[0]})
 		}
 	}()
 	AddRandomRecords()
-	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, hub, latestFiles)
+	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, cpu_hub, latestFiles)
 	newQuizController.RegisterRoutes()
 }

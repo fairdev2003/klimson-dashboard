@@ -1,6 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import type { ServerResponse } from '../types';
-import type { StorageRecord } from './storage';
+import type { StorageRecord, V2StorageRecord } from './storage';
 import { Api } from '../api';
 
 export class StorageV2 {
@@ -14,11 +14,11 @@ export class StorageV2 {
 		this.api = api;
 	}
 
-	public async GetStorageRecords(path: string): Promise<ServerResponse<StorageRecord[]>> {
+	public async GetStorageRecords(path: string): Promise<ServerResponse<V2StorageRecord[]>> {
 		const pathname = path ? path : '';
 		console.log(path);
 
-		const response: ServerResponse<StorageRecord[]> = await this.api.get(
+		const response: ServerResponse<V2StorageRecord[]> = await this.api.get(
 			`/admin/v2/storage/get/${pathname}`,
 			{
 				headers: {

@@ -12,7 +12,7 @@ import (
 )
 
 func GetDiskUsage() (uint64, uint64, error) {
-	usage, err := disk.Usage("/home")
+	usage, err := disk.Usage("/")
 	if err != nil {
 		return 0, 0, err
 	}
@@ -47,6 +47,10 @@ func ListFiles(folderPath string) ([]models.ListRecord, error) {
 
 func (controller GlobalController) TestRedirect(ctx *gin.Context) {
 	ctx.Redirect(http.StatusTemporaryRedirect, "/login")
+}
+
+func (controller GlobalController) LegalReasonsTest(ctx *gin.Context) {
+	ctx.JSON(http.StatusUnavailableForLegalReasons, gin.H{"message": "451"})
 }
 
 func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {

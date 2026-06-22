@@ -8,10 +8,12 @@
 	import StorageRecordTile from '../../../storage/components/StorageRecordTile.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
+	import StorageCard from '$lib/components/dashboard/storage/StorageCard.svelte';
 
 	let { params } = $props();
 	let fileInput: HTMLInputElement | undefined = $state();
 	let uploading: boolean = $state(false);
+	let path: string = $derived(params.path);
 
 	$effect(async () => {
 		await FetchStorageRecords();
@@ -50,7 +52,11 @@
 
 <div class="flex flex-col">
 	{@render StorageHeader()}
-	{storage_logic.storage_records}
+	<div class="flex flex-wrap gap-4 px-4">
+		{#each storage_logic.storage_records as storage_record}
+			<StorageCard {storage_record} path={params.path} />
+		{/each}
+	</div>
 </div>
 
 {#snippet StorageHeader()}

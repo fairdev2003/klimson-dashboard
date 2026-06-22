@@ -9,6 +9,14 @@ export type StorageRecord = {
 	modified: string;
 };
 
+export type V2StorageRecord = {
+	name: string;
+	file_type: string;
+	file_name: string;
+	path: string;
+	description: string;
+};
+
 type FolderCreationBody = {
 	folder_name: string;
 };

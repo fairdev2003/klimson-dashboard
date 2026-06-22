@@ -11,6 +11,7 @@ type WSHub struct {
 	Clients   map[*websocket.Conn]bool
 	Broadcast chan interface{}
 	Mu        sync.Mutex
+	Name      string
 }
 
 var Upgrader = websocket.Upgrader{
@@ -21,10 +22,11 @@ var Upgrader = websocket.Upgrader{
 	},
 }
 
-func NewHub() *WSHub {
+func NewHub(name string) *WSHub {
 	return &WSHub{
 		Clients:   make(map[*websocket.Conn]bool),
 		Broadcast: make(chan interface{}),
+		Name:      name,
 	}
 }
 

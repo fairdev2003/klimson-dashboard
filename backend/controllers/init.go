@@ -78,6 +78,8 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.POST("/storage/interface/new-file/*filepath", controller.NewFile)
 	controller.adminPath.GET("/storage/latest", controller.GetLatesFiles)
 
+	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
+
 	// context storage crud operations
 	controller.adminPath.POST("/context_storage/create", controller.CreateContextStorage)
 	controller.adminPath.PUT("/context_storage/update/:key", controller.UpdateContextStorage)

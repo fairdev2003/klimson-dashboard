@@ -3,6 +3,7 @@ import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
 import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 import { dashboard_load_date } from '$lib/components/dashboard/stores/main';
+import { clan_info } from '$lib/components/dashboard/table/pg3d/clan.store';
 import {
 	dashboardLoadState,
 	routes,
@@ -56,8 +57,13 @@ class DashboardClass {
 		debug.log('Autoryzacja poprawna');
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
+		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
+		const [routesResponse] = await Promise.all([
+			api.misc.GetRoutes()
+			// api.pg3d.GetClanInfo(context_response.data.value)
+		]);
 
-		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
+		// clan_info.set(clan_response.data);
 
 		routes.set(routesResponse.data);
 		console.log(routesResponse.data);

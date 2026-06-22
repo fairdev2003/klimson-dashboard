@@ -34,6 +34,7 @@
 	import SecondHubContainer from './widgets/containers/SecondHubContainer.svelte';
 	import { dockComponent } from './dashboard.svelte';
 	import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
+	import { blur, fade } from 'svelte/transition';
 
 	let loading: boolean = $state(false);
 
@@ -46,7 +47,7 @@
 	});
 </script>
 
-<div class=" p-5 text-white flex flex-col gap-5">
+<div in:blur={{ duration: 300 }} class=" p-5 text-white flex flex-col gap-5">
 	<div class="my-2 flex justify-between px-2">
 		<div class="flex flex-col">
 			<Heading>Hub</Heading>
