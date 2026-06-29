@@ -14,6 +14,7 @@
 
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	$effect(() => {
 		$route = page.url.pathname;
@@ -81,6 +82,18 @@
 				<Loader />
 				<p>{$dashboardLoadState}</p>
 			</div>
+			<a
+				class="mx-auto flex items-center text-blue mt-5 text-blue-400 hover:underline"
+				onclick={() => {
+					const p = confirm('Are you sure to process with this one?');
+					if (p) {
+						localStorage.setItem('dashboard_config', '{}');
+						window.location.reload();
+					} else {
+						toast.info('Process is denied!');
+					}
+				}}>Reset Dashboard Config</a
+			>
 		{:then access}
 			{#if access}
 				<CMSNavbar />
