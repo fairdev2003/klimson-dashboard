@@ -24,6 +24,14 @@ export type DiskData = {
 	label: string;
 };
 
+export type PermissionRegistry = {
+	icon: string;
+	name: string;
+	tag: string;
+	color: string;
+	description: string;
+};
+
 class Misc {
 	/**
 	 * Tworzy nową instancję ImageApi.
@@ -48,6 +56,17 @@ class Misc {
 		const response: ServerResponse<RoutesResponse[]> = await this.api.get('/admin/routes', {
 			headers: { Authorization: `Bearer ${Api.token}` }
 		});
+
+		return response;
+	}
+
+	public async GetPermissionRegistry(): Promise<ServerResponse<PermissionRegistry[]>> {
+		const response: ServerResponse<PermissionRegistry[]> = await this.api.get(
+			'/admin/permissions/all',
+			{
+				headers: { Authorization: `Bearer ${Api.token}` }
+			}
+		);
 
 		return response;
 	}

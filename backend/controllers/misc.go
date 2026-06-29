@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/zgierz/harc_quiz/backend/helpers"
 	"github.com/zgierz/harc_quiz/backend/khttp"
 	"github.com/zgierz/harc_quiz/backend/models"
 )
@@ -17,6 +18,12 @@ func GetDiskUsage() (uint64, uint64, error) {
 		return 0, 0, err
 	}
 	return usage.Used, usage.Total, nil
+}
+
+func (controller GlobalController) GetPermissionsList(ctx *gin.Context) {
+	perms := helpers.GetAllDefinedPermissions()
+
+	ctx.JSON(200, perms)
 }
 
 func ListFiles(folderPath string) ([]models.ListRecord, error) {

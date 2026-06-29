@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/harc_quiz/backend/logger"
 )
 
 type PermissionsMetadata struct {
@@ -40,6 +41,7 @@ func RequirePermission(meta PermissionsMetadata) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		metadataJson, _ := json.Marshal(meta.PermissionTag)
+		logger.ServerLog("Permission Tag:", meta.PermissionTag)
 
 		c.Writer.Header().Set("X-Required-Permission", string(metadataJson))
 

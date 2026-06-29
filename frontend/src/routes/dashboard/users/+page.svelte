@@ -9,6 +9,13 @@
 	import type { LabelName } from './helpers/user.types';
 	import AccountController from './helpers/access.svelte';
 	import account_controller from './helpers/access.svelte';
+	import Roles from './(components)/Roles.svelte';
+	import PermissionsRegistry from './(components)/PermissionsRegistry.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import InputSettingsRecord from '$lib/components/dashboard/settings/records/InputSettingsRecord.svelte';
+	import Input from '$lib/components/dashboard/settings/components/Input.svelte';
+	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
+	import MultipleDropdown from '$lib/components/dashboard/settings/components/MultipleDropdown.svelte';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
@@ -20,6 +27,8 @@
 
 		goto(`?${newParams.toString()}`, { replaceState: true, keepFocus: true });
 	}
+
+	let roleModalOpened = $state(false);
 </script>
 
 <div in:fade={{ duration: 150 }} class="flex flex-col m-8 my-4 gap-4">
@@ -60,7 +69,12 @@
 
 		<div class="flex gap-4">
 			<Button onclick={() => account_controller.DumpData()} theme="base">Dump data</Button>
-			<Button theme="base">Implement role</Button>
+			<Button
+				theme="base"
+				onclick={() => {
+					roleModalOpened = true;
+				}}>Implement role</Button
+			>
 			<Button theme="secondary">Add account</Button>
 		</div>
 	</div>
@@ -69,8 +83,24 @@
 		{#if selectedLabel === 'acc'}
 			<AccountsTable />
 		{/if}
+
+		{#if selectedLabel === 'roles'}
+			<Roles />
+		{/if}
+
+		{#if selectedLabel === 'perms'}
+			<PermissionsRegistry />
+		{/if}
 	</div>
 </div>
+
+<Modal
+	className="w-100 h-100"
+	onClose={() => (roleModalOpened = false)}
+	bind:opened={roleModalOpened}
+>
+	<DatabaseModalInput label="Role name" />
+</Modal>
 
 <style>
 	@import 'tailwindcss';

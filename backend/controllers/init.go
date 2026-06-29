@@ -70,13 +70,29 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
 	// protected file storage
-	controller.adminPath.POST("/storage/interface/create-folder/*folder", controller.CreateFolder)
+	controller.adminPath.POST("/storage/interface/create-folder/*folder", helpers.RequirePermission(
+		helpers.PermissionsMetadata{
+			Name:          "Create Private Folder",
+			Icon:          "chuj go wie",
+			PermissionTag: "storage:private:create-folder",
+			Color:         "bg-blue-500",
+			Description:   "",
+		},
+	), controller.CreateFolder)
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
 	controller.adminPath.POST("/storage/interface/edit-file/*filepath", controller.PushChangedTextFile)
 	controller.adminPath.POST("/storage/interface/new-file/*filepath", controller.NewFile)
-	controller.adminPath.GET("/storage/latest", controller.GetLatesFiles)
+	controller.adminPath.GET("/storage/latest", helpers.RequirePermission(
+		helpers.PermissionsMetadata{
+			Name:          "Latest Files",
+			Icon:          "chuj go wie",
+			PermissionTag: "storage:latest-files",
+			Color:         "bg-blue-500",
+			Description:   "",
+		},
+	), controller.GetLatesFiles)
 
 	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
 
@@ -101,7 +117,17 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)
 
 	// misc
-	controller.adminPath.GET("/disk", controller.GetStorageLeftPercentage)
+	controller.adminPath.GET("/disk", helpers.RequirePermission(
+		helpers.PermissionsMetadata{
+			Name:          "Disk Info",
+			Icon:          "vaadin:harddrive",
+			PermissionTag: "disk:info",
+			Color:         "bg-blue-500",
+			Description:   "",
+		},
+	), controller.GetStorageLeftPercentage)
+
+	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
 
 	// database crud
 	controller.adminPath.GET("/database/list/tables", controller.GetTables)

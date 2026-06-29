@@ -1,7 +1,7 @@
 {
-  "display_name": "HarcQuiz Api",
-  "internal_name": "harcquiz-api",
-  "description": "Serwer największej bazy quizów harcerskich",
+  "display_name": "Klimson Api",
+  "internal_name": "klimson-api",
+  "description": "Prywatny panel uzytkownika fairshooter123.",
   "port": 8090, 
   "debug": false,
   "api_config": {
