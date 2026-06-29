@@ -135,6 +135,9 @@ func InitRoutes() {
 				logger.ErrorLog("Error while generating token:", err.Error())
 			}
 
+			cookieValue := "token=" + token + "; Path=/; Max-Age=3600; HttpOnly; SameSite=None; Secure"
+			c.Writer.Header().Add("Set-Cookie", cookieValue)
+
 			c.JSON(200, gin.H{"token": token})
 		} else {
 			logger.ServerLog("Znaleziono kontrybutora o nicku: ", user.Password)
