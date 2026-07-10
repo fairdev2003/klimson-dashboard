@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
-	"github.com/zgierz/harc_quiz/backend/logger"
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/logger"
+	"github.com/zgierz/klimson/backend/models"
 )
 
 func GenerateRootToken(isContributor bool) (string, error) {

@@ -8,11 +8,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/v3/cpu"
-	"github.com/zgierz/harc_quiz/backend/controllers"
-	"github.com/zgierz/harc_quiz/backend/handlers"
-	"github.com/zgierz/harc_quiz/backend/helpers"
-	"github.com/zgierz/harc_quiz/backend/logger"
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/controllers"
+	"github.com/zgierz/klimson/backend/handlers"
+	"github.com/zgierz/klimson/backend/helpers"
+	"github.com/zgierz/klimson/backend/logger"
+	"github.com/zgierz/klimson/backend/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

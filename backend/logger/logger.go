@@ -10,7 +10,7 @@ import (
 	"io"
 
 	"github.com/fatih/color"
-	"github.com/zgierz/harc_quiz/backend/config"
+	"github.com/zgierz/klimson/backend/config"
 )
 
 func GetMethodColor(method string) func(a ...interface{}) string {

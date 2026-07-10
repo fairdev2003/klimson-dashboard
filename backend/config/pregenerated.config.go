@@ -1,6 +1,6 @@
 package config
 
-import "github.com/zgierz/harc_quiz/backend/models"
+import "github.com/zgierz/klimson/backend/models"
 
 var PreGeneratedConfig = &models.Config{
 	DisplayName:      "HarcQuiz Klimson Api",

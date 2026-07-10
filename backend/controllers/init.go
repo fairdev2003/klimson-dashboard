@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/harc_quiz/backend/helpers"
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/helpers"
+	"github.com/zgierz/klimson/backend/models"
 	"gorm.io/gorm"
 )
 

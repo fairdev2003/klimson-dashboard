@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/harc_quiz/backend/khttp"
+	"github.com/zgierz/klimson/backend/khttp"
 )
 
 const (

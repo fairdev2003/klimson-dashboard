@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/harc_quiz/backend/khttp"
-	"github.com/zgierz/harc_quiz/backend/logger"
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/logger"
+	"github.com/zgierz/klimson/backend/models"
 )
 
 func (gc GlobalController) UploadNewFile(ctx *gin.Context) {

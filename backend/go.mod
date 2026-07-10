@@ -1,4 +1,4 @@
-module github.com/zgierz/harc_quiz/backend
+module github.com/zgierz/klimson/backend
 
 go 1.25.0
 

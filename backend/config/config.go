@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/models"
 )
 
 func GetConfig(mainPath string, serverConfigPath string) (*models.Config, error) {

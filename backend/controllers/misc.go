@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/disk"
-	"github.com/zgierz/harc_quiz/backend/helpers"
-	"github.com/zgierz/harc_quiz/backend/khttp"
-	"github.com/zgierz/harc_quiz/backend/models"
+	"github.com/zgierz/klimson/backend/helpers"
+	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/models"
 )
 
 func GetDiskUsage() (uint64, uint64, error) {

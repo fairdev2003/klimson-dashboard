@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/harc_quiz/backend/logger"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 type PermissionsMetadata struct {

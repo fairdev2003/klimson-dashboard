@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
-	"github.com/zgierz/harc_quiz/backend/logger"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

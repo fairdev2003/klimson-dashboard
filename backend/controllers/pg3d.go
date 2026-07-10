@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/imroc/req/v3"
-	"github.com/zgierz/harc_quiz/backend/logger"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 func (controller GlobalController) GetClanInfo(ctx *gin.Context) {

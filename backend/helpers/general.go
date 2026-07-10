@@ -11,7 +11,7 @@ import (
 
 	"github.com/EdlinOrg/prominentcolor"
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/harc_quiz/backend/logger"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 func NetworkLogger() gin.HandlerFunc {
