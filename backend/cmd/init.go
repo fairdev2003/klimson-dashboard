@@ -90,7 +90,7 @@ func Db() *gorm.DB {
 
 func Redis() *redis.Client {
 	client := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("RDB_URL"), // Upewnij się, że tu jest "pro01.mikr.us:44285"
+		Addr:     os.Getenv("RDB_URL"),
 		Password: os.Getenv("RDB_PASS"),
 		DB:       0,
 	})
