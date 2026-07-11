@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
@@ -15,6 +17,7 @@ import (
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,6 +29,7 @@ var (
 	auth_token      string
 	hashed_password string
 	db_conn_string  string
+	rdb             *redis.Client
 )
 
 func LoadConfig() {
@@ -72,6 +76,7 @@ func LoadConfig() {
 }
 
 func Db() *gorm.DB {
+
 	dsn := db_conn_string
 
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -81,6 +86,25 @@ func Db() *gorm.DB {
 	logger.GreenServerLog("✓ Sucessfully connected to the database")
 
 	return DB
+}
+
+func Redis() *redis.Client {
+	client := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv("RDB_URL"), // Upewnij się, że tu jest "pro01.mikr.us:44285"
+		Password: os.Getenv("RDB_PASS"),
+		DB:       0,
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	response, err := client.Ping(ctx).Result()
+	if err != nil {
+		logger.ErrorLog("Error during connecting to redis database: %v", err)
+	}
+
+	logger.GreenServerLog("✓ Connected to redis storage successfully with message: ", response)
+	return client
 }
 
 func AutoMigrateModels() {
@@ -135,6 +159,7 @@ func Init() {
 	LoadConfig()
 	FetchEnvVariables()
 	db = Db()
+	rdb = Redis()
 	AutoMigrateModels()
 	StartGinServer()
 }
