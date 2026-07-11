@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/models"
 	"gorm.io/gorm"
@@ -16,9 +17,10 @@ type GlobalController struct {
 	adminPath  *gin.RouterGroup
 	Hub        *helpers.WSHub
 	Files      []models.ListRecord
+	rdb        *redis.Client
 }
 
-func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *helpers.WSHub, files []models.ListRecord) GlobalController {
+func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *helpers.WSHub, files []models.ListRecord, rdb *redis.Client) GlobalController {
 	return GlobalController{
 		db:         db,
 		ctx:        ctx,
@@ -26,6 +28,7 @@ func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterG
 		adminPath:  adminPath,
 		Hub:        hub,
 		Files:      files,
+		rdb:        rdb,
 	}
 }
 
@@ -60,6 +63,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/ws/stats/cpu", controller.RefreshCPU)
 
 	controller.RegisterV2StorageEndpoints()
+	controller.StartRedisEndpoints()
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")

@@ -169,6 +169,6 @@ func InitRoutes() {
 		}
 	}()
 	AddRandomRecords()
-	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, cpu_hub, latestFiles)
+	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, cpu_hub, latestFiles, rdb)
 	newQuizController.RegisterRoutes()
 }

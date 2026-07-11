@@ -40,10 +40,10 @@ export type ServerResponse<T = {}> = AxiosResponse<T & { message: string; error:
 	duration: number;
 };
 
-export type BackendResponse = {
+export type BackendResponse<T = {}> = {
 	message: string;
 	succes: boolean;
-};
+} & T;
 
 export type ApiConfig = {
 	dev_server: string;

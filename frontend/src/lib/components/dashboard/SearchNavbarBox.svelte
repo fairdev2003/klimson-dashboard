@@ -72,6 +72,12 @@
 			icon: 'mdi:user-key',
 			description: 'Manage user content access',
 			url: '/dashboard/users'
+		},
+		{
+			name: 'Redis Storage',
+			icon: 'devicon:redis',
+			description: 'Redis persisted storage manager',
+			url: '/dashboard/redis_writable'
 		}
 	];
 
