@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/websocket"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 type WSHub struct {
@@ -17,7 +18,8 @@ type WSHub struct {
 var Upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
+	CheckOrigin: func(request *http.Request) bool {
+		logger.GreenServerLog("Origin: ", "s")
 		return true
 	},
 }

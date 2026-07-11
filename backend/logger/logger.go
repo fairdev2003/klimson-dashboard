@@ -40,7 +40,7 @@ func GetMethodColor(method string) func(a ...interface{}) string {
 	return color.New(color.FgWhite).SprintFunc()
 }
 
-func GreenServerLog(log string) {
+func GreenServerLog(log ...any) {
 
 	file, err := os.Open("./" + "server-config" + "/config.json")
 	if err != nil {
@@ -64,7 +64,7 @@ func GreenServerLog(log string) {
 	red := color.New(color.FgHiCyan).SprintFunc()
 	green := color.New(color.FgGreen).SprintFunc()
 
-	fmt.Println(blue("● server/"+cfg.InternalName) + " " + yellow("("+cfg.Api.Version+")") + red(" % ") + green(log))
+	fmt.Println(blue("● server/"+cfg.InternalName) + " " + yellow("("+cfg.Api.Version+")") + red(" % ") + green(log...))
 }
 
 func GetFileLocation() string {
