@@ -13,7 +13,8 @@
 		title,
 		size,
 		border,
-		padding_preset
+		padding_preset,
+		form_config
 	}: ModalProps = $props();
 
 	const modal = new ModalLogic({
@@ -93,7 +94,7 @@
 			>
 				<RDBModalBar {title} onButtonClick={() => modal.on_exit_icon_click()} />
 				{@render children?.()}
-				<RDBSubmitControls />
+				<RDBSubmitControls {...form_config} />
 			</div>
 		</div>
 	</div>

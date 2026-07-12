@@ -15,6 +15,7 @@
 	import FancyLoader from './(components)/FancyLoader.svelte';
 	import { goto } from '$app/navigation';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
+	import { debug } from '$lib/dashboard/stores/debug';
 
 	async function get_tables(): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
 		const response: ServerResponse<BackendResponse<{ rdbs: string[] }>> =
@@ -153,6 +154,12 @@
 	{/if}
 </div>
 <RDBModal
+	form_config={{
+		onSubmit: () => {
+			debug.log('Submit!');
+			testModalOpened = !testModalOpened;
+		}
+	}}
 	title={`Editing "${redisWritableForm.key}"`}
 	border="borderless"
 	size="form_preset"

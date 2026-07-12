@@ -1,6 +1,13 @@
 import { debug } from '$lib/dashboard/stores/debug';
 import type { Snippet } from 'svelte';
 
+export type FormControlsProps = {
+	onCancel?: () => void;
+	onLog?: () => void;
+	onDelete?: () => void;
+	onSubmit?: () => void;
+};
+
 export type ModalProps = {
 	opened: boolean;
 	children?: Snippet;
@@ -10,6 +17,7 @@ export type ModalProps = {
 	border: 'normal' | 'borderless';
 	padding_preset: 'zero' | 'normal' | 'small' | 'big';
 	title?: string;
+	form_config?: FormControlsProps;
 };
 
 export class ModalLogic {
