@@ -15,6 +15,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
+	import FancyLoader from './redis_writable/(components)/FancyLoader.svelte';
 
 	$effect(() => {
 		$route = page.url.pathname;
@@ -79,10 +80,9 @@
 	<div class="flex h-auto flex-col text-white">
 		{#await Dashboard.Load()}
 			<div class="mx-auto mt-10 flex items-center gap-3">
-				<Loader />
-				<p>{$dashboardLoadState}</p>
+				<FancyLoader color="blue" />
 			</div>
-			<a
+			<!-- <a
 				class="mx-auto flex items-center text-blue mt-5 text-blue-400 hover:underline"
 				onclick={() => {
 					const p = confirm('Are you sure to process with this one?');
@@ -93,7 +93,7 @@
 						toast.info('Process is denied!');
 					}
 				}}>Reset Dashboard Config</a
-			>
+			> -->
 		{:then access}
 			{#if access}
 				<CMSNavbar />

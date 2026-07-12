@@ -88,11 +88,26 @@ func (controller GlobalController) RDBGetAllExistingKeys(ctx *gin.Context) {
 	khttp.SuccessResponse(ctx, gin.H{"rdbs": keys}, "Success!")
 }
 
+func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
+	key := ctx.Query("key")
+
+	ttl, _ := controller.rdb.TTL(ctx, key).Result()
+
+	mem, _ := controller.rdb.MemoryUsage(ctx, key, 0).Result()
+
+	kType, _ := controller.rdb.Type(ctx, key).Result()
+
+	idle, _ := controller.rdb.ObjectIdleTime(ctx, key).Result()
+
+	khttp.SuccessResponse(ctx, gin.H{"memory_usage": mem, "type": kType, "ttl": ttl, "idle": idle}, "Request was successfull")
+
+}
+
 func (controller GlobalController) StartRedisEndpoints() {
 	controller.publicPath.GET("/redis/ping", controller.PingRedis)
 	controller.publicPath.GET("/redis/get", controller.RDBGetKey)
 	controller.publicPath.GET("/redis/set", controller.RDBSetKey)
 	controller.publicPath.GET("/redis/del", controller.RDBSetKey)
 	controller.publicPath.GET("/redis/keys", controller.RDBGetAllExistingKeys)
-
+	controller.publicPath.GET("/redis/key/info", controller.RDBGetKeyInfo)
 }

@@ -41,7 +41,7 @@
 </script>
 
 <div
-	class="absolute z-51 h-auto flex flex-col gap-3 transition-all duration-300 w-full max-w-sm px-4"
+	class="absolute z-201 h-auto flex flex-col gap-3 transition-all duration-300 w-full max-w-sm px-4"
 	class:bottom-20={$debugOn}
 	class:bottom-5={!$debugOn}
 >
