@@ -53,39 +53,28 @@ class Misc {
 	 */
 
 	public async GetRoutes(): Promise<ServerResponse<RoutesResponse[]>> {
-		const response: ServerResponse<RoutesResponse[]> = await this.api.get('/admin/routes', {
-			headers: { Authorization: `Bearer ${Api.token}` }
-		});
+		const response: ServerResponse<RoutesResponse[]> = await this.api.get('/admin/routes');
 
 		return response;
 	}
 
 	public async GetPermissionRegistry(): Promise<ServerResponse<PermissionRegistry[]>> {
-		const response: ServerResponse<PermissionRegistry[]> = await this.api.get(
-			'/admin/permissions/all',
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
-		);
+		const response: ServerResponse<PermissionRegistry[]> =
+			await this.api.get('/admin/permissions/all');
 
 		return response;
 	}
 
 	public async GetTables(): Promise<ServerResponse<{ tables: TableData[] }>> {
 		const response: ServerResponse<{ tables: TableData[] }> = await this.api.get(
-			'/admin/database/list/tables',
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			'/admin/database/list/tables'
 		);
 
 		return response;
 	}
 
 	public async GetDisk(): Promise<ServerResponse<DiskData>> {
-		const response: ServerResponse<DiskData> = await this.api.get('/admin/disk', {
-			headers: { Authorization: `Bearer ${Api.token}` }
-		});
+		const response: ServerResponse<DiskData> = await this.api.get('/admin/disk');
 
 		return response;
 	}

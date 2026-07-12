@@ -19,12 +19,7 @@ export class StorageV2 {
 		console.log(path);
 
 		const response: ServerResponse<V2StorageRecord[]> = await this.api.get(
-			`/admin/v2/storage/get/${pathname}`,
-			{
-				headers: {
-					Authorization: `Bearer ${Api.token}`
-				}
-			}
+			`/admin/v2/storage/get/${pathname}`
 		);
 
 		return response;
@@ -35,13 +30,7 @@ export class StorageV2 {
 		formData.append('file', file);
 		const response: ServerResponse<{ success: boolean; message: string }> = await this.api.post(
 			`/admin/v2/storage/new-file/${path}`,
-			formData,
-			{
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${Api.token}`
-				}
-			}
+			formData
 		);
 
 		return response;
@@ -52,12 +41,7 @@ export class StorageV2 {
 
 		const response: ServerResponse<{ success: boolean; message: string }> = await this.api.post(
 			`/admin/v2/storage/create-folder`,
-			{ name: name, path: pathName },
-			{
-				headers: {
-					Authorization: `Bearer ${Api.token}`
-				}
-			}
+			{ name: name, path: pathName }
 		);
 
 		return response;

@@ -24,10 +24,7 @@ class DatabaseTable {
 
 	public async GetTableData(table_name: string): Promise<ServerResponse<TableDataType>> {
 		const response: ServerResponse<TableDataType> = await this.api.get(
-			`/admin/database/table/${table_name}`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/database/table/${table_name}`
 		);
 
 		return response;

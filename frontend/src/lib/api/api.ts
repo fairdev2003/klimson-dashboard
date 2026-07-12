@@ -116,6 +116,11 @@ export class Api extends ApiStatic {
 
 		this.api.interceptors.request.use((config) => {
 			(config as any).metadata = { startTime: new Date() };
+
+			if (Api.token) {
+				config.headers.Authorization = `Bearer ${Api.token}`;
+			}
+
 			return config;
 		});
 	}

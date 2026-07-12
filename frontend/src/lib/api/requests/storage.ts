@@ -52,12 +52,8 @@ class Storage {
 	}
 
 	public async GetLatestStorageRecords(): Promise<ServerResponse<{ files: StorageRecord[] }>> {
-		const response: ServerResponse<{ files: StorageRecord[] }> = await this.api.get(
-			`/admin/storage/latest`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
-		);
+		const response: ServerResponse<{ files: StorageRecord[] }> =
+			await this.api.get(`/admin/storage/latest`);
 
 		return response;
 	}
@@ -68,10 +64,7 @@ class Storage {
 	): Promise<ServerResponse> {
 		const response: ServerResponse = await this.api.post(
 			`/admin/storage/interface/edit-file/${path}`,
-			content,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			content
 		);
 
 		return response;
@@ -80,10 +73,7 @@ class Storage {
 	public async AddFile(path: string): Promise<ServerResponse<{}>> {
 		const response: ServerResponse<{}> = await this.api.post(
 			`/admin/storage/interface/new-file/${path}`,
-			{ content: '' },
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			{ content: '' }
 		);
 
 		return response;
@@ -97,10 +87,7 @@ class Storage {
 
 		const response: ServerResponse<{ message: string; success: boolean }> = await this.api.post(
 			`/admin/storage/interface/create-folder/${pathname}`,
-			folder,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			folder
 		);
 
 		return response;
@@ -121,8 +108,7 @@ class Storage {
 			formData,
 			{
 				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${Api.token}`
+					'Content-Type': 'multipart/form-data'
 				}
 			}
 		);
@@ -134,10 +120,7 @@ class Storage {
 		path: string
 	): Promise<ServerResponse<{ success: boolean; message: string }>> {
 		const response: ServerResponse<{ success: boolean; message: string }> = await this.api.delete(
-			`/admin/storage/interface/delete/${path}`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/storage/interface/delete/${path}`
 		);
 		return response;
 	}
@@ -148,8 +131,7 @@ class Storage {
 	): Promise<ServerResponse<{ success: boolean }>> {
 		const response: ServerResponse<{ success: boolean }> = await this.api.post(
 			`/admin/storage/interface/rename/${path}`,
-			{ newName },
-			{ headers: { Authorization: `Bearer ${Api.token}` } }
+			{ newName }
 		);
 		return response;
 	}

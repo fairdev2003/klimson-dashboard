@@ -36,10 +36,7 @@ class ContextStorage {
 
 	public async GetPrivateContextStorages(): Promise<ServerResponse<ContextStorageType[]>> {
 		const response: ServerResponse<ContextStorageType[]> = await this.api.get(
-			`/admin/context_storage/private`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/context_storage/private`
 		);
 
 		return response;
@@ -49,21 +46,14 @@ class ContextStorage {
 		context_storage: ContextStorageType
 	): Promise<ServerResponse<ContextStorageType[]>> {
 		const response: ServerResponse<ContextStorageType[]> = await this.api.post(
-			`/admin/context_storage/create`,
-			context_storage,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/context_storage/create`
 		);
 
 		return response;
 	}
 	public async DeleteContextStorage(id: number): Promise<ServerResponse<ContextStorageType[]>> {
 		const response: ServerResponse<ContextStorageType[]> = await this.api.delete(
-			`/admin/context_storage/delete/${id}`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/context_storage/delete/${id}`
 		);
 
 		return response;
@@ -73,10 +63,7 @@ class ContextStorage {
 
 	public async GetSinglePrivateContext(key: string): Promise<ServerResponse<ContextStorageType>> {
 		const response: ServerResponse<ContextStorageType> = await this.api.get(
-			`/admin/context_storage/private/single/${key}`,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			`/admin/context_storage/private/single/${key}`
 		);
 
 		return response;
@@ -88,10 +75,7 @@ class ContextStorage {
 	): Promise<ServerResponse<ContextStorageType>> {
 		const response: ServerResponse<ContextStorageType> = await this.api.put(
 			`/admin/context_storage/update/${key}`,
-			context_storage,
-			{
-				headers: { Authorization: `Bearer ${Api.token}` }
-			}
+			context_storage
 		);
 
 		return response;
