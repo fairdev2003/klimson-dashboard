@@ -36,7 +36,7 @@
 		dockComponent.set(RedisWritableDocky);
 	});
 
-	type RedisHubView = 'start' | 'react';
+	type RedisHubView = 'start' | 'react' | 'auth';
 	let current_view: RedisHubView = $state('start');
 
 	function change_view(view: RedisHubView) {
@@ -81,6 +81,12 @@
 					class:selected-label-pill={current_view === 'start'}>Current Redis Keys</button
 				>
 				<button
+					class:normal-label-pill={current_view !== 'auth'}
+					class:selected-label-pill={current_view === 'auth'}
+					onclick={() => change_view('auth')}
+					class="base-label-pill">Authorization</button
+				>
+				<button
 					class:normal-label-pill={current_view !== 'react'}
 					class:selected-label-pill={current_view === 'react'}
 					onclick={() => change_view('react')}
@@ -92,13 +98,28 @@
 		<div class="flex gap-4">
 			<!-- <Button theme="base">Dump data</Button>
 			<!-- <Button theme="base">Implement role</Button> -->
-			<Button
-				theme="secondary"
-				onclick={() => {
-					redisWritableForm = { value: '', key: '' };
-					addRedisRecordModalOpened = !addRedisRecordModalOpened;
-				}}>Add new key</Button
-			>
+			{#if current_view === 'start'}
+				<div in:blur={{ duration: 300 }}>
+					<Button
+						theme="secondary"
+						onclick={() => {
+							redisWritableForm = { value: '', key: '' };
+							addRedisRecordModalOpened = !addRedisRecordModalOpened;
+						}}>Add new key</Button
+					>
+				</div>
+			{/if}
+			{#if current_view === 'auth'}
+				<div in:blur={{ duration: 300 }}>
+					<Button
+						theme="secondary"
+						onclick={() => {
+							redisWritableForm = { value: '', key: '' };
+							addRedisRecordModalOpened = !addRedisRecordModalOpened;
+						}}>New key authorization</Button
+					>
+				</div>
+			{/if}
 		</div>
 	</div>
 	{#if current_view === 'start'}
@@ -109,55 +130,57 @@
 		{:then ping_data}
 			<div class="flex flex-col gap-2 w-2xl mx-auto" in:blur={{ duration: 300 }}>
 				{#each ping_data.data.rdbs as rdb}
-					{#await get(rdb)}
-						<FancyLoader color="red" />
-					{:then data}
-						<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
-							<div class="flex flex-col">
-								<span class="flex gap-1 items-center">
-									<Icon icon="devicon:redis" />
+					{#if !rdb.startsWith('password:')}
+						{#await get(rdb)}
+							<FancyLoader color="red" />
+						{:then data}
+							<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
+								<div class="flex flex-col">
+									<span class="flex gap-1 items-center">
+										<Icon icon="devicon:redis" />
+										<p
+											onclick={() => {
+												goto(`/dashboard/redis_writable/${rdb}/info`);
+											}}
+											class="font-black text-red-500 hover:underline cursor-pointer"
+										>
+											{rdb}
+										</p>
+									</span>
 									<p
 										onclick={() => {
-											goto(`/dashboard/redis_writable/${rdb}/info`);
+											navigator.clipboard.writeText(data.data.result);
+											toast.success('Copied to clipboard!');
 										}}
-										class="font-black text-red-500 hover:underline cursor-pointer"
+										class="hover:underline cursor-pointer"
 									>
-										{rdb}
+										{data.data.result}
 									</p>
-								</span>
-								<p
-									onclick={() => {
-										navigator.clipboard.writeText(data.data.result);
-										toast.success('Copied to clipboard!');
-									}}
-									class="hover:underline cursor-pointer"
-								>
-									{data.data.result}
-								</p>
+								</div>
+								<div class="flex items-center gap-2">
+									<button
+										onclick={() => {
+											editModalOpened = !editModalOpened;
+											savedFirstValue = data.data.result;
+											redisWritableForm = { key: rdb, value: data.data.result };
+										}}
+										class="p-2 hover:bg-neutral-700/50 hover:text-blue-400 rounded-xl cursor-pointer"
+									>
+										<Icon icon="boxicons:edit-filled" width="20" height="20" />
+									</button>
+									<button
+										onclick={() => {
+											deleteRedisKeyModalOpened = !deleteRedisKeyModalOpened;
+											redisWritableForm = { key: rdb, value: data.data.result };
+										}}
+										class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
+									>
+										<Icon icon="boxicons:trash-filled" width="20" height="20" />
+									</button>
+								</div>
 							</div>
-							<div class="flex items-center gap-2">
-								<button
-									onclick={() => {
-										editModalOpened = !editModalOpened;
-										savedFirstValue = data.data.result;
-										redisWritableForm = { key: rdb, value: data.data.result };
-									}}
-									class="p-2 hover:bg-neutral-700/50 hover:text-blue-400 rounded-xl cursor-pointer"
-								>
-									<Icon icon="boxicons:edit-filled" width="20" height="20" />
-								</button>
-								<button
-									onclick={() => {
-										deleteRedisKeyModalOpened = !deleteRedisKeyModalOpened;
-										redisWritableForm = { key: rdb, value: data.data.result };
-									}}
-									class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
-								>
-									<Icon icon="boxicons:trash-filled" width="20" height="20" />
-								</button>
-							</div>
-						</div>
-					{/await}
+						{/await}
+					{/if}
 				{/each}
 			</div>
 		{/await}
@@ -165,6 +188,59 @@
 
 	{#if current_view === 'react'}
 		<FancyLoader color="red" />
+	{/if}
+
+	{#if current_view === 'auth'}
+		{#await get_tables(id)}
+			<div class="flex mx-auto">
+				<FancyLoader />
+			</div>
+		{:then ping_data}
+			<div class="flex flex-col gap-2 w-2xl mx-auto" in:blur={{ duration: 300 }}>
+				{#each ping_data.data.rdbs as rdb}
+					{@const key = rdb.split(':')[1]}
+					{#if rdb.startsWith('password:')}
+						{#await get(rdb)}
+							<FancyLoader color="red" />
+						{:then data}
+							<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
+								<div class="flex flex-col">
+									<span class="flex gap-1 items-center text-red-500">
+										<span class="font-black items-center flex gap-1 text-red-500">
+											<p>password</p>
+											<Icon icon="humbleicons:arrow-join" />
+											<p>{key}</p>
+										</span>
+									</span>
+									<p class=" blur-[4px] select-none">dwa12737</p>
+								</div>
+								<div class="flex items-center gap-2">
+									<button
+										onclick={() => {
+											editModalOpened = !editModalOpened;
+											savedFirstValue = data.data.result;
+											redisWritableForm = { key: rdb, value: data.data.result };
+										}}
+										class="p-2 hover:bg-neutral-700/50 hover:text-blue-400 rounded-xl cursor-pointer"
+									>
+										<Icon icon="boxicons:edit-filled" width="20" height="20" />
+									</button>
+									<button
+										onclick={() => {
+											deleteRedisKeyModalOpened = !deleteRedisKeyModalOpened;
+											redisWritableForm = { key: rdb, value: data.data.result };
+										}}
+										class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
+									>
+										<Icon icon="boxicons:trash-filled" width="20" height="20" />
+									</button>
+								</div>
+							</div>
+						{/await}
+					{/if}
+				{/each}
+			</div>
+		{/await}
 	{/if}
 </div>
 <RDBModal

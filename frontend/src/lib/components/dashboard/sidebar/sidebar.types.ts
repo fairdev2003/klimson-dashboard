@@ -31,9 +31,9 @@ export const contents: SidebarItems = [
 		// ]
 	},
 	{
-		icon: 'mdi:bucket',
-		href: '/dashboard/context_storage',
-		name: 'Context Storage',
+		icon: 'devicon:redis',
+		href: '/dashboard/redis_writable',
+		name: 'Redis',
 		disabled: false
 	},
 
