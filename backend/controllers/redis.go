@@ -106,8 +106,8 @@ func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
 func (controller GlobalController) StartRedisEndpoints() {
 	controller.publicPath.GET("/redis/ping", controller.PingRedis)
 	controller.publicPath.GET("/redis/get", controller.RDBGetKey)
-	controller.publicPath.GET("/redis/set", controller.RDBSetKey)
-	controller.publicPath.GET("/redis/del", controller.RDBSetKey)
+	controller.adminPath.PUT("/redis/set", controller.RDBSetKey)
+	controller.adminPath.DELETE("/redis/del", controller.RDBSetKey)
 	controller.publicPath.GET("/redis/keys", controller.RDBGetAllExistingKeys)
 	controller.publicPath.GET("/redis/key/info", controller.RDBGetKeyInfo)
 }

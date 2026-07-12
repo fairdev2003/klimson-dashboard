@@ -17,7 +17,7 @@
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
 
-	async function get_tables(): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
+	async function get_tables(id: any): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
 		const response: ServerResponse<BackendResponse<{ rdbs: string[] }>> =
 			await api.api.get('/redis/keys');
 
@@ -45,8 +45,17 @@
 
 	let redisWritableForm: { key: string; value: string } = $state({ key: '', value: '' });
 	let savedFirstValue = $state('');
+	let savedFirstKey = $state('');
 
-	let testModalOpened: boolean = $state(false);
+	let editModalOpened: boolean = $state(false);
+	let addRedisRecordModalOpened: boolean = $state(false);
+	let deleteRedisKeyModalOpened: boolean = $state(false);
+
+	let id = $state();
+
+	function forceRefresh() {
+		id = Math.random();
+	}
 </script>
 
 <div class="p-7 flex flex-col gap-4">
@@ -86,13 +95,14 @@
 			<Button
 				theme="secondary"
 				onclick={() => {
-					testModalOpened = !testModalOpened;
-				}}>Open test modal</Button
+					redisWritableForm = { value: '', key: '' };
+					addRedisRecordModalOpened = !addRedisRecordModalOpened;
+				}}>Add new key</Button
 			>
 		</div>
 	</div>
 	{#if current_view === 'start'}
-		{#await get_tables()}
+		{#await get_tables(id)}
 			<div class="flex mx-auto">
 				<FancyLoader />
 			</div>
@@ -100,7 +110,7 @@
 			<div class="flex flex-col gap-2 w-2xl mx-auto" in:blur={{ duration: 300 }}>
 				{#each ping_data.data.rdbs as rdb}
 					{#await get(rdb)}
-						<p>Loading</p>
+						<FancyLoader color="red" />
 					{:then data}
 						<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
 							<div class="flex flex-col">
@@ -128,7 +138,7 @@
 							<div class="flex items-center gap-2">
 								<button
 									onclick={() => {
-										testModalOpened = !testModalOpened;
+										editModalOpened = !editModalOpened;
 										savedFirstValue = data.data.result;
 										redisWritableForm = { key: rdb, value: data.data.result };
 									}}
@@ -137,6 +147,10 @@
 									<Icon icon="boxicons:edit-filled" width="20" height="20" />
 								</button>
 								<button
+									onclick={() => {
+										deleteRedisKeyModalOpened = !deleteRedisKeyModalOpened;
+										redisWritableForm = { key: rdb, value: data.data.result };
+									}}
 									class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
 								>
 									<Icon icon="boxicons:trash-filled" width="20" height="20" />
@@ -150,20 +164,37 @@
 	{/if}
 
 	{#if current_view === 'react'}
-		<FancyLoader color="white" />
+		<FancyLoader color="red" />
 	{/if}
 </div>
 <RDBModal
 	form_config={{
-		onSubmit: () => {
-			debug.log('Submit!');
-			testModalOpened = !testModalOpened;
+		onSubmit: async () => {
+			try {
+				const response: ServerResponse = await api.api.put(
+					`/redis/set?key=${redisWritableForm.key}&value=${redisWritableForm.value}`
+				);
+				forceRefresh();
+
+				toast.success(response.data.message);
+				editModalOpened = false;
+				forceRefresh();
+			} catch (error) {
+				debug.error(error);
+			} finally {
+				debug.log('[Edit Submit] code is executed');
+				editModalOpened = false;
+			}
+		},
+
+		onLog: () => {
+			debug.log(redisWritableForm);
 		}
 	}}
 	title={`Editing "${redisWritableForm.key}"`}
 	border="borderless"
 	size="form_preset"
-	bind:opened={testModalOpened}
+	bind:opened={editModalOpened}
 >
 	<div class="flex gap-4 flex-col">
 		<div class="flex flex-col gap-1">
@@ -199,6 +230,108 @@
 				>
 					<Icon icon="material-symbols:undo" width="20" height="20" />
 				</button>
+			</span>
+
+			<input bind:value={redisWritableForm.value} class="rounded-lg border-0 bg-neutral-800" />
+		</div>
+	</div>
+</RDBModal>
+
+<RDBModal
+	form_config={{
+		onDelete: async () => {
+			try {
+				const response: ServerResponse = await api.api.delete(
+					`/redis/del?key=${redisWritableForm.key}`
+				);
+
+				toast.success(response.data.message);
+				forceRefresh();
+			} catch (error) {
+				debug.error(error);
+			} finally {
+				debug.log('[Add Submit] code is executed');
+				deleteRedisKeyModalOpened = false;
+			}
+		},
+		onLog: () => {
+			debug.log(redisWritableForm);
+		}
+	}}
+	title={`Removing redis key from existance`}
+	border="borderless"
+	size="form_preset"
+	bind:opened={deleteRedisKeyModalOpened}
+>
+	<p class="text-red-400">Do u want delete this redis storage key?</p>
+</RDBModal>
+
+<RDBModal
+	form_config={{
+		onSubmit: async () => {
+			try {
+				const response: ServerResponse = await api.api.put(
+					`/redis/set?key=${redisWritableForm.key}&value=${redisWritableForm.value}`
+				);
+
+				toast.success(response.data.message);
+				forceRefresh();
+			} catch (error) {
+				debug.error(error);
+			} finally {
+				debug.log('[Add Submit] code is executed');
+				addRedisRecordModalOpened = false;
+			}
+		},
+		onLog: () => {
+			debug.log(redisWritableForm);
+		}
+	}}
+	title={`Adding new redis storage item`}
+	border="borderless"
+	size="form_preset"
+	bind:opened={addRedisRecordModalOpened}
+>
+	<div class="flex gap-4 flex-col">
+		<div class="flex flex-col gap-1">
+			<p class="text-neutral-400 mb-1 uppercase font-bold text-xs">PREVIEW</p>
+
+			<div class="bg-neutral-800 gap-4 flex h-12 rounded-lg justify-between p-3 items-center">
+				<div class="flex gap-2 items-center">
+					<Icon icon="devicon:redis" />
+					{#key redisWritableForm.key}
+						<p in:blur={{ duration: 300, delay: 300 }} class="font-black text-red-500">
+							{redisWritableForm.key ? redisWritableForm.key : 'key'}
+						</p>
+					{/key}
+				</div>
+				{#key redisWritableForm.value}
+					<p
+						onclick={() => {
+							if (redisWritableForm.value) {
+								navigator.clipboard.writeText(redisWritableForm.value);
+								toast.success('Copied to clipboard!');
+							}
+						}}
+						in:blur={{ duration: 300, delay: 300 }}
+						class="hover:underline cursor-pointer"
+					>
+						{redisWritableForm.value ? redisWritableForm.value : 'value'}
+					</p>
+				{/key}
+			</div>
+		</div>
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>KEY</p>
+			</span>
+
+			<input bind:value={redisWritableForm.key} class="rounded-lg border-0 bg-neutral-800" />
+		</div>
+
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>VALUE</p>
 			</span>
 
 			<input bind:value={redisWritableForm.value} class="rounded-lg border-0 bg-neutral-800" />
