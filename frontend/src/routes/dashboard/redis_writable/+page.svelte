@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { api } from '$lib/api/api';
+	import { Api, api } from '$lib/api/api';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
 	import { onMount } from 'svelte';
 	import { dockComponent } from '../dashboard.svelte';
@@ -170,10 +170,9 @@
 <RDBModal
 	form_config={{
 		onSubmit: async () => {
+			debug.log(Api.token);
 			try {
-				const response: ServerResponse = await api.api.put(
-					`/redis/set?key=${redisWritableForm.key}&value=${redisWritableForm.value}`
-				);
+				const response = await api.redis.Set(redisWritableForm.key, redisWritableForm.value);
 				forceRefresh();
 
 				toast.success(response.data.message);
@@ -241,9 +240,7 @@
 	form_config={{
 		onDelete: async () => {
 			try {
-				const response: ServerResponse = await api.api.delete(
-					`/redis/del?key=${redisWritableForm.key}`
-				);
+				const response = await api.redis.Del(redisWritableForm.key);
 
 				toast.success(response.data.message);
 				forceRefresh();
@@ -270,9 +267,7 @@
 	form_config={{
 		onSubmit: async () => {
 			try {
-				const response: ServerResponse = await api.api.put(
-					`/redis/set?key=${redisWritableForm.key}&value=${redisWritableForm.value}`
-				);
+				const response = await api.redis.Set(redisWritableForm.key, redisWritableForm.value);
 
 				toast.success(response.data.message);
 				forceRefresh();

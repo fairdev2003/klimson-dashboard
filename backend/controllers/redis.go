@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 func (controller GlobalController) PingRedis(ctx *gin.Context) {
@@ -20,6 +21,8 @@ func (controller GlobalController) PingRedis(ctx *gin.Context) {
 }
 
 func (controller GlobalController) RDBSetKey(ctx *gin.Context) {
+	header := ctx.GetHeader("Authorization")
+	logger.ServerLog("Header: ", header)
 	key := ctx.Query("key")
 	value := ctx.Query("value")
 
@@ -104,10 +107,5 @@ func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
 }
 
 func (controller GlobalController) StartRedisEndpoints() {
-	controller.publicPath.GET("/redis/ping", controller.PingRedis)
-	controller.publicPath.GET("/redis/get", controller.RDBGetKey)
-	controller.adminPath.PUT("/redis/set", controller.RDBSetKey)
-	controller.adminPath.DELETE("/redis/del", controller.RDBSetKey)
-	controller.publicPath.GET("/redis/keys", controller.RDBGetAllExistingKeys)
-	controller.publicPath.GET("/redis/key/info", controller.RDBGetKeyInfo)
+
 }

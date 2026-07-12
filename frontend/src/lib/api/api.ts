@@ -9,6 +9,7 @@ import { Storage } from './requests/storage';
 import { base_url } from './api.store';
 import { get } from 'svelte/store';
 import { StorageV2 } from './requests/storagev2';
+import { Redis } from './requests/redis';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -158,6 +159,9 @@ export class Api extends ApiStatic {
 
 	public get storage() {
 		return new Storage(this.api);
+	}
+	public get redis() {
+		return new Redis(this.api);
 	}
 
 	public get storage_v2() {

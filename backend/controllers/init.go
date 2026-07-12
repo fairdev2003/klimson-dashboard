@@ -63,7 +63,13 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/ws/stats/cpu", controller.RefreshCPU)
 
 	controller.RegisterV2StorageEndpoints()
-	controller.StartRedisEndpoints()
+
+	controller.publicPath.GET("/redis/ping", controller.PingRedis)
+	controller.publicPath.GET("/redis/get", controller.RDBGetKey)
+	controller.adminPath.PUT("/redis/set", controller.RDBSetKey)
+	controller.adminPath.DELETE("/redis/del", controller.RDBSetKey)
+	controller.publicPath.GET("/redis/keys", controller.RDBGetAllExistingKeys)
+	controller.adminPath.GET("/redis/key/info", controller.RDBGetKeyInfo)
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")
