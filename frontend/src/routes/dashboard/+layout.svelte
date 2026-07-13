@@ -16,6 +16,7 @@
 	import { onMount } from 'svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import FancyLoader from './redis_writable/(components)/FancyLoader.svelte';
+	import Console from '$lib/components/dashboard/dev/Console.svelte';
 
 	$effect(() => {
 		$route = page.url.pathname;
@@ -76,7 +77,7 @@
 
 <div class="h-full">
 	<Toast />
-	<Debug />
+	<Console />
 	<div class="flex h-auto flex-col text-white">
 		{#await Dashboard.Load()}
 			<div class="mx-auto mt-10 flex items-center gap-3">

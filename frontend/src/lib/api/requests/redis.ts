@@ -26,8 +26,8 @@ export class Redis {
 		return response;
 	}
 	public async Get(key: string): Promise<ServerResponse<BackendResponse<{ result: any }>>> {
-		const response: ServerResponse<BackendResponse<{ result: any }>> = await this.api.put(
-			`/admin/redis/get?key=${key}`
+		const response: ServerResponse<BackendResponse<{ result: any }>> = await this.api.get(
+			`/redis/get?key=${key}`
 		);
 
 		return response;

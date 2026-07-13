@@ -105,11 +105,6 @@
 		class="lg:flex absolute hidden top-1/2 left-50"
 		src="https://api.klimson.dev/interface/bucket/random/banana.webp"
 	/>
-	<!-- <img
-		in:blur={{ duration: 2000, delay: 2000 }}
-		class="lg:flex absolute hidden top-1/3 right-50 size-1/4"
-		src="https://api.klimson.dev/interface/bucket/random/nugget_cat.png"
-	/> -->
 
 	<img
 		in:blur={{ duration: 2000, delay: 2000 }}
