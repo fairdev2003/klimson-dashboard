@@ -24,10 +24,14 @@
 		loading = true;
 
 		try {
-			const response: AxiosResponse<TokenData> = await api.api.post('/login', {
-				password: pass,
-				login: login
-			});
+			const response: AxiosResponse<TokenData> = await api.api.post(
+				'/login',
+				{
+					password: pass,
+					login: login
+				},
+				{ withCredentials: true }
+			);
 
 			const token = response.data.token;
 			localStorage.setItem('token', token);

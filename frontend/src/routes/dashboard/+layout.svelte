@@ -5,10 +5,8 @@
 	import DashboardLayout from '$lib/components/dashboard/DashboardLayout.svelte';
 	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import type { AxiosError } from 'axios';
-	import Dashboard from './dashboard.svelte';
 	import { dashboardLoadState } from '$lib/dashboard/stores/data.store';
 	import Toast from '$lib/components/dashboard/Toast.svelte';
-	import Debug from '$lib/components/dashboard/Debug.svelte';
 	import { goto } from '$app/navigation';
 	import { route } from '$lib/dashboard/stores/persist';
 
@@ -17,6 +15,7 @@
 	import { toast } from '$lib/dashboard/stores/toast';
 	import FancyLoader from './redis_writable/(components)/FancyLoader.svelte';
 	import Console from '$lib/components/dashboard/dev/Console.svelte';
+	import Dashboard from '$lib/dashboard/dashboard.svelte';
 
 	$effect(() => {
 		$route = page.url.pathname;

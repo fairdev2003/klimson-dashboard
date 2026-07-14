@@ -94,9 +94,15 @@
 				class="flex h-87.5 w-[calc(100vw-40px)] lg:w-150 flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
 			>
 				{#each $debug as a (a.id)}
-					<div class="flex gap-3 border-b border-white/5 pb-1 leading-relaxed last:border-0">
+					<div class="flex gap-3 items-center bg-white/5 pb-1 leading-relaxed last:border-0">
 						<span class="text-neutral-600 whitespace-nowrap w-20 shrink-0">
-							[{new Date(a.date).toLocaleTimeString()}]
+							{#if a.metadata.command}
+								{@render TerminalPrefix()}
+							{/if}
+
+							{#if a.metadata.message}
+								[{new Date(a.date).toLocaleTimeString()}]
+							{/if}
 						</span>
 						<span
 							class={a.level === 'error'
@@ -109,7 +115,11 @@
 											? 'text-blue-400'
 											: 'text-neutral-300'}
 						>
-							{a.message}
+							<p class="ml-1 text-[13px]">
+								{a.metadata.message}
+
+								{a.metadata.command}
+							</p>
 						</span>
 					</div>
 				{/each}
@@ -117,11 +127,7 @@
 					class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
 				>
 					<span class="text-neutral-600 flex whitespace-nowrap w-20 shrink-0 text-sm">
-						<span class="magenta">root</span>
-						<span>@</span>
-
-						<span class="magenta">dash</span>
-						<span>:~#</span>
+						{@render TerminalPrefix()}
 					</span>
 					<input
 						bind:value={commandLineValue}
@@ -153,6 +159,13 @@
 		{/if}
 	</div>
 {/if}
+{#snippet TerminalPrefix()}
+	<span class="magenta">root</span>
+	<span>@</span>
+
+	<span class="magenta">dash</span>
+	<span>:~#</span>
+{/snippet}
 
 <svelte:document
 	onkeydown={async (e) => {

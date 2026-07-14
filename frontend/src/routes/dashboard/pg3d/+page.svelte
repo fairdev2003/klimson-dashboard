@@ -6,8 +6,8 @@
 	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import PG3DClanMemberTable from '$lib/components/dashboard/table/pg3d/PG3DClanMemberTable.svelte';
 	import { clan_info } from '$lib/components/dashboard/table/pg3d/clan.store';
-	import { dockComponent } from '../dashboard.svelte';
 	import PG3DDocky from '$lib/components/dashboard/dock/boxes/PG3DDocky.svelte';
+	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	onMount(async () => {
 		dockComponent.set(PG3DDocky);

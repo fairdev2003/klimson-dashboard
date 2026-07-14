@@ -2,12 +2,16 @@ import { api } from '$lib/api/api';
 import type { BackendResponse, ServerResponse } from '$lib/api/types';
 import { debug } from '$lib/dashboard/stores/debug';
 import { writable } from 'svelte/store';
-import { CommandBuilder } from './command_builder.svelte';
+import { AutoComplete, CommandBuilder } from './command_builder.svelte';
 import { goto } from '$app/navigation';
 
 class ConsoleService {
 	private commands: Map<string, CommandBuilder> = new Map();
-	private unknown_command_handler: (name: string) => void = $state(() => {});
+	private unknown_command_handler: (user_input: string, name: string) => void = $state(() => {});
+	private on_command_handler: (
+		command: CommandBuilder | undefined,
+		input: string | undefined
+	) => void | undefined = () => {};
 
 	public loading = $state(false);
 
@@ -21,8 +25,17 @@ class ConsoleService {
 		debug.system('Console Service is initialized successfully.');
 	}
 
-	public onUnknownCommand(handler: (name: string) => void) {
+	public onUnknownCommand(handler: (user_input: string, name: string) => void) {
 		this.unknown_command_handler = handler;
+	}
+
+	public onCommand(
+		handler: (command: CommandBuilder | undefined, input?: string | undefined) => void,
+		input?: string | undefined
+	) {
+		this.on_command_handler = handler;
+
+		return;
 	}
 
 	public getCommandsRegister(): CommandBuilder[] {
@@ -34,6 +47,10 @@ class ConsoleService {
 		const name = parts[0];
 		const args = parts.slice(1);
 		const command = this.commands.get(name);
+
+		if (this.on_command_handler != undefined) {
+			this.on_command_handler(command, input);
+		}
 
 		if (parts.includes('help')) {
 			if (!command) return;
@@ -54,10 +71,10 @@ class ConsoleService {
 		}
 
 		if (command) {
-			command.execute(args);
+			command.execute(args, input);
 		} else {
 			if (this.unknown_command_handler != undefined) {
-				this.unknown_command_handler(name);
+				this.unknown_command_handler(input, name);
 			}
 
 			console.warn(`Unknown command: ${name}`);
@@ -66,9 +83,18 @@ class ConsoleService {
 }
 
 const console_service = new ConsoleService();
-console_service.onUnknownCommand((name) => {
-	debug.log(`Command with name '${name}' does not exist!`);
-	debug.log(`Type 'cmds' to view available commands.`);
+console_service.onUnknownCommand((input, name) => {
+	debug.console(input);
+
+	debug.system(`Command with name '${name}' does not exist!`);
+	debug.system(`Type 'cmds' to view available commands.`);
+});
+
+console_service.onCommand((command, input) => {
+	if (!command) {
+		return;
+	}
+	debug.console(input);
 });
 
 console_service
@@ -81,10 +107,10 @@ console_service
 console_service
 	.registerCommand('cmds')
 	.setDescription('List of all available commands to use in dashboard terminal.')
-	.addArgHandler((arg) => arg, {
+	.addArgHandler<string>((arg) => arg, {
 		customName: 'isDev',
-		auto_complete_args: ['true', 'false'],
-		strict: false
+		auto_complete_args: AutoComplete.bool,
+		required: false
 	})
 	.setAction((args) => {
 		const [dev] = args;
@@ -113,7 +139,22 @@ console_service
 	.setDescription('This command will allow you to operate on redis dashboard keys')
 	.addArgHandler((arg) => arg) // get, set
 	.addArgHandler((arg) => arg) // key
-	.setAction(async (args) => {
+	.addFlagHandler<string>(
+		'-t',
+		(flag) => {
+			return flag;
+		},
+		{ with_value: true }
+	)
+	.addFlagHandler<string>(
+		'-f',
+		(flag) => {
+			return flag;
+		},
+		{ with_value: true }
+	)
+	.setAction(async (args, flags) => {
+		debug.system('Flags: ', flags);
 		const [action, key] = args;
 		console_loading.set(true);
 		try {
@@ -130,6 +171,7 @@ console_service
 console_service
 	.registerCommand('goto')
 	.addArgHandler((arg) => arg)
+
 	.setDescription('Allow you to quickly go to available dashboard enpoints.')
 	.setAction((args) => {
 		let uri = args[0];
@@ -137,6 +179,7 @@ console_service
 			uri = '/' + args[0];
 		}
 		goto('/dashboard' + uri);
+		debug.system(`Moved to '${uri}'`);
 	});
 
 export { console_service };

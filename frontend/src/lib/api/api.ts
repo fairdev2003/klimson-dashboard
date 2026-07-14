@@ -111,7 +111,8 @@ export class Api extends ApiStatic {
 			baseURL: get(base_url),
 			headers: {
 				Accept: 'application/json'
-			}
+			},
+			withCredentials: true
 		});
 
 		this.api.interceptors.request.use((config) => {

@@ -8,10 +8,10 @@
 	import { base_url } from '$lib/api/api.store';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import EditingFile from './boxes/EditingFile.svelte';
-	import Dashboard, { dockComponent } from '../../../../routes/dashboard/dashboard.svelte';
 	import { goto } from '$app/navigation';
 	import { blur } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
+	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	let bookmarkModalOpened: boolean = $state(false);
 </script>

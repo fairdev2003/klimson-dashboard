@@ -8,8 +8,8 @@
 	import { base_url } from '$lib/api/api.store';
 	import RoutesDocky from '$lib/components/dashboard/dock/boxes/RoutesDocky.svelte';
 	import DashboardDock from '$lib/components/dashboard/dock/DashboardDock.svelte';
-	import { dockComponent } from '../dashboard.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
+	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	onMount(async () => {
 		dockComponent.set(RoutesDocky);

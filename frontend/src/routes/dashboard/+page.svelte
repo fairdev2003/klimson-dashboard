@@ -32,9 +32,9 @@
 	} from '$lib/components/dashboard/stores/main';
 	import { onMount } from 'svelte';
 	import SecondHubContainer from './widgets/containers/SecondHubContainer.svelte';
-	import { dockComponent } from './dashboard.svelte';
 	import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 	import { blur, fade } from 'svelte/transition';
+	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	let loading: boolean = $state(false);
 

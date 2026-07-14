@@ -2,20 +2,18 @@
 	import { Api, api } from '$lib/api/api';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
 	import { onMount } from 'svelte';
-	import { dockComponent } from '../dashboard.svelte';
 	import RedisWritableDocky from '$lib/components/dashboard/dock/boxes/RedisWritableDocky.svelte';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
 	import Icon from '@iconify/svelte';
 	import Button from '$lib/components/Button.svelte';
 	import './redis_hub.css';
-	import PageLoading from '$lib/components/PageLoading.svelte';
-	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import { blur, slide } from 'svelte/transition';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import FancyLoader from './(components)/FancyLoader.svelte';
 	import { goto } from '$app/navigation';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
+	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	async function get_tables(id: any): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
 		const response: ServerResponse<BackendResponse<{ rdbs: string[] }>> =

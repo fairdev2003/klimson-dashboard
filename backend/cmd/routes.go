@@ -40,13 +40,14 @@ func AddRandomRecords() {
 func InitRoutes() {
 
 	ctx := context.Background()
-	server.Use(helpers.CorsConf("*"))
+	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev"}
+	server.Use(helpers.CorsConf(origins))
 	server.Use(helpers.NetworkLogger())
 	apiPath = server.Group("/")
 	wsPath = server.Group("/ws")
 	adminPath = apiPath.Group("/admin")
 	adminPath.Use(AuthMiddleware())
-	adminPath.Use(helpers.CorsConf("*"))
+	adminPath.Use(helpers.CorsConf(origins))
 
 	// root routes
 	apiPath.GET("/", func(c *gin.Context) {
@@ -131,6 +132,10 @@ func InitRoutes() {
 			}
 
 			token, err := handlers.GenerateRootToken(false)
+
+			c.SetCookie("token", token, 3600, "/", "", false, true)
+			c.Writer.Header().Set("X-Token", token)
+
 			if err != nil {
 				logger.ErrorLog("Error while generating token:", err.Error())
 			}
@@ -148,7 +153,12 @@ func InitRoutes() {
 			token, err := handlers.GenerateToken(user)
 			if err != nil {
 				logger.ErrorLog("Error while generating token:", err.Error())
+				c.JSON(500, gin.H{"text": "błąd serwera przy generowaniu tokena"})
+				return
 			}
+
+			c.SetCookie("token", token, 3600, "/", "", false, true)
+			c.Writer.Header().Set("X-Token", token)
 
 			c.JSON(200, gin.H{"token": token})
 		}

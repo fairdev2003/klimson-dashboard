@@ -1,10 +1,21 @@
 import { writable } from 'svelte/store';
 
-export type LogLevel = 'info' | 'success' | 'warn' | 'error' | 'system';
+export type LogLevel = 'info' | 'success' | 'warn' | 'error' | 'system' | 'console';
+
+export type MessageDebugLogMetadata = {
+	message?: string;
+};
+
+export type TerminaPrefixlDebugLogMetadata = {
+	command?: string;
+};
+
+export type DebugMetadata = MessageDebugLogMetadata & TerminaPrefixlDebugLogMetadata;
 
 export type DebugEntry = {
 	date: number;
-	message: string;
+	metadata: DebugMetadata;
+
 	level: LogLevel;
 	id: string;
 };
@@ -13,7 +24,7 @@ function createDebugStore() {
 	const MAX_LOGS = 100;
 	const { subscribe, update } = writable<DebugEntry[]>([]);
 
-	async function addLog(message: any, level: LogLevel = 'info') {
+	async function addLog(message: DebugMetadata, level: LogLevel = 'info') {
 		let formattedMessage: string;
 
 		if (message instanceof Error) {
@@ -25,14 +36,15 @@ function createDebugStore() {
 		}
 
 		update((logs) => {
-			const newLog = {
-				id: crypto.randomUUID(),
-				date: Date.now(),
-				message: formattedMessage,
-				level
-			};
-
-			const newLogs = [...logs, newLog];
+			const newLogs = [
+				...logs,
+				{
+					id: crypto.randomUUID(),
+					date: Date.now(),
+					metadata: message,
+					level
+				}
+			];
 			return newLogs.slice(-MAX_LOGS);
 		});
 	}
@@ -56,7 +68,12 @@ function createDebugStore() {
 	}
 
 	const logHelper = (level: LogLevel, ...msg: any[]) => {
-		addLog(formatMessage(...msg), level);
+		if (level === 'console') {
+			addLog({ command: formatMessage(...msg) }, level);
+			return;
+		}
+
+		addLog({ message: formatMessage(...msg) }, level);
 	};
 
 	return {
@@ -66,6 +83,7 @@ function createDebugStore() {
 		warn: (...msg: any[]) => logHelper('warn', ...msg),
 		error: (...msg: any[]) => logHelper('error', ...msg),
 		system: (...msg: any[]) => logHelper('system', ...msg),
+		console: (...msg: any[]) => logHelper('console', ...msg),
 		clear: () => update(() => [])
 	};
 }
