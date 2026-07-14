@@ -13,8 +13,9 @@
 		color?: FancyLoaderColor;
 		centerAnimationEnabled?: boolean;
 		rotate?: 360 | 720;
+		size?: 'big' | 'medium' | 'minimalistic';
 	};
-	const { color = 'red', centerAnimationEnabled, rotate = 720 }: Props = $props();
+	const { color = 'red', centerAnimationEnabled, rotate = 720, size = 'big' }: Props = $props();
 
 	const loaderStyles = tv({
 		base: 'h-10 top-0 w-10 border-[5px] absolute z-2',
@@ -25,10 +26,16 @@
 				blue: 'border-blue-500',
 				white: 'border-white',
 				gray: 'border-neutral-600'
+			},
+			size: {
+				big: 'h-10 w-10',
+				medium: 'h-6 w-6',
+				minimalistic: 'w-3 h-3'
 			}
 		},
 		defaultVariants: {
-			color: 'red'
+			color: 'red',
+			size: 'big'
 		}
 	});
 
@@ -76,7 +83,7 @@
 </script>
 
 <div class="relative flex items-center justify-center">
-	<div bind:this={firstsquareRef} class={loaderStyles({ color })}>
+	<div bind:this={firstsquareRef} class={loaderStyles({ color, size })}>
 		<div bind:this={secondsquareRef} class={centerSquareStyles({ color })}></div>
 	</div>
 </div>

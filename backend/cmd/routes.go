@@ -160,7 +160,7 @@ func InitRoutes() {
 			c.SetCookie("token", token, 3600, "/", "", false, true)
 			c.Writer.Header().Set("X-Token", token)
 
-			c.JSON(200, gin.H{"token": token})
+			c.JSON(200, gin.H{"token": ""})
 		}
 
 	})
