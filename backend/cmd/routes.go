@@ -40,7 +40,7 @@ func AddRandomRecords() {
 func InitRoutes() {
 
 	ctx := context.Background()
-	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev"}
+	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev", "https://klimson.dev"}
 	server.Use(helpers.CorsConf(origins))
 	server.Use(helpers.NetworkLogger())
 	apiPath = server.Group("/")

@@ -16,10 +16,13 @@
 	import Input from '$lib/components/dashboard/settings/components/Input.svelte';
 	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
 	import MultipleDropdown from '$lib/components/dashboard/settings/components/MultipleDropdown.svelte';
+	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
 	);
+
+	let editUserModalOpened = $state(false);
 
 	function updateLabel(label: LabelName) {
 		const newParams = new URLSearchParams($page.url.searchParams);
@@ -107,6 +110,9 @@
 					</div>
 					<div class="flex items-center gap-2">
 						<button
+							onclick={() => {
+								editUserModalOpened = true;
+							}}
 							class="p-2 hover:bg-neutral-700/50 hover:text-blue-400 rounded-xl cursor-pointer"
 						>
 							<Icon icon="boxicons:edit-filled" width="20" height="20" />
@@ -130,6 +136,9 @@
 		{/if}
 	</div>
 </div>
+
+<RDBModal title="Editing 'Jew Hunter'" size="form_preset" bind:opened={editUserModalOpened}
+></RDBModal>
 
 <Modal
 	className="w-100 h-100"

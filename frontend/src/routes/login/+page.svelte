@@ -79,8 +79,8 @@
 		{/if}
 	</div>
 	<div class="flex flex-col items-center gap-2">
-		<h1 class="text-2xl font-bold tracking-tight">Witaj ponownie</h1>
-		<p class="text-sm text-neutral-400">Zaloguj się do DOJEBANEGO panelu</p>
+		<h1 class="text-2xl font-bold tracking-tight">Welcome back nigga</h1>
+		<p class="text-sm text-neutral-400">Log into DOJEBANY dashboard</p>
 	</div>
 
 	<div class="mt-5 w-full space-y-4">
@@ -91,7 +91,7 @@
 					id="login"
 					type="text"
 					bind:value={login}
-					placeholder="Twój login..."
+					placeholder="Your login..."
 					disabled={padlock_loading}
 					class="w-full rounded border disabled:opacity-25 border-neutral-700 bg-neutral-800 p-3 text-white transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				/>
@@ -102,7 +102,7 @@
 			<label
 				for="password"
 				class="text-xs relative inline-block z-10 tracking-widest text-neutral-500 uppercase"
-				>Hasło</label
+				>Password</label
 			>
 			{#key session_authorized}
 				<input
@@ -114,7 +114,6 @@
 					class="w-full rounded border disabled:opacity-25 border-neutral-700 bg-neutral-800 p-3 text-white transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				/>
 
-				<!-- Marker teraz będzie uwięziony wewnątrz tego diva -->
 				{#if cenzurka}
 					<div
 						class="marker-overlay top-0 right-10 absolute inset-0 pointer-events-none rounded"
@@ -147,7 +146,7 @@
 			className="flex justify-center w-full py-3 font-semibold transition-transform  text-center"
 			onclick={handleLogin}
 		>
-			{loading ? 'Logowanie...' : 'Zaloguj się'}
+			{loading ? 'Authorizing...' : 'Sign in'}
 		</Button>
 	{/if}
 
