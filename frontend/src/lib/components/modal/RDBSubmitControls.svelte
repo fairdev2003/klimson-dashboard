@@ -8,7 +8,9 @@
 		rdb_submit_controls_props.onCancel ||
 		rdb_submit_controls_props.onDelete ||
 		rdb_submit_controls_props.onLog ||
-		rdb_submit_controls_props.onSubmit;
+		rdb_submit_controls_props.onSubmit ||
+		rdb_submit_controls_props.onDeny ||
+		rdb_submit_controls_props.onAccept;
 </script>
 
 <div class="flex flex-col gap-2 justify-between">
@@ -45,6 +47,20 @@
 				<button
 					onclick={rdb_submit_controls_props.onSubmit}
 					class="bg-blue-700 px-3 p-1 hover:bg-blue-700 cursor-pointer rounded-md">Submit</button
+				>
+			{/if}
+			{#if rdb_submit_controls_props.onDeny}
+				<button
+					onclick={rdb_submit_controls_props.onDeny}
+					class="bg-neutral-800 px-3 p-1 rounded-md hover:bg-neutral-700 cursor-pointer text-red-400"
+					>No</button
+				>
+			{/if}
+			{#if rdb_submit_controls_props.onAccept}
+				<button
+					onclick={rdb_submit_controls_props.onAccept}
+					class="bg-neutral-800 px-3 p-1 rounded-md hover:bg-neutral-700 cursor-pointer text-green-400"
+					>Yes</button
 				>
 			{/if}
 		</div>

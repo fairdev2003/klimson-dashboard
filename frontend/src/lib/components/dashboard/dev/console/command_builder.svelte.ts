@@ -124,9 +124,6 @@ export class CommandBuilder {
 			if (arg) return arg;
 		});
 
-		debug.system('Args: ', args);
-		debug.system('Flags: ', flags);
-
 		if (this.loadingState) this.loadingState.set(true);
 
 		try {

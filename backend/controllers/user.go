@@ -31,7 +31,7 @@ func (gc GlobalController) GetUser(ctx *gin.Context) {
 		khttp.BadRequestResponse(ctx, nil, "User not found")
 		return
 	}
-	khttp.SuccessResponse(ctx, user, "User details")
+	khttp.SuccessResponse(ctx, gin.H{"user": user}, "User details")
 }
 
 func (gc GlobalController) ListUsers(ctx *gin.Context) {
@@ -55,7 +55,7 @@ func (gc GlobalController) UpdateUser(ctx *gin.Context) {
 	}
 
 	gc.db.Save(&user)
-	khttp.SuccessResponse(ctx, user, "User updated successfully")
+	khttp.SuccessResponse(ctx, nil, "User updated successfully")
 }
 
 func (gc GlobalController) DeleteUser(ctx *gin.Context) {

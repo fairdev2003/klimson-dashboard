@@ -1,13 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { gsap } from 'gsap';
-	import type { Snippet } from 'svelte';
 	import { ModalLogic, type ModalProps } from './modal.svelte';
 	import { tv } from 'tailwind-variants';
 	import RDBModalBar from './RDBModalBar.svelte';
 	import RDBSubmitControls from './RDBSubmitControls.svelte';
-	import Button from '../Button.svelte';
-	import { debug } from '$lib/dashboard/stores/debug';
 
 	let {
 		opened = $bindable(false),
@@ -19,7 +14,8 @@
 		border,
 		padding_preset,
 		form_config,
-		form = $bindable()
+		backgroundExitLocked,
+		titleStyle
 	}: ModalProps = $props();
 
 	const modal = new ModalLogic({
@@ -36,15 +32,8 @@
 		size,
 		border,
 		padding_preset,
-		form
-	});
-
-	$effect(() => {
-		if (opened) {
-			if (form) {
-				modal.setInitialForm(form);
-			}
-		}
+		backgroundExitLocked,
+		titleStyle
 	});
 
 	const modalStyles = tv({
@@ -106,7 +95,7 @@
 				}}
 				class={`${className} ${modalStyles({ size, border, padding_preset })}`}
 			>
-				<RDBModalBar {title} onButtonClick={() => modal.on_exit_icon_click()} />
+				<RDBModalBar {title} {titleStyle} onButtonClick={() => modal.on_exit_icon_click()} />
 				{@render children?.()}
 				<RDBSubmitControls {...form_config} />
 			</div>

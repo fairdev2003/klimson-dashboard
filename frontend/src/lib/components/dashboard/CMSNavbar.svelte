@@ -8,6 +8,7 @@
 	import QuickActionButton from './QuickActionButton.svelte';
 	import { userInfo } from '$lib/dashboard/stores/store';
 	import { isMobile, mobile_sidebar_open, sidebar_open } from '$lib/dashboard/stores/persist';
+	import PowerOffDashboard from './navbar/PowerOffDashboard.svelte';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
 		return () => {
@@ -58,7 +59,7 @@
 
 	<!-- Prawa strona -->
 	<div class="flex items-center gap-3 shrink-0">
-		<UserSettings />
+		<PowerOffDashboard />
 	</div>
 </div>
 

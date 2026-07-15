@@ -105,6 +105,48 @@ console_service
 	});
 
 console_service
+	.registerCommand('reload')
+	.setDescription('Reload the page.')
+	.setAction(() => {
+		debug.system('Reloading the page....');
+		window.location.reload();
+	});
+
+console_service
+	.registerCommand('user')
+	.setDescription('Fetches specific user')
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'method', required: true, auto_complete_args: ['get'], type: 'string' }
+	)
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'arg1', required: false, auto_complete_args: ['number'], type: 'string' }
+	)
+	.setAction(() => {
+		debug.clear();
+	})
+	.setAction(async (args) => {
+		const [method, arg1] = args;
+
+		if (method === 'get') {
+			try {
+				const response = await api.user.GetOne(arg1);
+
+				if (response.status === 200) {
+					debug.log(response.data);
+				}
+			} catch (error) {
+				debug.error(error);
+			}
+		}
+	});
+
+console_service
 	.registerCommand('cmds')
 	.setDescription('List of all available commands to use in dashboard terminal.')
 	.addArgHandler<string>((arg) => arg, {

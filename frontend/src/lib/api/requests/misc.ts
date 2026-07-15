@@ -59,8 +59,10 @@ class Misc {
 	}
 
 	public async GetPermissionRegistry(): Promise<ServerResponse<PermissionRegistry[]>> {
-		const response: ServerResponse<PermissionRegistry[]> =
-			await this.api.get('/admin/permissions/all');
+		const response: ServerResponse<PermissionRegistry[]> = await this.api.get(
+			'/admin/permissions/all',
+			{ withCredentials: true }
+		);
 
 		return response;
 	}

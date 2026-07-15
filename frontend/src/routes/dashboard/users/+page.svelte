@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
 	import Icon from '@iconify/svelte';
-	import { fade } from 'svelte/transition';
+	import { blur, fade, slide } from 'svelte/transition';
 	import Button from '$lib/components/Button.svelte';
 	import type { LabelName } from './helpers/user.types';
 	import account_controller from './helpers/access.svelte';
@@ -116,6 +116,8 @@
 			<Button theme="base">Implement role</Button>
 			<Button
 				onclick={() => {
+					userForm = createEmptyUser;
+
 					addUserModalOpened = true;
 				}}
 				theme="secondary">Add account</Button
@@ -182,6 +184,11 @@
 	bind:opened={addUserModalOpened}
 >
 	<div class="flex flex-col gap-2">
+		{#if userForm.nickname}
+			<div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+				<UserPreview user={userForm} />
+			</div>
+		{/if}
 		<div class="flex flex-col gap-1">
 			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
 				<p>NICKNAME</p>
@@ -249,6 +256,10 @@
 >
 	<div class="flex flex-col gap-2">
 		<UserPreview user={currentUser} />
+		<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+			<p>ID: {currentUser?.id}</p>
+		</span>
+
 		<div class="flex flex-col gap-1">
 			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
 				<p>NICKNAME</p>

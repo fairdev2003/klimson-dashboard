@@ -7,9 +7,13 @@ export type FormControlsProps = {
 	onLog?: () => void;
 	onDelete?: () => void;
 	onSubmit?: () => void;
+	onAccept?: () => void;
+	onDeny?: () => void;
 	initialForm?: any;
 	currentForm?: any;
 };
+
+export type TitleStyle = 'basic' | 'danger';
 
 export type ModalProps = {
 	opened: boolean;
@@ -21,11 +25,11 @@ export type ModalProps = {
 	padding_preset: 'zero' | 'normal' | 'small' | 'big';
 	title?: string;
 	form_config?: FormControlsProps;
-	form: any;
+	backgroundExitLocked: boolean;
+	titleStyle?: TitleStyle;
 };
 
 export class ModalLogic {
-	private initialForm: string = $state('');
 	public modalContainer: HTMLDivElement | undefined;
 	public props = $state<ModalProps>({ opened: true });
 	constructor(public initialProps: ModalProps) {
@@ -46,15 +50,8 @@ export class ModalLogic {
 		});
 	}
 
-	public setInitialForm(form: any) {
-		this.initialForm = JSON.stringify(form);
-	}
-
 	public async on_background_click() {
-		debug.log('Initial:', this.initialForm);
-		debug.log('Props:', this.props.form);
-
-		if (this.initialForm !== JSON.stringify(this.props.form)) {
+		if (this.props.backgroundExitLocked) {
 			this.ShakeModalContainer();
 			return;
 		}

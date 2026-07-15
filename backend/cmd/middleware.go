@@ -20,7 +20,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Brak autoryzacji"})
 			return
 		}
-		logger.GreenServerLog(tokenString)
 
 		secret := os.Getenv("TOKEN")
 		if secret == "" {
