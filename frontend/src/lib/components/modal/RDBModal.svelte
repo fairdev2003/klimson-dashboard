@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { gsap } from 'gsap';
 	import type { Snippet } from 'svelte';
 	import { ModalLogic, type ModalProps } from './modal.svelte';
 	import { tv } from 'tailwind-variants';
 	import RDBModalBar from './RDBModalBar.svelte';
 	import RDBSubmitControls from './RDBSubmitControls.svelte';
+	import Button from '../Button.svelte';
+	import { debug } from '$lib/dashboard/stores/debug';
 
 	let {
 		opened = $bindable(false),
@@ -14,7 +18,8 @@
 		size,
 		border,
 		padding_preset,
-		form_config
+		form_config,
+		form = $bindable()
 	}: ModalProps = $props();
 
 	const modal = new ModalLogic({
@@ -30,7 +35,16 @@
 		title,
 		size,
 		border,
-		padding_preset
+		padding_preset,
+		form
+	});
+
+	$effect(() => {
+		if (opened) {
+			if (form) {
+				modal.setInitialForm(form);
+			}
+		}
 	});
 
 	const modalStyles = tv({
@@ -47,10 +61,11 @@
 			size: {
 				auto: 'w-auto',
 				accept_preset: 'w-80 ',
-				form_preset: 'w-120 '
+				form_preset: 'w-150 '
 			},
 			border: {
 				normal: 'border border-neutral-700',
+				form: 'border-2 border-blue-500',
 				borderless: 'border-0'
 			},
 			text_color: {
@@ -82,11 +97,10 @@
 				await modal.on_background_click();
 			}}
 		></div>
-		<!-- svelte-ignore a11y_click_events_have_key_events -->
 
 		<div class="flex flex-col justify-center items-center w-full h-full">
-			<div>Siema</div>
 			<div
+				bind:this={modal.modalContainer}
 				onclick={(e) => {
 					modal.on_content_click(e);
 				}}

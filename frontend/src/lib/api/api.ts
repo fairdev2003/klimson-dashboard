@@ -10,6 +10,7 @@ import { base_url } from './api.store';
 import { get } from 'svelte/store';
 import { StorageV2 } from './requests/storagev2';
 import { Redis } from './requests/redis';
+import { UserClass } from './requests/user';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -172,6 +173,10 @@ export class Api extends ApiStatic {
 
 	public get storage_v2() {
 		return new StorageV2(this.api);
+	}
+
+	public get user() {
+		return new UserClass(this.api);
 	}
 }
 

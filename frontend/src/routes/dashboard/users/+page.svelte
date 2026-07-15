@@ -4,25 +4,28 @@
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import AccountsTable from '$lib/dashboard/users/components/AccountsTable.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { LabelName } from './helpers/user.types';
-	import AccountController from './helpers/access.svelte';
 	import account_controller from './helpers/access.svelte';
 	import Roles from './(components)/Roles.svelte';
 	import PermissionsRegistry from './(components)/PermissionsRegistry.svelte';
 	import Modal from '$lib/components/Modal.svelte';
-	import InputSettingsRecord from '$lib/components/dashboard/settings/records/InputSettingsRecord.svelte';
-	import Input from '$lib/components/dashboard/settings/components/Input.svelte';
 	import DatabaseModalInput from '$lib/components/dashboard/table/DatabaseModalInput.svelte';
-	import MultipleDropdown from '$lib/components/dashboard/settings/components/MultipleDropdown.svelte';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
+	import type { User } from '$lib/api/types';
+	import { debug } from '$lib/dashboard/stores/debug';
+	import { api } from '$lib/api/api';
+	import UserListing from './(components)/UserListing.svelte';
+	import { onMount } from 'svelte';
+	import type { AxiosError } from 'axios';
+	import UserPreview from './(components)/UserPreview.svelte';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
 	);
 
 	let editUserModalOpened = $state(false);
+	let addUserModalOpened = $state(false);
 
 	function updateLabel(label: LabelName) {
 		const newParams = new URLSearchParams($page.url.searchParams);
@@ -30,6 +33,44 @@
 
 		goto(`?${newParams.toString()}`, { replaceState: true, keepFocus: true });
 	}
+
+	let users: User[] = $state([]);
+	let usersLoading: boolean = $state(true);
+
+	let currentUser: User | undefined = $state();
+
+	onMount(async () => {
+		await FetchUsers();
+	});
+
+	async function FetchUsers() {
+		try {
+			const response = await api.user.List();
+
+			if (response.status === 200) {
+				users = response.data.users;
+				debug.log(users);
+			}
+		} catch (error) {
+			debug.error(error);
+		} finally {
+			debug.log('Listing rule has been ended');
+		}
+	}
+
+	async function refetchUsers() {
+		await FetchUsers();
+	}
+
+	const createEmptyUser = {
+		first_name: '',
+		last_name: '',
+		nickname: '',
+		pfp: '',
+		blocked: false
+	};
+
+	let userForm: User = $state(createEmptyUser);
 
 	let roleModalOpened = $state(false);
 </script>
@@ -72,59 +113,35 @@
 
 		<div class="flex gap-4">
 			<Button onclick={() => account_controller.DumpData()} theme="base">Dump data</Button>
+			<Button theme="base">Implement role</Button>
 			<Button
-				theme="base"
 				onclick={() => {
-					roleModalOpened = true;
-				}}>Implement role</Button
+					addUserModalOpened = true;
+				}}
+				theme="secondary">Add account</Button
 			>
-			<Button theme="secondary">Add account</Button>
 		</div>
 	</div>
 
 	<div>
 		{#if selectedLabel === 'acc'}
-			<div class="flex flex-col gap-2 w-2xl mx-auto">
-				<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-6 items-center">
-					<div class="flex items-center gap-3">
-						<img
-							src="https://api.klimson.dev/interface/bucket/random/pixelgunicon.png"
-							class="size-10 rounded-full"
-						/>
-						<div class="flex flex-col">
-							<span class="flex gap-0.5 items-center text-white">
-								<p
-									onclick={() => {
-										goto(`/dashboard/redis_writable/${rdb}/info`);
-									}}
-									class="font-black hover:underline cursor-pointer"
-								>
-									Jew hunter
-								</p>
-							</span>
-							<p class="hover:underline cursor-pointer">
-								<!-- pill -->
-								<span class="rounded-full px-2 text-xs p-0.5 bg-black">Nigga</span>
-							</p>
-						</div>
-					</div>
-					<div class="flex items-center gap-2">
-						<button
-							onclick={() => {
-								editUserModalOpened = true;
-							}}
-							class="p-2 hover:bg-neutral-700/50 hover:text-blue-400 rounded-xl cursor-pointer"
-						>
-							<Icon icon="boxicons:edit-filled" width="20" height="20" />
-						</button>
-						<button
-							class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
-						>
-							<Icon icon="boxicons:trash-filled" width="20" height="20" />
-						</button>
-					</div>
-				</div>
-			</div>
+			<UserListing
+				{users}
+				{usersLoading}
+				onEditButtonClick={(user) => {
+					currentUser = user;
+
+					userForm = {
+						first_name: user.first_name,
+						last_name: user.last_name,
+						nickname: user.nickname,
+						pfp: user.pfp,
+						blocked: user
+					};
+
+					editUserModalOpened = true;
+				}}
+			/>
 		{/if}
 
 		{#if selectedLabel === 'roles'}
@@ -137,8 +154,132 @@
 	</div>
 </div>
 
-<RDBModal title="Editing 'Jew Hunter'" size="form_preset" bind:opened={editUserModalOpened}
-></RDBModal>
+<RDBModal
+	border="borderless"
+	form_config={{
+		onSubmit: async () => {
+			try {
+				const response = await api.user.Create(userForm);
+
+				if (response.status === 200) {
+					debug.log('Success');
+				}
+			} catch (error) {
+				debug.log(error);
+			} finally {
+				addUserModalOpened = false;
+			}
+		},
+		onCancel: () => {
+			addUserModalOpened = false;
+		},
+		onLog: () => {
+			debug.log(userForm);
+		}
+	}}
+	title="Adding new account"
+	size="form_preset"
+	bind:opened={addUserModalOpened}
+>
+	<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>NICKNAME</p>
+			</span>
+
+			<input bind:value={userForm.nickname} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>FIRST NAME</p>
+			</span>
+
+			<input bind:value={userForm.first_name} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>LAST NAME</p>
+			</span>
+
+			<input bind:value={userForm.last_name} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>PFP HREF</p>
+			</span>
+
+			<input bind:value={userForm.pfp} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+	</div>
+</RDBModal>
+
+<RDBModal
+	border="borderless"
+	bind:form={userForm}
+	form_config={{
+		onSubmit: async () => {
+			if (!currentUser) {
+				debug.warn('No user!');
+				return;
+			}
+			try {
+				const response = await api.user.Update(currentUser.id as string | number, userForm);
+
+				if (response.status === 200) {
+					debug.success('Success');
+					await refetchUsers();
+				}
+			} catch (error) {
+				debug.log(error);
+			} finally {
+				editUserModalOpened = false;
+			}
+		},
+		onCancel: () => {
+			editUserModalOpened = false;
+		},
+		onLog: () => {
+			debug.log(userForm);
+		}
+	}}
+	title={`Editing "${currentUser?.nickname}"`}
+	size="form_preset"
+	bind:opened={editUserModalOpened}
+>
+	<div class="flex flex-col gap-2">
+		<UserPreview user={currentUser} />
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>NICKNAME</p>
+			</span>
+
+			<input bind:value={userForm.nickname} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>FIRST NAME</p>
+			</span>
+
+			<input bind:value={userForm.first_name} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>LAST NAME</p>
+			</span>
+
+			<input bind:value={userForm.last_name} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+
+		<div class="flex flex-col gap-1">
+			<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
+				<p>PFP HREF</p>
+			</span>
+
+			<input bind:value={userForm.pfp} class="rounded-lg border-0 bg-neutral-800 p-2" />
+		</div>
+	</div>
+</RDBModal>
 
 <Modal
 	className="w-100 h-100"

@@ -60,7 +60,7 @@ func InitRoutes() {
 	})
 
 	type MostCommonColorBody struct {
-		ImageURL string `json:"image_url" binding:"required"` // Dodaliśmy tag 'required' dla walidacji
+		ImageURL string `json:"image_url" binding:"required"`
 	}
 
 	apiPath.POST("/most_common_image_color", func(ctx *gin.Context) {

@@ -63,6 +63,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/ws/stats/cpu", controller.RefreshCPU)
 
 	controller.RegisterV2StorageEndpoints()
+	controller.RegisterUserController()
 
 	controller.publicPath.GET("/redis/ping", controller.PingRedis)
 	controller.publicPath.GET("/redis/get", controller.RDBGetKey)

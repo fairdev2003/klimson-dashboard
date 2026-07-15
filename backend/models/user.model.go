@@ -6,7 +6,7 @@ type User struct {
 	Lastname       string `json:"last_name"`
 	Nickname       string `json:"nickname"`
 	Password       string `json:"password"`
-	RoleID         uint   `json:"role_id"`
+	RoleID         *uint  `json:"role_id"`
 	Role           Role   `json:"role" gorm:"foreignKey:RoleID"`
 	ProfilePicture string `json:"pfp"`
 	Blocked        *bool  `json:"blocked"`

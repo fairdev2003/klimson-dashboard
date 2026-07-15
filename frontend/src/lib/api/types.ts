@@ -77,3 +77,32 @@ export type UpdateOneFieldType<T> = {
 		value: T[K];
 	};
 }[keyof T];
+
+export type BaseModel = {
+	id?: number;
+	created_at?: string;
+	updated_at?: string;
+	deleted_at?: string | null;
+};
+
+export type Role = BaseModel & {
+	id: number;
+	name: string;
+	permissions: Permission[];
+};
+
+export type Permission = BaseModel & {
+	name: string;
+	role_id: number;
+};
+
+export type User = BaseModel & {
+	first_name: string;
+	last_name: string;
+	nickname: string;
+	password?: string;
+	role_id?: number;
+	role?: Role;
+	pfp: string;
+	blocked: boolean;
+};

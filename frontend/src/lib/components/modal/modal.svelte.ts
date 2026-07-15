@@ -1,11 +1,14 @@
 import { debug } from '$lib/dashboard/stores/debug';
 import type { Snippet } from 'svelte';
+import gsap from 'gsap';
 
 export type FormControlsProps = {
 	onCancel?: () => void;
 	onLog?: () => void;
 	onDelete?: () => void;
 	onSubmit?: () => void;
+	initialForm?: any;
+	currentForm?: any;
 };
 
 export type ModalProps = {
@@ -14,13 +17,16 @@ export type ModalProps = {
 	onClose?: () => void;
 	className?: string;
 	size: 'auto' | 'accept_preset' | 'form_preset';
-	border: 'normal' | 'borderless';
+	border: 'normal' | 'borderless' | 'form';
 	padding_preset: 'zero' | 'normal' | 'small' | 'big';
 	title?: string;
 	form_config?: FormControlsProps;
+	form: any;
 };
 
 export class ModalLogic {
+	private initialForm: string = $state('');
+	public modalContainer: HTMLDivElement | undefined;
 	public props = $state<ModalProps>({ opened: true });
 	constructor(public initialProps: ModalProps) {
 		this.props = initialProps;
@@ -29,7 +35,30 @@ export class ModalLogic {
 		});
 	}
 
+	private ShakeModalContainer() {
+		if (!this.modalContainer) return;
+		gsap.to(this.modalContainer, {
+			x: -10,
+			duration: 0.1,
+			repeat: 3,
+			yoyo: true,
+			ease: 'power1.inOut'
+		});
+	}
+
+	public setInitialForm(form: any) {
+		this.initialForm = JSON.stringify(form);
+	}
+
 	public async on_background_click() {
+		debug.log('Initial:', this.initialForm);
+		debug.log('Props:', this.props.form);
+
+		if (this.initialForm !== JSON.stringify(this.props.form)) {
+			this.ShakeModalContainer();
+			return;
+		}
+
 		this.props.opened = false;
 	}
 
