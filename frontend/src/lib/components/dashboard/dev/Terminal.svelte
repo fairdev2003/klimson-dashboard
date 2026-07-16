@@ -11,7 +11,7 @@
 	import { console_loading, console_service } from './console/console_service.svelte';
 	import TerminalRecord from './(components)/TerminalRecord.svelte';
 	import TerminalPrefix from './(components)/helpers/TerminalPrefix.svelte';
-	import { terminal } from './console/terminal.svelte';
+	import { terminal } from '$lib/terminal/logic';
 	import TerminalInput from './(components)/input/TerminalInput.svelte';
 
 	let logOpened = $state(false);
@@ -50,7 +50,6 @@
 	});
 
 	onMount(() => {
-		debug.system('Debug component is ready');
 		loaded = true;
 	});
 
@@ -146,15 +145,7 @@
 					<TerminalRecord naming={terminal.terminal_naming} {entry} />
 				{/each}
 
-				<!-- <TerminalInput bind:value={commandLineValue} /> -->
-
 				{@render OldInput()}
-				<!-- {#if $debug.length === 0}
-					<div class="flex h-full flex-col items-center justify-center text-neutral-700 italic">
-						<Code class="mb-2 h-8 w-8 opacity-20" />
-						<p>No active logs in the buffor</p>
-					</div>
-				{/if} -->
 			</div>
 		{:else}
 			<button
@@ -211,6 +202,11 @@
 		}
 		if (e.key === 'F3') {
 			e.preventDefault();
+			if (!logOpened) {
+				logOpened = true;
+				fullscreen = true;
+				return;
+			}
 			fullscreen = !fullscreen;
 		}
 		if (e.key === 'ArrowDown') {

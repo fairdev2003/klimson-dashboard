@@ -23,9 +23,7 @@ class ConsoleService {
 		return cmd;
 	}
 
-	constructor() {
-		debug.system('Console Service is initialized successfully.');
-	}
+	constructor() {}
 
 	public onUnknownCommand(handler: (user_input: string, name: string) => void) {
 		this.unknown_command_handler = handler;
@@ -165,6 +163,8 @@ console_service
 		const location = l ? l : 'Skawina';
 		const format = f ? f : '3';
 
+		console_loading.set(true);
+
 		try {
 			const response = await axios.get(`https://wttr.in/${location}?format=${format}`, {
 				headers: { 'User-Agent': 'curl/7.64.1' }
@@ -175,8 +175,10 @@ console_service
 			const cleanText = doc.body.textContent || response.data;
 
 			debug.system(cleanText.trim());
+			console_loading.set(false);
 		} catch (error) {
 			debug.error('Error fetching weather:', error);
+			console_loading.set(false);
 		}
 	});
 
@@ -261,7 +263,7 @@ console_service
 			const desc = command.description ? ` - ${command.description}` : '';
 
 			cmds_string = cmds_string + `${command.name}${desc}\n\n`;
-			debug.log(`${command.name}${desc}`);
+			debug.raw(`${command.name}${desc}`);
 		});
 		// debug.log(`${cmds_string}`);
 

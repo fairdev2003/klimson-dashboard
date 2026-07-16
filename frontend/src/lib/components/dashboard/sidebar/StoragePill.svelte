@@ -17,8 +17,6 @@
 		const response = await api.misc.GetDisk();
 		disk = response.data;
 		percent = Number(disk.percentage) / 100;
-		debug.log('Procent z API: ' + disk.percentage);
-		debug.log('Wartość power: ' + power);
 
 		gsap.to('.blob-item', {
 			backgroundColor: (i) => (i < power ? '#22c55e' : '#525252'),

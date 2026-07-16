@@ -1,6 +1,14 @@
 import { get, writable, type Writable } from 'svelte/store';
 
-export type EntryType = 'message' | 'success' | 'warn' | 'error' | 'system' | 'console' | 'silent';
+export type EntryType =
+	| 'message'
+	| 'success'
+	| 'warn'
+	| 'error'
+	| 'system'
+	| 'console'
+	| 'silent'
+	| 'raw';
 
 export type MessageDebugLogMetadata = { message?: string };
 export type TerminaPrefixlDebugLogMetadata = { command?: string };
@@ -39,6 +47,9 @@ export class DebugService {
 	}
 	public silent(...msg: any[]) {
 		this.logHelper('silent', ...msg);
+	}
+	public raw(...msg: any[]) {
+		this.logHelper('raw', ...msg);
 	}
 
 	public clear() {

@@ -55,7 +55,6 @@ class DashboardClass {
 		});
 
 		if (!verify.data.access) return false;
-		debug.log('Authorization is successful');
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
 		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
@@ -81,8 +80,8 @@ class DashboardClass {
 		await preloadCode('/dashboard/context_storage');
 
 		dashboardLoaded.set(true);
+		debug.system("Terminal initialized. Type 'cmds' to view available commands");
 		terminal.set_terminal_naming({ name: 'klimson-dashboard', path: 'main' });
-
 		return true;
 	}
 }

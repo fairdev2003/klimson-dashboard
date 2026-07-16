@@ -1,4 +1,6 @@
+import { onMount } from 'svelte';
 import { console_service } from './console_service.svelte';
+import { debug } from '$lib/dashboard/stores/debug';
 
 type TerminalSavedInput = {
 	user_input: string;
