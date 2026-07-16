@@ -12,9 +12,10 @@
 	let { entry, naming }: Props = $props();
 </script>
 
-<div class="flex gap-3 items-center justify-start leading-relaxed last:border-0">
-	<DatePrefix color="bg-red-400/50" date={entry.date} {naming} />
-	<span class="text-red-400">
+<div class="flex gap-3 items-center leading-relaxed last:border-0">
+	<DatePrefix color="bg-transparent" date={entry.date} {naming} />
+
+	<span class="text-gray-500">
 		<p class="ml-1 text-[13px]">
 			{entry.metadata.message}
 		</p>

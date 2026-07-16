@@ -1,29 +1,23 @@
 <script lang="ts">
 	import type { TerminalEntry } from '$lib/dashboard/stores/debug';
-	import TerminalPrefix from '../TerminalPrefix.svelte';
+	import type { TerminalNaming } from '../../console/terminal.svelte';
+	import DatePrefix from '../helpers/DatePrefix.svelte';
+	import TerminalPrefix from '../helpers/TerminalPrefix.svelte';
 
 	type Props = {
 		entry: TerminalEntry;
+		naming: TerminalNaming | undefined;
 	};
 
-	let { entry }: Props = $props();
+	let { entry, naming }: Props = $props();
 </script>
 
 <div class="flex gap-3 items-center leading-relaxed last:border-0">
-	<span class="text-neutral-600 whitespace-nowrap shrink-0">
-		{#if entry.metadata.command}
-			<TerminalPrefix />
-		{/if}
+	<DatePrefix date={entry.date} {naming} />
 
-		{#if entry.metadata.message}
-			[{new Date(entry.date).toLocaleTimeString()}]
-		{/if}
-	</span>
 	<span class="text-blue-400">
 		<p class="ml-1 text-[13px]">
 			{entry.metadata.message}
-
-			{entry.metadata.command}
 		</p>
 	</span>
 </div>
@@ -32,7 +26,7 @@
 	<div class="flex gap-3 items-center pb-1 leading-relaxed last:border-0">
 		<span class="text-neutral-600 whitespace-nowrap w-20 shrink-0">
 			{#if entry.metadata.command}
-				<TerminalPrefix />
+				<TerminalPrefix {naming} />
 			{/if}
 
 			{#if entry.metadata.message}

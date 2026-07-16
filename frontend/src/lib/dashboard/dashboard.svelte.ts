@@ -1,6 +1,7 @@
 import { preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
+import { terminal } from '$lib/components/dashboard/dev/console/terminal.svelte';
 import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 import { dashboard_load_date } from '$lib/components/dashboard/stores/main';
 import { clan_info } from '$lib/components/dashboard/table/pg3d/clan.store';
@@ -80,6 +81,7 @@ class DashboardClass {
 		await preloadCode('/dashboard/context_storage');
 
 		dashboardLoaded.set(true);
+		terminal.set_terminal_naming({ name: 'klimson-dashboard', path: 'main' });
 
 		return true;
 	}

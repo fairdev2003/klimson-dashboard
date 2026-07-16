@@ -4,6 +4,8 @@ import { debug } from '$lib/dashboard/stores/debug';
 import { writable } from 'svelte/store';
 import { AutoComplete, CommandBuilder } from './command_builder.svelte';
 import { goto } from '$app/navigation';
+import { terminal } from './terminal.svelte';
+import axios from 'axios';
 
 class ConsoleService {
 	private commands: Map<string, CommandBuilder> = new Map();
@@ -101,6 +103,11 @@ console_service.onCommand((command, input) => {
 	if (!command) {
 		return;
 	}
+	if (!input) {
+		return;
+	}
+
+	terminal.set_input({ user_input: input, id: terminal.input_history.length + 1 });
 	debug.console(input);
 });
 
@@ -109,6 +116,20 @@ console_service
 	.setDescription('Clears the terminal')
 	.setAction(() => {
 		debug.clear();
+	});
+
+console_service
+	.registerCommand('history')
+	.setDescription('Prinitng user input history.')
+	.setAction(() => {
+		debug.silent(terminal.input_history);
+	});
+
+console_service
+	.registerCommand('logs')
+	.setDescription('Prinitng all terminal logs in JSON format')
+	.setAction(() => {
+		debug.logStore();
 	});
 
 console_service
@@ -124,6 +145,39 @@ console_service
 	.setDescription('Terminating cms session')
 	.setAction(() => {
 		goto('/login');
+	});
+
+console_service
+	.registerCommand('weather')
+	.setDescription('Showing current weather in your location')
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'location', required: false, type: 'string' }
+	)
+	.addFlagHandler<number>('-f', (flag) => {
+		return flag;
+	})
+	.setAction(async (args, flags) => {
+		const [l, f] = args;
+
+		const location = l ? l : 'Skawina';
+		const format = f ? f : '3';
+
+		try {
+			const response = await axios.get(`https://wttr.in/${location}?format=${format}`, {
+				headers: { 'User-Agent': 'curl/7.64.1' }
+			});
+
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(response.data, 'text/html');
+			const cleanText = doc.body.textContent || response.data;
+
+			debug.system(cleanText.trim());
+		} catch (error) {
+			debug.error('Error fetching weather:', error);
+		}
 	});
 
 console_service
@@ -200,11 +254,16 @@ console_service
 		debug.log(`\n`);
 		debug.log(`(${command_register.length}) Commands: `);
 		debug.log(`\n`);
+
+		let cmds_string: string = '';
+
 		command_register.forEach((command) => {
 			const desc = command.description ? ` - ${command.description}` : '';
 
+			cmds_string = cmds_string + `${command.name}${desc}\n\n`;
 			debug.log(`${command.name}${desc}`);
 		});
+		// debug.log(`${cmds_string}`);
 
 		if (Boolean(dev)) {
 			command_register.forEach((command) => {

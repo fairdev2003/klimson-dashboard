@@ -1,91 +1,91 @@
-import { writable } from 'svelte/store';
+import { get, writable, type Writable } from 'svelte/store';
 
-export type EntryType = 'message' | 'success' | 'warn' | 'error' | 'system' | 'console';
+export type EntryType = 'message' | 'success' | 'warn' | 'error' | 'system' | 'console' | 'silent';
 
-export type MessageDebugLogMetadata = {
-	message?: string;
-};
-
-export type TerminaPrefixlDebugLogMetadata = {
-	command?: string;
-};
-
+export type MessageDebugLogMetadata = { message?: string };
+export type TerminaPrefixlDebugLogMetadata = { command?: string };
 export type DebugMetadata = MessageDebugLogMetadata & TerminaPrefixlDebugLogMetadata;
 
 export type TerminalEntry = {
 	date: number;
 	metadata: DebugMetadata;
-
 	type: EntryType;
 	id: string;
 };
 
-function createDebugStore() {
-	const MAX_LOGS = 300;
-	const { subscribe, update } = writable<TerminalEntry[]>([]);
+export class DebugService {
+	private readonly MAX_LOGS = 300;
+	private store: Writable<TerminalEntry[]> = writable([]);
 
-	async function addLog(message: DebugMetadata, type: EntryType = 'message') {
-		let formattedMessage: string;
+	public subscribe = this.store.subscribe;
 
-		if (message instanceof Error) {
-			formattedMessage = `${message.message}\nStack trace: ${message.stack}`;
-		} else if (typeof message === 'object') {
-			formattedMessage = JSON.stringify(message, null, 2);
-		} else {
-			formattedMessage = String(message);
-		}
+	public log(...msg: any[]) {
+		this.logHelper('message', ...msg);
+	}
+	public success(...msg: any[]) {
+		this.logHelper('success', ...msg);
+	}
+	public warn(...msg: any[]) {
+		this.logHelper('warn', ...msg);
+	}
+	public error(...msg: any[]) {
+		this.logHelper('error', ...msg);
+	}
+	public system(...msg: any[]) {
+		this.logHelper('system', ...msg);
+	}
+	public console(...msg: any[]) {
+		this.logHelper('console', ...msg);
+	}
+	public silent(...msg: any[]) {
+		this.logHelper('silent', ...msg);
+	}
 
-		update((logs) => {
-			const newLogs = [
-				...logs,
-				{
-					id: crypto.randomUUID(),
-					date: Date.now(),
-					metadata: message,
-					type
-				}
-			];
-			return newLogs.slice(-MAX_LOGS);
+	public clear() {
+		this.store.set([]);
+	}
+
+	public logStore() {
+		this.addLog({ message: JSON.stringify(get(this.store)) }, 'message');
+	}
+
+	private logHelper(level: EntryType, ...msg: any[]) {
+		const content = this.formatMessage(...msg);
+		const metadata: DebugMetadata =
+			level === 'console' ? { command: content } : { message: content };
+
+		this.addLog(metadata, level);
+	}
+
+	private addLog(metadata: DebugMetadata, type: EntryType) {
+		this.store.update((logs) => {
+			const newEntry: TerminalEntry = {
+				id: crypto.randomUUID(),
+				date: Date.now(),
+				metadata,
+				type
+			};
+			return [...logs, newEntry].slice(-this.MAX_LOGS);
 		});
 	}
 
-	function formatMessage(...msg: any[]): string {
+	private formatMessage(...msg: any[]): string {
 		return msg
 			.map((m) => {
+				if (m instanceof Error) {
+					return `${m.message}\nStack trace: ${m.stack}`;
+				}
 				if (typeof m === 'object' && m !== null) {
 					try {
-						return JSON.stringify(m, null, 4);
+						return JSON.stringify(m, null, 2);
 					} catch {
 						return String(m);
 					}
-				}
-				if (m instanceof Error) {
-					return m.message + (m.stack ? `\n${m.stack}` : '');
 				}
 				return String(m);
 			})
 			.join(' ');
 	}
-
-	const logHelper = (level: EntryType, ...msg: any[]) => {
-		if (level === 'console') {
-			addLog({ command: formatMessage(...msg) }, level);
-			return;
-		}
-
-		addLog({ message: formatMessage(...msg) }, level);
-	};
-
-	return {
-		subscribe,
-		log: (...msg: any[]) => logHelper('message', ...msg),
-		success: (...msg: any[]) => logHelper('success', ...msg),
-		warn: (...msg: any[]) => logHelper('warn', ...msg),
-		error: (...msg: any[]) => logHelper('error', ...msg),
-		system: (...msg: any[]) => logHelper('system', ...msg),
-		console: (...msg: any[]) => logHelper('console', ...msg),
-		clear: () => update(() => [])
-	};
 }
 
-export const debug = createDebugStore();
+export const debug = new DebugService();

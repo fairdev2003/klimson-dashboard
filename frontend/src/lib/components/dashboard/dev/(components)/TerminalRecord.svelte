@@ -1,31 +1,37 @@
 <script lang="ts">
 	import type { TerminalEntry } from '$lib/dashboard/stores/debug';
+	import type { TerminalNaming } from '../console/terminal.svelte';
 	import ConsoleRecord from './records/ConsoleRecord.svelte';
 	import ErrorRecord from './records/ErrorRecord.svelte';
 	import MessageRecord from './records/MessageRecord.svelte';
+	import SilentRecord from './records/SilentRecord.svelte';
 	import SystemRecord from './records/SystemRecord.svelte';
 	import WarningRecord from './records/WarningRecord.svelte';
 
 	type Props = {
 		entry: TerminalEntry;
+		naming: TerminalNaming | undefined;
 	};
 
-	let { entry }: Props = $props();
+	let { entry, naming }: Props = $props();
 </script>
 
 {#if entry.type === 'system'}
-	<SystemRecord {entry} />
+	<SystemRecord {naming} {entry} />
 {/if}
 {#if entry.type === 'warn'}
-	<WarningRecord {entry} />
+	<WarningRecord {naming} {entry} />
 {/if}
 {#if entry.type === 'error'}
-	<ErrorRecord {entry} />
+	<ErrorRecord {naming} {entry} />
 {/if}
 
 {#if entry.type === 'message'}
-	<MessageRecord {entry} />
+	<MessageRecord {naming} {entry} />
 {/if}
 {#if entry.type === 'console'}
-	<ConsoleRecord {entry} />
+	<ConsoleRecord {naming} {entry} />
+{/if}
+{#if entry.type === 'silent'}
+	<SilentRecord {naming} {entry} />
 {/if}

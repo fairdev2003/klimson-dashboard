@@ -10,7 +10,9 @@
 	import Loader from '../Loader.svelte';
 	import { console_loading, console_service } from './console/console_service.svelte';
 	import TerminalRecord from './(components)/TerminalRecord.svelte';
-	import TerminalPrefix from './(components)/TerminalPrefix.svelte';
+	import TerminalPrefix from './(components)/helpers/TerminalPrefix.svelte';
+	import { terminal } from './console/terminal.svelte';
+	import TerminalInput from './(components)/input/TerminalInput.svelte';
 
 	let logOpened = $state(false);
 	let debugContainer: HTMLDivElement | undefined = $state();
@@ -89,7 +91,7 @@
 				onmousedown={handleMouseDown}
 				class:w-300={fullscreen}
 				class:w-150={!fullscreen}
-				class="flex w-full items-center justify-between rounded-t-xl border-b border-neutral-800 bg-neutral-800 p-2 text-white active:cursor-grabbing"
+				class="flex w-full items-center justify-between border border-blue-800 bg-blue-800 p-2 text-white active:cursor-grabbing"
 			>
 				<div class="flex items-center gap-2 px-2">
 					<Terminal class="h-3 w-3 text-blue-500" />
@@ -100,7 +102,7 @@
 
 				<div class="flex items-center gap-2">
 					<div
-						class=" text-xs gap-1 bg-blue-400/20 text-blue-400 mr-5 font-black flex items-center justify-center p-1 px-4 rounded-md"
+						class=" text-xs gap-1 bg-blue-400/20 text-blue-400 mr-5 font-black flex items-center justify-center p-1 px-4"
 					>
 						<span>{`${$debug.length}`}</span>
 						<Icon icon="ic:round-message" />
@@ -136,35 +138,23 @@
 				bind:this={debugContainer}
 				class:w-300={fullscreen}
 				class:h-150={fullscreen}
-				class:w-150={!fullscreen}
-				class:h-75={!fullscreen}
-				class="flex h-150 flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
+				class:w-200={!fullscreen}
+				class:h-100={!fullscreen}
+				class="flex h-150 flex-col gap-1 overflow-y-auto border border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
 			>
 				{#each $debug as entry (entry.id)}
-					<TerminalRecord {entry} />
+					<TerminalRecord naming={terminal.terminal_naming} {entry} />
 				{/each}
-				<div
-					class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
-				>
-					<span class="text-neutral-600 flex whitespace-nowrap w-20 shrink-0 text-sm">
-						<TerminalPrefix />
-					</span>
-					<input
-						bind:value={commandLineValue}
-						bind:this={inputRef}
-						class="bg-transparent h-5 px-2 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
-					/>
-					{#if $console_loading}
-						<Loader theme="regular" />
-					{/if}
-				</div>
 
-				{#if $debug.length === 0}
+				<!-- <TerminalInput bind:value={commandLineValue} /> -->
+
+				{@render OldInput()}
+				<!-- {#if $debug.length === 0}
 					<div class="flex h-full flex-col items-center justify-center text-neutral-700 italic">
 						<Code class="mb-2 h-8 w-8 opacity-20" />
 						<p>No active logs in the buffor</p>
 					</div>
-				{/if}
+				{/if} -->
 			</div>
 		{:else}
 			<button
@@ -179,6 +169,32 @@
 		{/if}
 	</div>
 {/if}
+
+{#snippet OldInput()}
+	<div
+		class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
+	>
+		<span class="text-neutral-600 flex whitespace-nowrap shrink-0 text-sm">
+			<TerminalPrefix naming={terminal.terminal_naming} />
+		</span>
+		<div class="relative flex items-center w-full">
+			<input
+				bind:value={commandLineValue}
+				bind:this={inputRef}
+				class="bg-transparent h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
+			/>
+
+			{#if !commandLineValue}
+				<p class="absolute pointer-events-none text-neutral-600 text-xs select-none">
+					Type '/' to proceed
+				</p>
+			{/if}
+		</div>
+		{#if $console_loading}
+			<Loader theme="regular" />
+		{/if}
+	</div>
+{/snippet}
 
 <svelte:document
 	onkeydown={async (e) => {
@@ -197,6 +213,19 @@
 			e.preventDefault();
 			fullscreen = !fullscreen;
 		}
+		if (e.key === 'ArrowDown') {
+			if (terminal.last_record_user_iterator === terminal.input_history.length - 1) {
+				commandLineValue = '';
+				return;
+			}
+		}
+		if (e.key === 'ArrowUp') {
+			if (terminal.last_record_user_iterator === -1) {
+				commandLineValue = terminal.input_history[terminal.input_history.length - 1].user_input;
+				terminal.last_record_user_iterator = terminal.input_history.length - 1;
+				return;
+			}
+		}
 		if (e.ctrlKey && e.key === 'x') {
 			debug.clear();
 		}
@@ -213,7 +242,6 @@
 	onclick={(e) => {
 		if (boxRef && !boxRef.contains(e.target as Node)) {
 			terminalFocused = false;
-			debug.system(terminalFocused);
 		}
 	}}
 />

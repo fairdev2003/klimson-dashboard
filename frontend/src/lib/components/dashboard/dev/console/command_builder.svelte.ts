@@ -1,7 +1,7 @@
 import { debug } from '$lib/dashboard/stores/debug';
 
 type CommandLoader = boolean;
-type CommandAction = (args: any[], flags?: CommandFlag<any>[]) => void;
+type CommandAction = (args: any[], flags: CommandFlag<any>[]) => void;
 type ArgHandler = { handler: (arg: any) => any; config?: CommandConfig };
 type LoadingState = {
 	set: (value: boolean) => void;
