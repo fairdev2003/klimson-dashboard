@@ -7,7 +7,7 @@
 	import { blur } from 'svelte/transition';
 	import AnimatedPadlock from './(components)/AnimatedPadlock.svelte';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
-	import FancyLoader from '../dashboard/redis_writable/(components)/FancyLoader.svelte';
+	import FancyLoader from '../dashboard/redis/(components)/FancyLoader.svelte';
 
 	let pass: string = $state('');
 	let login: string = $state('');

@@ -9,6 +9,8 @@
 	import { api } from '$lib/api/api';
 	import Loader from '../Loader.svelte';
 	import { console_loading, console_service } from './console/console_service.svelte';
+	import TerminalRecord from './(components)/TerminalRecord.svelte';
+	import TerminalPrefix from './(components)/TerminalPrefix.svelte';
 
 	let logOpened = $state(false);
 	let debugContainer: HTMLDivElement | undefined = $state();
@@ -21,11 +23,27 @@
 	let inputRef: HTMLInputElement | undefined = $state();
 	let debugFetchLoading = $state(false);
 
+	let fullscreen = $state(false);
+	let terminalFocused = $state(false);
+
+	let inputFocused = $state(false);
+
+	function centerTerminal() {
+		fullscreen = !fullscreen;
+	}
+
 	$effect(() => {
 		if ($debug && debugContainer) {
 			tick().then(() => {
 				debugContainer!.scrollTo({ top: debugContainer!.scrollHeight, behavior: 'smooth' });
 			});
+		}
+	});
+
+	$effect(() => {
+		if (terminalFocused) {
+			inputFocused = false;
+		} else {
 		}
 	});
 
@@ -50,9 +68,18 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 {#if $debugOn && loaded}
 	<div
 		bind:this={boxRef}
+		onclick={() => {
+			if (inputFocused === true) {
+				return;
+			}
+			inputRef?.focus();
+			inputFocused = true;
+		}}
 		class="fixed z-2000 flex flex-col shadow-2xl transition-shadow"
 		style="left: {pos.x}px; bottom: {20 - pos.y}px; {isDragging ? 'z-index: 1000' : ''}"
 	>
@@ -60,12 +87,14 @@
 			<div
 				role="presentation"
 				onmousedown={handleMouseDown}
-				class="flex w-full lg:w-150 cursor-grab items-center justify-between rounded-t-xl border-b border-neutral-800 bg-neutral-900 p-2 text-white active:cursor-grabbing"
+				class:w-300={fullscreen}
+				class:w-150={!fullscreen}
+				class="flex w-full items-center justify-between rounded-t-xl border-b border-neutral-800 bg-neutral-800 p-2 text-white active:cursor-grabbing"
 			>
 				<div class="flex items-center gap-2 px-2">
 					<Terminal class="h-3 w-3 text-blue-500" />
-					<p class="text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
-						Dashboard Console
+					<p class="text-[10px] font-bold tracking-widest text-white uppercase">
+						Dashboard Terminal
 					</p>
 				</div>
 
@@ -77,13 +106,27 @@
 						<Icon icon="ic:round-message" />
 					</div>
 					<button
-						class="p-1 text-neutral-600 transition-colors hover:text-red-500"
+						class="p-1 text-white transition-colors hover:text-red-500"
 						onclick={() => debug.clear()}
-						title="Clear console"
+						title="Clear console - CTRL + X"
 					>
 						<Trash2 class="h-3 w-3" />
 					</button>
-					<button class="p-1 text-neutral-600 hover:text-white" onclick={() => (logOpened = false)}>
+					<button
+						class="p-1 text-white transition-colors hover:text-blue-500"
+						onclick={() => {
+							centerTerminal();
+						}}
+						title="Close - F2"
+					>
+						<Icon icon="material-symbols:fullscreen" />
+					</button>
+
+					<button
+						title="Close terminal - F2"
+						class="p-1 text-white hover:text-blue-500"
+						onclick={() => (logOpened = false)}
+					>
 						<X class="h-3 w-3" />
 					</button>
 				</div>
@@ -91,43 +134,20 @@
 
 			<div
 				bind:this={debugContainer}
-				class="flex h-87.5 w-[calc(100vw-40px)] lg:w-150 flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
+				class:w-300={fullscreen}
+				class:h-150={fullscreen}
+				class:w-150={!fullscreen}
+				class:h-75={!fullscreen}
+				class="flex h-150 flex-col gap-1 overflow-y-auto rounded-b-xl border border-t-0 border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
 			>
-				{#each $debug as a (a.id)}
-					<div class="flex gap-3 items-center bg-white/5 pb-1 leading-relaxed last:border-0">
-						<span class="text-neutral-600 whitespace-nowrap w-20 shrink-0">
-							{#if a.metadata.command}
-								{@render TerminalPrefix()}
-							{/if}
-
-							{#if a.metadata.message}
-								[{new Date(a.date).toLocaleTimeString()}]
-							{/if}
-						</span>
-						<span
-							class={a.level === 'error'
-								? 'text-red-400'
-								: a.level === 'warn'
-									? 'text-yellow-400'
-									: a.level === 'success'
-										? 'text-green-400 '
-										: a.level === 'system'
-											? 'text-blue-400'
-											: 'text-neutral-300'}
-						>
-							<p class="ml-1 text-[13px]">
-								{a.metadata.message}
-
-								{a.metadata.command}
-							</p>
-						</span>
-					</div>
+				{#each $debug as entry (entry.id)}
+					<TerminalRecord {entry} />
 				{/each}
 				<div
 					class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
 				>
 					<span class="text-neutral-600 flex whitespace-nowrap w-20 shrink-0 text-sm">
-						{@render TerminalPrefix()}
+						<TerminalPrefix />
 					</span>
 					<input
 						bind:value={commandLineValue}
@@ -154,32 +174,46 @@
 				<div class="rounded-full bg-blue-500/20 p-2 transition-colors group-hover:bg-blue-500">
 					<Terminal class="h-4 w-4 text-blue-500 group-hover:text-white" />
 				</div>
-				<span class="text-xs font-bold tracking-tighter text-neutral-400 uppercase">Console</span>
+				<span class="text-xs font-bold tracking-tighter text-neutral-400 uppercase">Terminal</span>
 			</button>
 		{/if}
 	</div>
 {/if}
-{#snippet TerminalPrefix()}
-	<span class="magenta">root</span>
-	<span>@</span>
-
-	<span class="magenta">dash</span>
-	<span>:~#</span>
-{/snippet}
 
 <svelte:document
 	onkeydown={async (e) => {
-		inputRef?.focus();
-
+		if (commandLineValue.length === 0 && e.key === '/') {
+			e.preventDefault();
+			await tick();
+			inputRef?.focus();
+		}
 		if (e.key === 'F2') {
 			logOpened = !logOpened;
+			inputFocused = false;
+			await tick();
+			inputRef?.focus();
+		}
+		if (e.key === 'F3') {
+			e.preventDefault();
+			fullscreen = !fullscreen;
+		}
+		if (e.ctrlKey && e.key === 'x') {
+			debug.clear();
 		}
 		if (e.key === 'Enter') {
 			if (!commandLineValue) return;
 
 			console_service.run(commandLineValue);
 
+			await tick();
+			inputRef?.focus();
 			commandLineValue = '';
+		}
+	}}
+	onclick={(e) => {
+		if (boxRef && !boxRef.contains(e.target as Node)) {
+			terminalFocused = false;
+			debug.system(terminalFocused);
 		}
 	}}
 />

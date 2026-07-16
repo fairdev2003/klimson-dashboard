@@ -138,7 +138,7 @@
 										<Icon icon="devicon:redis" />
 										<p
 											onclick={() => {
-												goto(`/dashboard/redis_writable/${rdb}/info`);
+												goto(`/dashboard/redis/${rdb}/info`);
 											}}
 											class="font-black text-red-500 hover:underline cursor-pointer"
 										>

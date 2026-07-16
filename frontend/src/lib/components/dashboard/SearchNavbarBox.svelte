@@ -77,7 +77,7 @@
 			name: 'Redis Storage',
 			icon: 'devicon:redis',
 			description: 'Redis persisted storage manager',
-			url: '/dashboard/redis_writable'
+			url: '/dashboard/redis'
 		}
 	];
 

@@ -25,7 +25,7 @@
 {:then ping_data}
 	<span
 		onclick={() => {
-			goto('/dashboard/redis_writable');
+			goto('/dashboard/redis');
 		}}
 		class="p-1 hover:bg-neutral-600 cursor-pointer px-3 items-center bg-neutral-700 rounded-full flex gap-1"
 	>

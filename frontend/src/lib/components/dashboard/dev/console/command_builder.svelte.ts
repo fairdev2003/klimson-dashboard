@@ -11,7 +11,7 @@ type CommandConfig<T = any> =
 			customName: string;
 			required?: boolean;
 			type?: T;
-			auto_complete_args: string[];
+			auto_complete_args?: string[];
 	  }
 	| undefined;
 

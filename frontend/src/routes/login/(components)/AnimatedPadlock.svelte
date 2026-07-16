@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { blur } from 'svelte/transition';
 	import { gsap } from 'gsap';
-	import FancyLoader from '../../dashboard/redis_writable/(components)/FancyLoader.svelte';
 
 	let {
 		padlock_loading = $bindable(),

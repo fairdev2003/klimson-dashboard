@@ -32,7 +32,7 @@ export const contents: SidebarItems = [
 	},
 	{
 		icon: 'devicon:redis',
-		href: '/dashboard/redis_writable',
+		href: '/dashboard/redis',
 		name: 'Redis',
 		disabled: false
 	},

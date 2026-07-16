@@ -43,7 +43,14 @@ class ConsoleService {
 	}
 
 	public run(input: string) {
-		const parts = input.trim().split(/\s+/);
+		const regex = /[^\s"]+|"([^"]*)"/g;
+		const parts: string[] = [];
+		let match;
+
+		while ((match = regex.exec(input.trim())) !== null) {
+			parts.push(match[1] ? match[1] : match[0]);
+		}
+
 		const name = parts[0];
 		const args = parts.slice(1);
 		const command = this.commands.get(name);
@@ -110,6 +117,39 @@ console_service
 	.setAction(() => {
 		debug.system('Reloading the page....');
 		window.location.reload();
+	});
+
+console_service
+	.registerCommand('logout')
+	.setDescription('Terminating cms session')
+	.setAction(() => {
+		goto('/login');
+	});
+
+console_service
+	.registerCommand('warn')
+	.setDescription('Warn terminal record test')
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'message', required: true, type: 'string' }
+	)
+	.setAction((args) => {
+		debug.warn(args[0]);
+	});
+
+console_service
+	.registerCommand('error')
+	.setDescription('Error terminal record test')
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'message', required: true, type: 'string' }
+	)
+	.setAction((args) => {
+		debug.error(args[0]);
 	});
 
 console_service
