@@ -11,7 +11,7 @@
 	onclick={() => {
 		powerOffModalOpened = true;
 	}}
-	class="size-10 rounded-full flex justify-center hover:bg-neutral-700 transition-colors cursor-pointer items-center text-red-500 bg-neutral-800"
+	class="size-10 rounded-full flex justify-center transition-colors cursor-pointer items-center text-red-500 bg-neutral-800"
 >
 	<Icon icon="tdesign:poweroff" width="20" height="20" />
 </button>

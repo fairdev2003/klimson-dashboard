@@ -175,10 +175,15 @@ func InitRoutes() {
 		for range ticker.C {
 			cpuUsage, _ := cpu.Percent(0, false)
 
-			cpu_hub.Send(map[string]float64{"cpu": cpuUsage[0]})
+			cpu_hub.Send(map[string]interface{}{
+				"cpu": cpuUsage,
+			})
 		}
 	}()
 	AddRandomRecords()
-	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, cpu_hub, latestFiles, rdb)
+	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, &models.WebsocketIsland{
+		CPUHub:    (*models.WSHub)(cpu_hub),
+		LoggerHub: (*models.WSHub)(logger_ws),
+	}, latestFiles, rdb)
 	newQuizController.RegisterRoutes()
 }

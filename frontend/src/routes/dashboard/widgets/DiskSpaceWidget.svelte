@@ -18,10 +18,12 @@
 	let usedGb = $derived(formatBytes(disk?.used ?? 0));
 	let totalGb = $derived(formatBytes(disk?.total ?? 0));
 	let loadingRoute = $state(false);
+	let os = $state('');
 
 	onMount(async () => {
 		const response = await api.misc.GetDisk();
 		disk = response.data;
+		os = response.data.os;
 		percent = Number(disk.percentage) / 100;
 
 		gsap.to('.blob-item', {
@@ -71,7 +73,7 @@
 					class:text-blue-500={$base_url !== 'https://api.klimson.dev'}
 					class="text-xs mt-1 font-semibold"
 				>
-					{$base_url === 'https://api.klimson.dev' ? 'mikrus' : 'arch'}
+					{os}
 				</p>
 			{/if}
 		</div>

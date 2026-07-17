@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runtime"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/host"
 	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/models"
@@ -60,15 +62,29 @@ func (controller GlobalController) LegalReasonsTest(ctx *gin.Context) {
 	ctx.JSON(http.StatusUnavailableForLegalReasons, gin.H{"message": "451"})
 }
 
+func getSystemInfo() (string, string) {
+	arch := runtime.GOARCH
+
+	hostInfo, err := host.Info()
+	osName := "Unknown"
+	if err == nil {
+		osName = hostInfo.Platform + " " + hostInfo.PlatformVersion
+	}
+
+	return arch, osName
+}
+
 func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {
 	used, total, err := GetDiskUsage()
+	arch, osName := getSystemInfo()
+
 	if err != nil {
 		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if total == 0 {
-		khttp.SuccessResponse(ctx, gin.H{"percentage": 0, "used": 0, "total": 0})
+		khttp.SuccessResponse(ctx, gin.H{"percentage": 0, "used": 0, "total": 0, "arch": arch, "os": osName})
 		return
 	}
 
@@ -79,5 +95,7 @@ func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {
 		"used":       used,
 		"total":      total,
 		"label":      fmt.Sprintf("%.2f%%", percentage),
+		"arch":       arch,
+		"os":         osName,
 	})
 }

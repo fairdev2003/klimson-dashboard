@@ -22,6 +22,8 @@ export type DiskData = {
 	used: string;
 	total: string;
 	label: string;
+	arch: string;
+	os: string;
 };
 
 export type PermissionRegistry = {

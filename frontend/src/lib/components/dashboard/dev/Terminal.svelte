@@ -37,7 +37,7 @@
 	$effect(() => {
 		if ($debug && debugContainer) {
 			tick().then(() => {
-				debugContainer!.scrollTo({ top: debugContainer!.scrollHeight, behavior: 'smooth' });
+				debugContainer!.scrollTo({ top: debugContainer!.scrollHeight });
 			});
 		}
 	});
@@ -163,14 +163,14 @@
 
 {#snippet OldInput()}
 	<div
-		class:opacity-50={terminal.terminal_disabled}
+		class:opacity-50={console_service.hasActiveRequests}
 		class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
 	>
 		<span class="text-neutral-600 flex whitespace-nowrap shrink-0 text-sm">
 			<TerminalPrefix naming={terminal.terminal_naming} />
 		</span>
 		<div class="relative flex items-center w-full">
-			{#if !terminal.terminal_disabled}
+			{#if !console_service.hasActiveRequests}
 				<input
 					bind:value={commandLineValue}
 					bind:this={inputRef}
@@ -212,6 +212,7 @@
 			}
 			fullscreen = !fullscreen;
 		}
+
 		if (e.key === 'ArrowDown') {
 			if (terminal.last_record_user_iterator === terminal.input_history.length - 1) {
 				commandLineValue = '';

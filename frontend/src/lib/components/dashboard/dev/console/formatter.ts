@@ -2,6 +2,9 @@ class Formatter {
 	public red(text: string): string {
 		return `<span style="color: red;">${text}</span>`;
 	}
+	public span(text: string): string {
+		return `<span>${text}</span>`;
+	}
 	public orange(text: string): string {
 		return `<span style="color: orange;">${text}</span>`;
 	}

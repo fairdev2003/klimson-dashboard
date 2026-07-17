@@ -8,11 +8,14 @@
 	import { blur } from 'svelte/transition';
 	let cpu = $state(0);
 	let cpuUsage = $derived(Math.floor(cpu));
+	let os: string = $state('OS_ID');
 
 	let ws_connection_opened = $state(false);
 
 	type CPUObjectType = {
 		cpu: number;
+		arch: string;
+		os: string;
 	};
 
 	onMount(() => {
@@ -25,7 +28,6 @@
 		socket.onmessage = (event) => {
 			const data: CPUObjectType = JSON.parse(event.data);
 			cpu = data.cpu;
-			Dashboard.state.setLoaderPercent(cpuUsage);
 		};
 
 		socket.onopen = (event) => {

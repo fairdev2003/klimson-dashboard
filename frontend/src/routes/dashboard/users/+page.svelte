@@ -19,6 +19,9 @@
 	import { onMount } from 'svelte';
 	import type { AxiosError } from 'axios';
 	import UserPreview from './(components)/UserPreview.svelte';
+	import RDBInput from '$lib/components/modal/RDBInput.svelte';
+	import { terminal } from '$lib/terminal/logic';
+	import { bold } from '$lib/terminal/style';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
@@ -26,6 +29,7 @@
 
 	let editUserModalOpened = $state(false);
 	let addUserModalOpened = $state(false);
+	let implementRoleModalOpened = $state(false);
 
 	function updateLabel(label: LabelName) {
 		const newParams = new URLSearchParams($page.url.searchParams);
@@ -113,7 +117,12 @@
 
 		<div class="flex gap-4">
 			<Button onclick={() => account_controller.DumpData()} theme="base">Dump data</Button>
-			<Button theme="base">Implement role</Button>
+			<Button
+				theme="base"
+				onclick={() => {
+					implementRoleModalOpened = true;
+				}}>Implement role</Button
+			>
 			<Button
 				onclick={() => {
 					userForm = createEmptyUser;
@@ -155,6 +164,18 @@
 		{/if}
 	</div>
 </div>
+
+<RDBModal
+	bind:opened={implementRoleModalOpened}
+	border="borderless"
+	title="Adding new role"
+	size="form_preset"
+	form_config={{
+		onLog: () => {}
+	}}
+>
+	<RDBInput label="ROLE NAME" />
+</RDBModal>
 
 <RDBModal
 	border="borderless"

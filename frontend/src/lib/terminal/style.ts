@@ -7,5 +7,6 @@ const orange = formatter.orange;
 const bold = formatter.bold;
 const italic = formatter.italic;
 const tail = formatter.tail;
+const span = formatter.span;
 
-export { red, orange, bold, italic, tail };
+export { red, orange, bold, italic, tail, span };

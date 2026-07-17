@@ -106,6 +106,15 @@ func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
 
 }
 
-func (controller GlobalController) StartRedisEndpoints() {
+func (controller GlobalController) RegisterRedisEndpoints(groupPrefix string) {
 
+	redisGroupAdmin := controller.adminPath.Group(groupPrefix)
+	redisGroupPublic := controller.publicPath.Group(groupPrefix)
+
+	redisGroupPublic.GET("/ping", controller.PingRedis)
+	redisGroupPublic.GET("/get", controller.RDBGetKey)
+	redisGroupAdmin.PUT("/set", controller.RDBSetKey)
+	redisGroupAdmin.DELETE("del", controller.RDBSetKey)
+	redisGroupPublic.GET("/keys", controller.RDBGetAllExistingKeys)
+	redisGroupAdmin.GET("/key/info", controller.RDBGetKeyInfo)
 }

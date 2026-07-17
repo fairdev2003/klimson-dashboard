@@ -9,15 +9,18 @@ export type EntryType =
 	| 'console'
 	| 'silent'
 	| 'raw'
-	| 'format';
+	| 'format'
+	| 'image';
 
 export type MessageDebugLogMetadata = { message?: string };
 export type TerminaPrefixlDebugLogMetadata = { command?: string };
-export type FormatRecordTag = { html?: string };
+export type FormatRecordTagMetadata = { html?: string };
+export type ImageDebugLogMetadata = { src?: string };
 
 export type DebugMetadata = MessageDebugLogMetadata &
 	TerminaPrefixlDebugLogMetadata &
-	FormatRecordTag;
+	FormatRecordTagMetadata &
+	ImageDebugLogMetadata;
 
 export type TerminalEntry = {
 	date: number;
@@ -29,6 +32,7 @@ export type TerminalEntry = {
 export class DebugService {
 	private readonly MAX_LOGS = 300;
 	private store: Writable<TerminalEntry[]> = writable([]);
+	super() {}
 
 	public subscribe = this.store.subscribe;
 
@@ -59,6 +63,9 @@ export class DebugService {
 
 	public format(...msg: any[]) {
 		this.addLog({ html: msg.join(' ') }, 'format');
+	}
+	public image(src: string) {
+		this.addLog({ src }, 'image');
 	}
 
 	public clear() {

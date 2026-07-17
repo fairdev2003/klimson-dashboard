@@ -15,12 +15,12 @@ type GlobalController struct {
 	ctx        context.Context
 	publicPath *gin.RouterGroup
 	adminPath  *gin.RouterGroup
-	Hub        *helpers.WSHub
+	Hub        *models.WebsocketIsland
 	Files      []models.ListRecord
 	rdb        *redis.Client
 }
 
-func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *helpers.WSHub, files []models.ListRecord, rdb *redis.Client) GlobalController {
+func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *models.WebsocketIsland, files []models.ListRecord, rdb *redis.Client) GlobalController {
 	return GlobalController{
 		db:         db,
 		ctx:        ctx,
@@ -39,14 +39,14 @@ func (controller GlobalController) RefreshCPU(ctx *gin.Context) {
 		return
 	}
 
-	controller.Hub.Mu.Lock()
-	controller.Hub.Clients[conn] = true
-	controller.Hub.Mu.Unlock()
+	controller.Hub.CPUHub.Mu.Lock()
+	controller.Hub.CPUHub.Clients[conn] = true
+	controller.Hub.CPUHub.Mu.Unlock()
 
 	defer func() {
-		controller.Hub.Mu.Lock()
-		delete(controller.Hub.Clients, conn)
-		controller.Hub.Mu.Unlock()
+		controller.Hub.CPUHub.Mu.Lock()
+		delete(controller.Hub.CPUHub.Clients, conn)
+		controller.Hub.CPUHub.Mu.Unlock()
 		conn.Close()
 	}()
 
@@ -64,13 +64,7 @@ func (controller GlobalController) RegisterRoutes() {
 
 	controller.RegisterV2StorageEndpoints()
 	controller.RegisterUserController()
-
-	controller.publicPath.GET("/redis/ping", controller.PingRedis)
-	controller.publicPath.GET("/redis/get", controller.RDBGetKey)
-	controller.adminPath.PUT("/redis/set", controller.RDBSetKey)
-	controller.adminPath.DELETE("/redis/del", controller.RDBSetKey)
-	controller.publicPath.GET("/redis/keys", controller.RDBGetAllExistingKeys)
-	controller.adminPath.GET("/redis/key/info", controller.RDBGetKeyInfo)
+	controller.RegisterRedisEndpoints("/redis")
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")

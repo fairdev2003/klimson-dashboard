@@ -10,7 +10,8 @@
 		SilentRecord,
 		SystemRecord,
 		WarningRecord,
-		FormatRecord
+		FormatRecord,
+		ImageRecord
 	} from '$lib/terminal/components';
 
 	type Props = {
@@ -28,7 +29,8 @@
 		console: ConsoleRecord,
 		silent: SilentRecord,
 		raw: RawRecord,
-		format: FormatRecord
+		format: FormatRecord,
+		image: ImageRecord
 	};
 
 	let Component = $derived(recordMap[entry.type]);

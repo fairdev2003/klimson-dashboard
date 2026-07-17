@@ -11,6 +11,8 @@
 	import PowerOffDashboard from './navbar/PowerOffDashboard.svelte';
 	import { Dashboard } from '$lib/dashboard/logic';
 	import { blur } from 'svelte/transition';
+	import Logo from '$lib/assets/klimson_logo.svg';
+	import Notification from './navbar/NotificationPanel.svelte';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
 		return () => {
@@ -46,12 +48,7 @@
 	<!-- Lewa strona -->
 	<div class="flex flex-1 items-center min-w-0">
 		<!-- Logo (tylko desktop) -->
-		<div class="items-center shrink-0 md:hidden hidden lg:flex w-40 justify-center">
-			<span class="text-blue-500 mr-2">
-				<Icon icon="fluent:brain-20-filled" width="35" height="35" />
-			</span>
-			{@render CMSTextLogo()}
-		</div>
+		{@render CMSTextLogo()}
 
 		<!-- Przycisk menu (mobile/desktop toggle) -->
 		<button
@@ -68,19 +65,16 @@
 	</div>
 
 	<!-- Prawa strona -->
-	<div class="flex items-center gap-3 shrink-0">
+	<div class="flex items-center gap-6 mr-5 shrink-0">
+		<Notification />
 		<PowerOffDashboard />
 	</div>
 </div>
 
-{#snippet CMSTextLogo(contributor: boolean = false)}
-	<a href="/dashboard" class="cursor-pointer py-3 font-semibold text-blue-500 select-none mr-4">
-		{#if contributor}
-			<p>Harcquiz</p>
-			<p>for Contr.</p>
-		{:else}
-			<p>klimson.dev</p>
-			<p>station</p>
-		{/if}
+{#snippet CMSTextLogo()}
+	<a href="/dashboard" class="cursor-pointer font-black rounded-lg text-blue-500 select-none mr-4">
+		<div class="items-center shrink-0 md:hidden hidden lg:flex w-15 justify-center h-full">
+			<img src={Logo} class=" text-blue-700" />
+		</div>
 	</a>
 {/snippet}

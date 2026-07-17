@@ -1,4 +1,5 @@
 import FormatRecord from '$lib/components/dashboard/dev/(components)/records/FormatRecord.svelte';
+import ImageRecord from '$lib/components/dashboard/dev/(components)/records/ImageRecord.svelte';
 import ConsoleRecord from '../components/dashboard/dev/(components)/records/ConsoleRecord.svelte';
 import ErrorRecord from '../components/dashboard/dev/(components)/records/ErrorRecord.svelte';
 import MessageRecord from '../components/dashboard/dev/(components)/records/MessageRecord.svelte';
@@ -15,5 +16,6 @@ export {
 	SilentRecord,
 	SystemRecord,
 	WarningRecord,
-	FormatRecord
+	FormatRecord,
+	ImageRecord
 };

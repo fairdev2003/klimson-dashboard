@@ -8,9 +8,11 @@ import { terminal } from './terminal.svelte';
 import axios from 'axios';
 import Dashboard from '$lib/dashboard/dashboard.svelte';
 import { formatter } from './formatter';
-import { bold, tail, italic, red } from '$lib/terminal/style';
+import { bold, tail, italic, red, span } from '$lib/terminal/style';
+import { notifications, type NotificationRecord } from '../../navbar/notification_service.svelte';
 
 class ConsoleService {
+	public activeRequests = $state(new Map<string, AbortController>());
 	private commands: Map<string, CommandBuilder> = new Map();
 	private unknown_command_handler: (user_input: string, name: string) => void = $state(() => {});
 	private on_command_handler: (
@@ -24,6 +26,19 @@ class ConsoleService {
 		const cmd = new CommandBuilder(name);
 		this.commands.set(name, cmd);
 		return cmd;
+	}
+
+	public get hasActiveRequests() {
+		return this.activeRequests.size > 0;
+	}
+
+	public dumpAvailableCommands() {
+		let commandsList: string[] = [];
+
+		this.commands.forEach((e) => {
+			commandsList.push(e.name);
+		});
+		return commandsList.join(', ');
 	}
 
 	constructor() {}
@@ -166,11 +181,13 @@ console_service
 		const location = l ? l : 'Skawina';
 		const format = f ? f : '3';
 
-		terminal.toggle_terminal();
+		const controller = new AbortController();
+		console_service.activeRequests.set('weather', controller);
 
 		try {
 			const response = await axios.get(`https://wttr.in/${location}?format=${format}`, {
-				headers: { 'User-Agent': 'curl/7.64.1' }
+				headers: { 'User-Agent': 'curl/7.64.1' },
+				signal: controller.signal
 			});
 
 			const parser = new DOMParser();
@@ -180,8 +197,10 @@ console_service
 			debug.system(cleanText.trim());
 			terminal.toggle_terminal();
 		} catch (error) {
-			debug.error('Error fetching weather:', error);
-			terminal.toggle_terminal();
+			if (axios.isAxiosError(error)) {
+				debug.error('Error fetching weather:', error.name);
+				console_service.activeRequests.delete('weather');
+			}
 		}
 	});
 
@@ -211,6 +230,36 @@ console_service
 	});
 
 console_service
+	.registerCommand('image')
+	.setDescription('Image terminal record test')
+	.addArgHandler<string>(
+		(arg) => {
+			return arg;
+		},
+		{ customName: 'imageSrc', required: true, type: 'string' }
+	)
+	.setAction((args) => {
+		const imageSrc: 'cat' | string = args[0];
+		type ImageKey = string | 'cat' | 'chill' | 'jewgun';
+		const images: Record<ImageKey, string> = {
+			cat: 'https://api.klimson.dev/interface/bucket/random/nugget_cat.png',
+			chill: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg',
+			jewgun: 'https://api.klimson.dev/interface/bucket/random/pixelgunicon.png'
+		};
+
+		if (!imageSrc) {
+			debug.error(`No image provided at <$arg1>. Use 'image help' to view usage`);
+			return;
+		}
+		if (imageSrc in images) {
+			debug.image(images[imageSrc]);
+			return;
+		}
+
+		debug.image(args[0]);
+	});
+
+console_service
 	.registerCommand('error')
 	.setDescription('Error terminal record test')
 	.addArgHandler<string>(
@@ -221,6 +270,80 @@ console_service
 	)
 	.setAction((args) => {
 		debug.error(args[0]);
+	});
+
+console_service
+	.registerCommand('n')
+	.setDescription('Notification test')
+
+	.setAction((args) => {
+		const [action, type] = args;
+
+		if (action === 'test') {
+			const mockRecords: Record<string, NotificationRecord> = {
+				chlopak: notifications.notifications[0],
+				comment: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'Marek',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg'
+					},
+					timestamp: '1m ago',
+					actionType: 'comment',
+					isRead: false,
+					content: { headerHtml: '<b>Marek</b> commented on <b>post</b>', body: 'Świetny projekt!' }
+				},
+				like: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'Ania',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg'
+					},
+					timestamp: '5m ago',
+					actionType: 'like',
+					isRead: false,
+					content: { headerHtml: '<b>Ania</b> liked your <b>photo</b>', body: '' }
+				},
+				mention: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'Admin',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg'
+					},
+					timestamp: '1h ago',
+					actionType: 'mention',
+					isRead: false,
+					content: { headerHtml: '<b>Admin</b> mentioned you', body: 'Sprawdź nowy regulamin.' }
+				},
+				component: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'Cwel',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/unknown.png'
+					},
+					timestamp: '1m ago',
+					actionType: 'mention',
+					isRead: false,
+					content: {
+						headerHtml: '<b>Cwel</b> mentioned you',
+						body: span(
+							`${tail('@Fair', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')} Wow, ten komponent NotificationPanel wygląda rewelacyjnie! Bardzo podoba mi się czystość designu i płynne przejścia przy dodawaniu nowych elementów - świetnie wpisuje się w nowoczesny stack`
+						)
+					}
+				}
+			};
+
+			const record = mockRecords[type || 'comment'];
+			if (record) {
+				notifications.add(record);
+			} else {
+				debug.error('Nieznany typ powiadomienia. Użyj: comment, like, mention');
+			}
+		}
+
+		if (action === 'clear') {
+			notifications.clear();
+		}
 	});
 
 console_service
@@ -280,12 +403,9 @@ console_service
 			cmds_string = cmds_string + `${command.name}${desc}\n\n`;
 			debug.raw(`${command.name}${desc}`);
 		});
-		// debug.log(`${cmds_string}`);
 
 		if (Boolean(dev)) {
-			command_register.forEach((command) => {
-				debug.log(command.argHandlers);
-			});
+			debug.format(bold(terminal.console.dumpAvailableCommands()));
 		}
 	});
 

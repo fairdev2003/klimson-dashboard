@@ -19,7 +19,11 @@ class Terminal {
 	public last_record_user_iterator = $state(-1);
 	private readonly MAX_INPUT_MEMORY = 30;
 
-	public get console_service() {
+	public get debug() {
+		return debug;
+	}
+
+	public get console() {
 		return console_service;
 	}
 

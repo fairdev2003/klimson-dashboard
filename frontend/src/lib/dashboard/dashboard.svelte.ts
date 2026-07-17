@@ -16,41 +16,23 @@ import { toast } from '$lib/dashboard/stores/toast';
 import type { Component } from 'svelte';
 import { get, writable } from 'svelte/store';
 import { DashboardState } from '$lib/dashboard/logic';
+import { DashboardMisc } from './dashboard_misc.svelte';
 
 export const dockComponent = writable<any>(BaseDockComponent);
 
 class DashboardClass {
 	constructor() {}
 
-	public art: string = `
- ____ ___ _____ __  __    _       ______        _______ _    _   _ 
-/ ___|_ _| ____|  \\/  |  / \\     / ___\\ \\      / / ____| |  | | | |
-\\___ \\| ||  _| | |\\/| | / _ \\   | |    \\ \\ /\\ / /|  _| | |  | | | |
- ___) | || |___| |  | |/ ___ \\  | |___  \\ V  V / | |___| |__| |_| |
-|____/___|_____|_|  |_/_/   \\_\\  \\____|  \\_/\\_/  |_____|_____\\___/ 
-`;
-
-	private GetDateTime(): string {
-		const now = new Date();
-		const currentTime = now.toLocaleTimeString('us-US', {
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit'
-		});
-		const currentDate = now.toLocaleDateString('us-US', {
-			day: 'numeric',
-			month: 'long',
-			year: 'numeric'
-		});
-		return `${currentTime}, ${currentDate}`;
-	}
-
 	public get state() {
 		return DashboardState;
 	}
 
+	public get miscellaneous() {
+		return DashboardMisc;
+	}
+
 	public async Load(): Promise<boolean> {
-		console.log(this.art);
+		debug.image('https://api.klimson.dev/interface/bucket/random/zbysiu.png');
 
 		dashboardLoadState.set('Autoryzacja');
 		dashboardLoaded.set(false);
@@ -63,12 +45,7 @@ class DashboardClass {
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
 		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
-		const [routesResponse] = await Promise.all([
-			api.misc.GetRoutes()
-			// api.pg3d.GetClanInfo(context_response.data.value)
-		]);
-
-		// clan_info.set(clan_response.data);
+		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
 
 		routes.set(routesResponse.data);
 		console.log(routesResponse.data);
@@ -78,7 +55,7 @@ class DashboardClass {
 		debug.system('Server is up and ready!');
 
 		toast.success('Aktualne dane załadowane');
-		dashboard_load_date.set(this.GetDateTime());
+		dashboard_load_date.set(this.miscellaneous.GetDateTime());
 
 		dashboardLoadState.set('Lazy Loading dashboard components!');
 		await preloadCode('/dashboard/database');

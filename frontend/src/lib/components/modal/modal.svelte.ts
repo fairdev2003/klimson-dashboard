@@ -34,9 +34,6 @@ export class ModalLogic {
 	public props = $state<ModalProps>({ opened: true });
 	constructor(public initialProps: ModalProps) {
 		this.props = initialProps;
-		$effect(() => {
-			debug.log(this.props.opened);
-		});
 	}
 
 	private ShakeModalContainer() {
