@@ -163,17 +163,20 @@
 
 {#snippet OldInput()}
 	<div
+		class:opacity-50={terminal.terminal_disabled}
 		class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
 	>
 		<span class="text-neutral-600 flex whitespace-nowrap shrink-0 text-sm">
 			<TerminalPrefix naming={terminal.terminal_naming} />
 		</span>
 		<div class="relative flex items-center w-full">
-			<input
-				bind:value={commandLineValue}
-				bind:this={inputRef}
-				class="bg-transparent h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
-			/>
+			{#if !terminal.terminal_disabled}
+				<input
+					bind:value={commandLineValue}
+					bind:this={inputRef}
+					class="bg-transparent h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
+				/>
+			{/if}
 
 			{#if !commandLineValue}
 				<p class="absolute pointer-events-none text-neutral-600 text-xs select-none">

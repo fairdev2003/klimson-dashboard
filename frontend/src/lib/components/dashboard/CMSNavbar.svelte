@@ -9,6 +9,8 @@
 	import { userInfo } from '$lib/dashboard/stores/store';
 	import { isMobile, mobile_sidebar_open, sidebar_open } from '$lib/dashboard/stores/persist';
 	import PowerOffDashboard from './navbar/PowerOffDashboard.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
+	import { blur } from 'svelte/transition';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
 		return () => {
@@ -33,6 +35,14 @@
 <div
 	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
 >
+	{#if Dashboard.state.dashboard_loader_on}
+		<div
+			out:blur={{ duration: 300 }}
+			class="bg-blue-500 duration-1000 bottom-0 h-0.5 left-0 absolute transition-all"
+			style="width: {Dashboard.state.loaded_percent}%;"
+		></div>
+	{/if}
+
 	<!-- Lewa strona -->
 	<div class="flex flex-1 items-center min-w-0">
 		<!-- Logo (tylko desktop) -->

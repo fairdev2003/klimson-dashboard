@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base_url } from '$lib/api/api.store';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
 	import { debug } from '$lib/dashboard/stores/debug';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
@@ -24,6 +25,7 @@
 		socket.onmessage = (event) => {
 			const data: CPUObjectType = JSON.parse(event.data);
 			cpu = data.cpu;
+			Dashboard.state.setLoaderPercent(cpuUsage);
 		};
 
 		socket.onopen = (event) => {

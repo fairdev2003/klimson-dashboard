@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Api, api } from '$lib/api/api';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import RedisWritableDocky from '$lib/components/dashboard/dock/boxes/RedisWritableDocky.svelte';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
 	import Icon from '@iconify/svelte';
@@ -13,9 +13,10 @@
 	import { goto } from '$app/navigation';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
-	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
+	import Dashboard, { dockComponent } from '$lib/dashboard/dashboard.svelte';
 
 	async function get_tables(id: any): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
+		Dashboard.state.setLoaderPercent(70);
 		const response: ServerResponse<BackendResponse<{ rdbs: string[] }>> =
 			await api.api.get('/redis/keys');
 
@@ -26,6 +27,9 @@
 		const response: ServerResponse<BackendResponse<{ result: any }>> = await api.api.get(
 			`/redis/get?key=${key}`
 		);
+		untrack(() => {
+			Dashboard.state.setLoaderPercent(100, { delay: 1000 });
+		});
 
 		return response;
 	}

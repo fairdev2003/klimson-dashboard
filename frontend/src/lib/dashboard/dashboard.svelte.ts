@@ -15,6 +15,7 @@ import { debug } from '$lib/dashboard/stores/debug';
 import { toast } from '$lib/dashboard/stores/toast';
 import type { Component } from 'svelte';
 import { get, writable } from 'svelte/store';
+import { DashboardState } from '$lib/dashboard/logic';
 
 export const dockComponent = writable<any>(BaseDockComponent);
 
@@ -42,6 +43,10 @@ class DashboardClass {
 			year: 'numeric'
 		});
 		return `${currentTime}, ${currentDate}`;
+	}
+
+	public get state() {
+		return DashboardState;
 	}
 
 	public async Load(): Promise<boolean> {

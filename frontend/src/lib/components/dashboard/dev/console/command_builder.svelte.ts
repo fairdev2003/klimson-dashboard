@@ -32,6 +32,7 @@ export const AutoComplete: Record<AutoCompleteKey, any[]> = {
 
 export class CommandBuilder {
 	public argHandlers: ArgHandler[] = [];
+	public argsConfigs: CommandConfig<any>[] = [];
 	public flags: CommandFlag<any>[] = [];
 	private action?: CommandAction;
 	public loader: CommandLoader = false;
@@ -42,6 +43,7 @@ export class CommandBuilder {
 
 	addArgHandler<T>(handler: (arg: T) => any, config?: CommandConfig<T>): this {
 		this.argHandlers.push({ handler, config });
+		this.argsConfigs.push(config);
 		return this;
 	}
 

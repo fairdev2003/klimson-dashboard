@@ -15,6 +15,7 @@ export type TerminalNaming = {
 class Terminal {
 	private latest_input_records: TerminalSavedInput[] = $state([]);
 	private t_naming: TerminalNaming | undefined = $state();
+	private t_disabled: boolean = $state(false);
 	public last_record_user_iterator = $state(-1);
 	private readonly MAX_INPUT_MEMORY = 30;
 
@@ -32,12 +33,19 @@ class Terminal {
 		return this.latest_input_records;
 	}
 
+	public toggle_terminal() {
+		this.t_disabled = !this.t_disabled;
+	}
 	public set_terminal_naming(naming: TerminalNaming) {
 		this.t_naming = naming;
 	}
 
 	public get terminal_naming() {
 		return this.t_naming;
+	}
+
+	public get terminal_disabled() {
+		return this.t_disabled;
 	}
 }
 

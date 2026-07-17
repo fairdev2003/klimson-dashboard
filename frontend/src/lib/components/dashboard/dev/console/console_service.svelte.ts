@@ -6,6 +6,9 @@ import { AutoComplete, CommandBuilder } from './command_builder.svelte';
 import { goto } from '$app/navigation';
 import { terminal } from './terminal.svelte';
 import axios from 'axios';
+import Dashboard from '$lib/dashboard/dashboard.svelte';
+import { formatter } from './formatter';
+import { bold, tail, italic, red } from '$lib/terminal/style';
 
 class ConsoleService {
 	private commands: Map<string, CommandBuilder> = new Map();
@@ -163,7 +166,7 @@ console_service
 		const location = l ? l : 'Skawina';
 		const format = f ? f : '3';
 
-		console_loading.set(true);
+		terminal.toggle_terminal();
 
 		try {
 			const response = await axios.get(`https://wttr.in/${location}?format=${format}`, {
@@ -175,11 +178,23 @@ console_service
 			const cleanText = doc.body.textContent || response.data;
 
 			debug.system(cleanText.trim());
-			console_loading.set(false);
+			terminal.toggle_terminal();
 		} catch (error) {
 			debug.error('Error fetching weather:', error);
-			console_loading.set(false);
+			terminal.toggle_terminal();
 		}
+	});
+
+console_service
+	.registerCommand('formatter')
+	.setDescription('Formatter test')
+	.addArgHandler((arg) => arg, { customName: 'run' })
+	.addArgHandler((arg) => arg, { customName: 'formatterText' })
+	.setAction((args) => {
+		let text = args[1] || 'Formatter';
+		let tailwind = args[2] || 'bg-orange-500/50 text-orange-200 border-1 p-1';
+
+		debug.format(bold(italic(tail(text, tailwind))));
 	});
 
 console_service

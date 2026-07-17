@@ -8,11 +8,16 @@ export type EntryType =
 	| 'system'
 	| 'console'
 	| 'silent'
-	| 'raw';
+	| 'raw'
+	| 'format';
 
 export type MessageDebugLogMetadata = { message?: string };
 export type TerminaPrefixlDebugLogMetadata = { command?: string };
-export type DebugMetadata = MessageDebugLogMetadata & TerminaPrefixlDebugLogMetadata;
+export type FormatRecordTag = { html?: string };
+
+export type DebugMetadata = MessageDebugLogMetadata &
+	TerminaPrefixlDebugLogMetadata &
+	FormatRecordTag;
 
 export type TerminalEntry = {
 	date: number;
@@ -50,6 +55,10 @@ export class DebugService {
 	}
 	public raw(...msg: any[]) {
 		this.logHelper('raw', ...msg);
+	}
+
+	public format(...msg: any[]) {
+		this.addLog({ html: msg.join(' ') }, 'format');
 	}
 
 	public clear() {

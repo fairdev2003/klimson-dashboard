@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import Icon from '@iconify/svelte';
+	import { console_service } from '../dev/console/console_service.svelte';
 
 	let powerOffModalOpened = $state(false);
 </script>
@@ -23,7 +24,7 @@
 	size="accept_preset"
 	form_config={{
 		onAccept: () => {
-			goto('/login');
+			console_service.run('logout');
 		},
 		onCancel: () => {
 			powerOffModalOpened = false;
