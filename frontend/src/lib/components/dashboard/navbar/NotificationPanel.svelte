@@ -77,8 +77,8 @@
 				<p class="font-black">Notifications</p>
 			</div>
 
-			<div class="flex flex-col overflow-y-auto">
-				{#each sortedNotifications as notification}
+			<div class="flex flex-col flex-col-reverse overflow-y-auto">
+				{#each $notifications.reverse() as notification}
 					<div
 						use:onVisible={() => handleSeen(notification.id)}
 						in:blur={{ duration: 150 }}

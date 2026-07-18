@@ -1,4 +1,4 @@
-import { preloadCode } from '$app/navigation';
+import { goto, preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
 import type { ServerResponse } from '$lib/api/types';
 import { terminal } from '$lib/components/dashboard/dev/console/terminal.svelte';
@@ -17,6 +17,7 @@ import type { Component } from 'svelte';
 import { get, writable } from 'svelte/store';
 import { DashboardState } from '$lib/dashboard/logic';
 import { DashboardMisc } from './dashboard_misc.svelte';
+import axios from 'axios';
 
 export const dockComponent = writable<any>(BaseDockComponent);
 
@@ -36,12 +37,20 @@ class DashboardClass {
 
 		dashboardLoadState.set('Autoryzacja');
 		dashboardLoaded.set(false);
+		try {
+			const verify: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify', {
+				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+			});
 
-		const verify: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify', {
-			headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-		});
-
-		if (!verify.data.access) return false;
+			if (!verify.data.access) return false;
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				if (error.code === '401') {
+					console.log(error.message);
+					goto('/login');
+				}
+			}
+		}
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
 		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');

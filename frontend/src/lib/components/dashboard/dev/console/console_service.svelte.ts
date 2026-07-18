@@ -159,8 +159,14 @@ console_service
 console_service
 	.registerCommand('logout')
 	.setDescription('Terminating cms session')
-	.setAction(() => {
-		goto('/login');
+	.setAction(async () => {
+		try {
+			await api.api.post('/auth/logout');
+		} catch (e) {
+			debug.error('Błąd połączenia z serwerem podczas wylogowywania');
+		} finally {
+			goto('/login');
+		}
 	});
 
 console_service

@@ -8,6 +8,7 @@
 	import AnimatedPadlock from './(components)/AnimatedPadlock.svelte';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
 	import FancyLoader from '../dashboard/redis/(components)/FancyLoader.svelte';
+	import axios from 'axios';
 
 	let pass: string = $state('');
 	let login: string = $state('');
@@ -15,12 +16,41 @@
 	let loading: boolean = $state(false);
 	let cenzurka: boolean = $state(false);
 	let session_authorized: boolean = $state(false);
+	let disabled_user_input = $state(false);
 
 	type TokenData = {
 		token: string;
 	};
 
 	let key = $state(false);
+
+	async function CheckIfAuthorized() {
+		try {
+			const response = await api.api.get('/admin/verify');
+
+			if (response.status === 200) {
+				session_authorized = true;
+				padlock_loading = false;
+				disabled_user_input = true;
+			}
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				if (error.status === 401) {
+					session_authorized = false;
+					padlock_loading = false;
+					disabled_user_input = false;
+				}
+			}
+		}
+	}
+
+	$effect(() => {
+		if (pass.length > 0 && pass.length < 3) {
+			error = 'Hasło jest za krótkie!';
+		} else if (error === 'Hasło jest za krótkie!') {
+			error = '';
+		}
+	});
 
 	async function handleLogin() {
 		if (!login || !pass || loading) return;
@@ -31,35 +61,32 @@
 		try {
 			const response: AxiosResponse<TokenData> = await api.api.post(
 				'/login',
-				{
-					password: pass,
-					login: login
-				},
+				{ password: pass, login: login },
 				{ withCredentials: true }
 			);
 
-			try {
-				const auth: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify');
-
-				session_authorized = auth.data.access;
-			} catch (error) {}
+			if (response.status === 200) {
+				session_authorized = true;
+				padlock_loading = false;
+				disabled_user_input = true;
+			}
 		} catch (e: any) {
-			if (e.response && e.response.data && e.response.data.error) {
-				error = e.response.data.error;
-			} else if (e.code === 'ECONNABORTED') {
-				error = 'Serwer zbyt długo nie odpowiada...';
+			console.log('Pełny obiekt błędu:', e);
+
+			if (e.response && e.response.data) {
+				error = e.response.data.message || 'Wystąpił nieznany błąd';
 			} else {
-				error = 'Coś poszło nie tak. Spróbuj ponownie.';
+				error = 'Błąd połączenia z serwerem';
 			}
 		} finally {
 			loading = false;
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		padlock_loading = true;
-		setTimeout(() => {
-			padlock_loading = false;
+		setTimeout(async () => {
+			await CheckIfAuthorized();
 		}, 2000);
 	});
 
@@ -91,8 +118,9 @@
 					id="login"
 					type="text"
 					bind:value={login}
+					oninput={() => (error = '')}
 					placeholder="Your login..."
-					disabled={padlock_loading}
+					disabled={padlock_loading || disabled_user_input}
 					class="w-full rounded border disabled:opacity-25 border-neutral-700 bg-neutral-800 p-3 text-white transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				/>
 			{/key}
@@ -109,8 +137,9 @@
 					id="password"
 					type="password"
 					bind:value={pass}
+					oninput={() => (error = '')}
 					placeholder="••••••••"
-					disabled={padlock_loading}
+					disabled={padlock_loading || disabled_user_input}
 					class="w-full rounded border disabled:opacity-25 border-neutral-700 bg-neutral-800 p-3 text-white transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 				/>
 

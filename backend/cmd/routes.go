@@ -11,6 +11,7 @@ import (
 	"github.com/zgierz/klimson/backend/controllers"
 	"github.com/zgierz/klimson/backend/handlers"
 	"github.com/zgierz/klimson/backend/helpers"
+	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
 	"golang.org/x/crypto/bcrypt"
@@ -40,7 +41,7 @@ func AddRandomRecords() {
 func InitRoutes() {
 
 	ctx := context.Background()
-	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev", "https://klimson.dev"}
+	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev", "https://klimson.dev", "http://mojprojekt.test:5173"}
 	server.Use(helpers.CorsConf(origins))
 	server.Use(helpers.NetworkLogger())
 	apiPath = server.Group("/")
@@ -117,7 +118,7 @@ func InitRoutes() {
 
 		if err := c.ShouldBindJSON(&req); err != nil {
 			logger.ErrorLog("Niepoprawny format JSONA")
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Błędny JSON"})
+			khttp.BadRequestResponse(c, gin.H{}, "Invalid form data")
 			return
 		}
 
@@ -127,42 +128,49 @@ func InitRoutes() {
 			err := bcrypt.CompareHashAndPassword([]byte(hashed_password), []byte(req.Password))
 			if err != nil {
 				logger.ErrorLog("Incorrect password")
-				c.JSON(400, gin.H{"text": "niepoprawne hasło"})
+				khttp.UnauthorizedResponse(c, gin.H{}, "Invalid password")
 				return
 			}
 
 			token, err := handlers.GenerateRootToken(false)
 
-			c.SetCookie("token", token, 3600, "/", "", false, true)
+			c.SetCookie("token", token, 86400, "/", "", false, true)
 			c.Writer.Header().Set("X-Token", token)
 
 			if err != nil {
 				logger.ErrorLog("Error while generating token:", err.Error())
+				khttp.InternalServerErrorResponse(c, nil, "Error while generating token:", err.Error())
 			}
 
-			c.JSON(200, gin.H{"token": token})
+			khttp.SuccessResponse(c, gin.H{}, "Login was successfull")
+
 		} else {
 			logger.ServerLog("Znaleziono kontrybutora o nicku: ", user.Password)
 			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 			if err != nil {
 				logger.ErrorLog("Incorrect password")
-				c.JSON(400, gin.H{"text": "niepoprawne hasło"})
+				khttp.BadRequestResponse(c, gin.H{}, "Invalid password")
 				return
 			}
 
 			token, err := handlers.GenerateToken(user)
 			if err != nil {
 				logger.ErrorLog("Error while generating token:", err.Error())
-				c.JSON(500, gin.H{"text": "błąd serwera przy generowaniu tokena"})
+				khttp.InternalServerErrorResponse(c, nil, "Error while generating token:", err.Error())
 				return
 			}
 
 			c.SetCookie("token", token, 3600, "/", "", false, true)
-			c.Writer.Header().Set("X-Token", token)
 
-			c.JSON(200, gin.H{"token": ""})
+			khttp.SuccessResponse(c, gin.H{}, "Login was successfull")
 		}
 
+	})
+
+	apiPath.POST("/auth/logout", func(ctx *gin.Context) {
+		ctx.SetCookie("token", "token", -1, "/", "", false, true)
+
+		khttp.SuccessResponse(ctx, gin.H{"success": true}, "Cookie is successfully deleted!")
 	})
 
 	cpu_hub := helpers.NewHub("cpu")

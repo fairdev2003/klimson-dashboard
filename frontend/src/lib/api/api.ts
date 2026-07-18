@@ -11,6 +11,7 @@ import { get } from 'svelte/store';
 import { StorageV2 } from './requests/storagev2';
 import { Redis } from './requests/redis';
 import { UserClass } from './requests/user';
+import { goto } from '$app/navigation';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -125,6 +126,17 @@ export class Api extends ApiStatic {
 
 			return config;
 		});
+
+		this.api.interceptors.response.use(
+			(response) => response,
+			(error) => {
+				if (error.response && error.response.status === 401) {
+					goto('/login');
+				}
+
+				return Promise.reject(error);
+			}
+		);
 	}
 
 	/**
