@@ -282,16 +282,39 @@ console_service
 		if (action === 'test') {
 			const mockRecords: Record<string, NotificationRecord> = {
 				chlopak: notifications.notifications[0],
+				//
 				comment: {
 					id: Math.random().toString(36),
 					user: {
-						username: 'Marek',
-						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg'
+						username: 'Marek Łuszkiewicz',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/robalini.png'
 					},
 					timestamp: '1m ago',
 					actionType: 'comment',
 					isRead: false,
-					content: { headerHtml: '<b>Marek</b> commented on <b>post</b>', body: 'Świetny projekt!' }
+					content: {
+						headerHtml: `${bold('Marek')} mentioned you on ${bold('origin/drama')}`,
+						body: span(
+							` Nie dales mi zapisać synka do klubu ${tail('@Klimson', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')}. Znajde cie i zajebie!`
+						)
+					}
+				},
+				ram: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'themanofsmegg99',
+						avatarUrl:
+							'https://api.klimson.dev/interface/bucket/random/1b5217313bab90409e39c48b9351118c.webp'
+					},
+					timestamp: '1m ago',
+					actionType: 'comment',
+					isRead: false,
+					content: {
+						headerHtml: `${bold('themanofsmegg99')} mentioned you on ${bold('vent')}`,
+						body: span(
+							`${tail('@everyone', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')} sprzedałem 128GB ramu za 100 zl. Teraz ten ram kosztuje więcej. Jak to odkręcić prosze pomozcie 😭`
+						)
+					}
 				},
 				like: {
 					id: Math.random().toString(36),
@@ -325,9 +348,9 @@ console_service
 					actionType: 'mention',
 					isRead: false,
 					content: {
-						headerHtml: '<b>Cwel</b> mentioned you',
+						headerHtml: `${bold('Cwel')} mentioned you on ${bold('origin/main')}`,
 						body: span(
-							`${tail('@Fair', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')} Wow, ten komponent NotificationPanel wygląda rewelacyjnie! Bardzo podoba mi się czystość designu i płynne przejścia przy dodawaniu nowych elementów - świetnie wpisuje się w nowoczesny stack`
+							`${tail('@Klimson', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')} Wow, ten komponent NotificationPanel wygląda rewelacyjnie! Bardzo podoba mi się czystość designu i płynne przejścia przy dodawaniu nowych elementów - świetnie wpisuje się w nowoczesny stack`
 						)
 					}
 				}

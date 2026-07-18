@@ -68,21 +68,21 @@
 	{#if notificationWindowToggled}
 		{@const sortedNotifications = [...$notifications].reverse()}
 		<div
-			class="absolute w-100 h-100 flex flex-col p-4 top-10 bg-neutral-900 border border-neutral-700 shadow-2xl -right-10"
+			class="absolute w-100 h-130 flex flex-col top-10 bg-neutral-900 border border-neutral-700 shadow-2xl -right-10"
 		>
 			<div
-				class="text-xs text-neutral-300 uppercase flex gap-1 border-b border-white/10 pt-2 pb-4 shrink-0"
+				class="text-xs text-neutral-300 uppercase flex gap-2 m-4 border-b border-white/10 pt-2 pb-4 shrink-0"
 			>
 				<Icon icon="mingcute:notification-fill" width="15" height="15" />
 				<p class="font-black">Notifications</p>
 			</div>
 
-			<div class="flex flex-col gap-4 overflow-y-auto pr-2 mt-4">
+			<div class="flex flex-col overflow-y-auto">
 				{#each sortedNotifications as notification}
 					<div
 						use:onVisible={() => handleSeen(notification.id)}
 						in:blur={{ duration: 150 }}
-						class="flex items-start gap-4 p-2 rounded transition-colors w-full"
+						class="flex items-start cursor-pointer hover:bg-white/10 gap-4 p-4 transition-colors w-full border-b border-white/10"
 					>
 						<!-- action image -->
 						<div class="relative">
