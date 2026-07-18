@@ -68,7 +68,8 @@
 	{#if notificationWindowToggled}
 		{@const sortedNotifications = [...$notifications].reverse()}
 		<div
-			class="absolute w-100 h-130 flex flex-col top-10 bg-neutral-900 border border-neutral-700 shadow-2xl -right-10"
+			in:slide={{ duration: 300 }}
+			class="absolute w-100 h-130 flex flex-col top-[3.660rem] bg-neutral-900 border border-neutral-700 shadow-2xl -right-5 border-t-0"
 		>
 			<div
 				class="text-xs text-neutral-300 uppercase flex gap-2 m-4 border-b border-white/10 pt-2 pb-4 shrink-0"
@@ -78,7 +79,7 @@
 			</div>
 
 			<div class="flex flex-col flex-col-reverse overflow-y-auto">
-				{#each $notifications.reverse() as notification}
+				{#each $notifications as notification}
 					<div
 						use:onVisible={() => handleSeen(notification.id)}
 						in:blur={{ duration: 150 }}

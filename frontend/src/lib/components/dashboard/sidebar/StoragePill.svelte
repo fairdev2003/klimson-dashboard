@@ -17,13 +17,6 @@
 		const response = await api.misc.GetDisk();
 		disk = response.data;
 		percent = Number(disk.percentage) / 100;
-
-		gsap.to('.blob-item', {
-			backgroundColor: (i) => (i < power ? '#22c55e' : '#525252'),
-			duration: 1,
-			stagger: 0.1,
-			ease: 'power1.inOut'
-		});
 	});
 
 	function formatBytes(bytes: number | string, decimals = 2) {

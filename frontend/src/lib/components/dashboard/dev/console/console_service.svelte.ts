@@ -211,14 +211,15 @@ console_service
 	.setDescription('Changes current directory')
 	.addArgHandler((arg) => arg)
 	.setAction(async (args) => {
-		let dir: string = args[0];
+		let dir: string = args[0] || '';
 
 		if (dir === '..') {
-			let splitted = Dashboard.state.current_directory.split('/').pop();
-			if (splitted) {
-				Dashboard.state.current_directory = splitted;
-				debug.log("Directory after 'cd ..' command: ", Dashboard.state.current_directory);
-			}
+			let splitted = Dashboard.state.current_directory.split('/');
+
+			splitted.pop();
+
+			Dashboard.state.current_directory = splitted.join('/');
+
 			return;
 		}
 
@@ -308,11 +309,12 @@ console_service
 	)
 	.setAction((args) => {
 		const imageSrc: 'cat' | string = args[0];
-		type ImageKey = string | 'cat' | 'chill' | 'jewgun';
+		type ImageKey = string | 'cat' | 'chill' | 'jewgun' | 'ryba';
 		const images: Record<ImageKey, string> = {
 			cat: 'https://api.klimson.dev/interface/bucket/random/nugget_cat.png',
 			chill: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg',
-			jewgun: 'https://api.klimson.dev/interface/bucket/random/pixelgunicon.png'
+			jewgun: 'https://api.klimson.dev/interface/bucket/random/pixelgunicon.png',
+			ryba: 'https://api.klimson.dev/interface/bucket/random/681693EF-D9EF-4007-8ACA-031949000CA3.gif'
 		};
 
 		if (!imageSrc) {
@@ -387,8 +389,8 @@ console_service
 				like: {
 					id: Math.random().toString(36),
 					user: {
-						username: 'Ania',
-						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/klimson-chill.jpeg'
+						username: 'Waifu Otaku :3',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/random/anime.png'
 					},
 					timestamp: '5m ago',
 					actionType: 'like',

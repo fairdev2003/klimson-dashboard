@@ -61,7 +61,7 @@ class NotificationService {
 	public add(record: NotificationRecord) {
 		this.store.update((notifications) => {
 			const newNotifications = [record, ...notifications];
-			return newNotifications;
+			return newNotifications.reverse();
 		});
 	}
 

@@ -13,6 +13,9 @@
 	import { blur } from 'svelte/transition';
 	import Logo from '$lib/assets/klimson_logo.svg';
 	import Notification from './navbar/NotificationPanel.svelte';
+	import Pixeletedsraka from '$lib/assets/Pixeletedsraka.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 
 	const SendHeightInfo: Attachment<HTMLDivElement> = (element) => {
 		return () => {
@@ -72,9 +75,13 @@
 </div>
 
 {#snippet CMSTextLogo()}
-	<a href="/dashboard" class="cursor-pointer font-black rounded-lg text-blue-500 select-none mr-4">
-		<div class="items-center shrink-0 md:hidden hidden lg:flex w-15 justify-center h-full">
-			<img src={Logo} class=" text-blue-700" />
-		</div>
-	</a>
+	<Pixeletedsraka
+		onclick={() => {
+			if (page.route.id !== '/dashboard') {
+				goto('/dashboard');
+				return true;
+			}
+			return false;
+		}}
+	/>
 {/snippet}
