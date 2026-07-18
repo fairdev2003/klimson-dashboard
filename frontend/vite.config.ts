@@ -7,6 +7,6 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	ssr: {
-		noExternal: ['monaco-editor']
+		noExternal: ['monaco-editor', 'gsap']
 	}
 });
