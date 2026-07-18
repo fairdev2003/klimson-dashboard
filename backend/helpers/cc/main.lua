@@ -1,4 +1,4 @@
-local url = "ws://mojprojekt.test:8080/ws" -- lub Twój adres
+local url = "wss://api.klimson.dev/ws/cpu" -- lub Twój adres
 local ws, err = http.websocket(url)
 
 if not ws then
