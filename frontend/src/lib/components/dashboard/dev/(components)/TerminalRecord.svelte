@@ -16,7 +16,7 @@
 
 	type Props = {
 		entry: TerminalEntry;
-		naming: TerminalNaming | undefined;
+		naming: string;
 	};
 
 	let { entry, naming }: Props = $props();

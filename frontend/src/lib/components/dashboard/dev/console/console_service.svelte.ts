@@ -126,6 +126,7 @@ console_service.onCommand((command, input) => {
 
 	terminal.set_input({ user_input: input, id: terminal.input_history.length + 1 });
 	debug.console(input);
+	terminal.last_record_user_iterator = -1;
 });
 
 console_service
@@ -343,6 +344,14 @@ console_service
 	});
 
 console_service
+	.registerCommand('history')
+	.setDescription('Error terminal record test')
+
+	.setAction(() => {
+		debug.system(terminal.input_history);
+	});
+
+console_service
 	.registerCommand('n')
 	.setDescription('Notification test')
 
@@ -366,6 +375,22 @@ console_service
 						headerHtml: `${bold('Marek')} mentioned you on ${bold('origin/drama')}`,
 						body: span(
 							` Nie dales mi zapisać synka do klubu ${tail('@Klimson', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')}. Znajde cie i zajebie!`
+						)
+					}
+				},
+				lancuch: {
+					id: Math.random().toString(36),
+					user: {
+						username: 'Robert Łańcuch',
+						avatarUrl: 'https://api.klimson.dev/interface/bucket/pedal.png'
+					},
+					timestamp: '10s ago',
+					actionType: 'comment',
+					isRead: false,
+					content: {
+						headerHtml: `${bold('Robert')} mentioned you on ${bold('origin/fotowoltaika')}`,
+						body: span(
+							`${tail('@Klimson', 'text-blue-500 bg-blue-800/50 rounded-lg p-0.5 px-1.5 font-black')} Mieszkam pod mostem. Można zainstalować te panele fotowoltaiczne na asfalcie na dachu. Zadne pisma mi nie przychodza ani nic tutaj pod tym mostem`
 						)
 					}
 				},

@@ -13,6 +13,7 @@
 	import TerminalPrefix from './(components)/helpers/TerminalPrefix.svelte';
 	import { terminal } from '$lib/terminal/logic';
 	import TerminalInput from './(components)/input/TerminalInput.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
 
 	let logOpened = $state(false);
 	let debugContainer: HTMLDivElement | undefined = $state();
@@ -66,6 +67,19 @@
 		};
 		window.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('mouseup', onMouseUp);
+	}
+
+	const full_terminal_naming = $derived(
+		terminal.terminal_naming + Dashboard.state.current_directory
+	);
+
+	async function setCommand(value: string) {
+		commandLineValue = value;
+		await tick();
+		if (inputRef) {
+			inputRef.setSelectionRange(inputRef.value.length, inputRef.value.length);
+			inputRef.focus();
+		}
 	}
 </script>
 
@@ -142,10 +156,10 @@
 				class="flex h-150 flex-col gap-1 overflow-y-auto border border-neutral-800 bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
 			>
 				{#each $debug as entry (entry.id)}
-					<TerminalRecord naming={terminal.terminal_naming} {entry} />
+					<TerminalRecord naming={full_terminal_naming} {entry} />
 				{/each}
 
-				{@render OldInput()}
+				{@render Input()}
 			</div>
 		{:else}
 			<button
@@ -161,7 +175,7 @@
 	</div>
 {/if}
 
-{#snippet OldInput()}
+{#snippet Input()}
 	<div
 		class:opacity-50={console_service.hasActiveRequests}
 		class="flex gap-3 relative items-center border-b border-white/5 pb-1 leading-relaxed last:border-0"
@@ -170,13 +184,22 @@
 			<TerminalPrefix naming={terminal.terminal_naming} />
 		</span>
 		<div class="relative flex items-center w-full">
-			{#if !console_service.hasActiveRequests}
-				<input
-					bind:value={commandLineValue}
-					bind:this={inputRef}
-					class="bg-transparent h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
-				/>
-			{/if}
+			{#if !console_service.hasActiveRequests}{/if}
+
+			<!-- <div
+				onclick={() => {
+					inputRef?.focus();
+				}}
+				class="absolute top-max bg-transparent cursor-text h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
+			>
+				{commandLineValue}
+			</div> -->
+
+			<input
+				bind:value={commandLineValue}
+				bind:this={inputRef}
+				class="absolute top-max bg-transparent h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
+			/>
 
 			{#if !commandLineValue}
 				<p class="absolute pointer-events-none text-neutral-600 text-xs select-none">
@@ -214,17 +237,28 @@
 		}
 
 		if (e.key === 'ArrowDown') {
-			if (terminal.last_record_user_iterator === terminal.input_history.length - 1) {
-				commandLineValue = '';
-				return;
+			e.preventDefault();
+			if (terminal.input_history.length === 0) return;
+
+			if (terminal.last_record_user_iterator >= terminal.input_history.length - 1) {
+				terminal.last_record_user_iterator = terminal.input_history.length;
+				setCommand('');
+			} else {
+				terminal.last_record_user_iterator++;
+				setCommand(terminal.input_history[terminal.last_record_user_iterator].user_input);
 			}
 		}
 		if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			if (terminal.input_history.length === 0) return;
+
 			if (terminal.last_record_user_iterator === -1) {
-				commandLineValue = terminal.input_history[terminal.input_history.length - 1].user_input;
 				terminal.last_record_user_iterator = terminal.input_history.length - 1;
-				return;
+			} else if (terminal.last_record_user_iterator > 0) {
+				terminal.last_record_user_iterator--;
 			}
+
+			setCommand(terminal.input_history[terminal.last_record_user_iterator].user_input);
 		}
 		if (e.ctrlKey && e.key === 'x') {
 			debug.clear();
