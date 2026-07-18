@@ -1,6 +1,7 @@
 class State {
 	public loaded_percent: number = $state(0);
 	public dashboard_loader_on: boolean = $state(false);
+	public current_directory: string = $state('/');
 
 	public async setLoaderPercent(percent: number, hideLoader?: { delay?: number }) {
 		this.loaded_percent = 10;

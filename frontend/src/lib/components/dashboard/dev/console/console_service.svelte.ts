@@ -10,6 +10,7 @@ import Dashboard from '$lib/dashboard/dashboard.svelte';
 import { formatter } from './formatter';
 import { bold, tail, italic, red, span } from '$lib/terminal/style';
 import { notifications, type NotificationRecord } from '../../navbar/notification_service.svelte';
+import type { StorageRecord } from '$lib/api/requests/storage';
 
 class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
@@ -162,11 +163,72 @@ console_service
 	.setAction(async () => {
 		try {
 			await api.api.post('/auth/logout');
-		} catch (e) {
-			debug.error('Błąd połączenia z serwerem podczas wylogowywania');
+		} catch (error) {
+			debug.error('Erorr during logout');
+			debug.error(error);
 		} finally {
 			goto('/login');
 		}
+	});
+
+console_service
+	.registerCommand('ls')
+	.setDescription('Storage file listing')
+	.setAction(async () => {
+		let cleaned_records: string[] = [];
+		const connection_string = `/storage/list/${Dashboard.state.current_directory}`;
+		try {
+			const response: ServerResponse<StorageRecord[]> = await api.api.get(connection_string);
+
+			if (response.data === null || response.data.length === 0) {
+				debug.format('No files here');
+				return;
+			}
+
+			if (response.status === 200) {
+				response.data.forEach((record) => {
+					if (record.is_dir) {
+						cleaned_records.push(bold(tail(record.name, 'text-blue-500 col-span-1 font-bold')));
+					} else {
+						cleaned_records.push(bold(tail(record.name, 'col-span-1 font-bold')));
+					}
+				});
+
+				debug.format(tail(cleaned_records.join(''), 'flex flex-wrap gap-x-10'));
+			}
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				debug.error(error.response?.data);
+			}
+			debug.silent(connection_string);
+			debug.error('Error:');
+			debug.error(error);
+		}
+	});
+
+console_service
+	.registerCommand('cd')
+	.setDescription('Changes current directory')
+	.addArgHandler((arg) => arg)
+	.setAction(async (args) => {
+		let dir: string = args[0];
+
+		if (dir === '..') {
+			let splitted = Dashboard.state.current_directory.split('/').pop();
+			if (splitted) {
+				Dashboard.state.current_directory = splitted;
+				debug.log("Directory after 'cd ..' command: ", Dashboard.state.current_directory);
+			}
+			return;
+		}
+
+		if (Dashboard.state.current_directory.endsWith('/')) {
+			Dashboard.state.current_directory = Dashboard.state.current_directory + `${dir}`;
+			return;
+		}
+
+		Dashboard.state.current_directory = Dashboard.state.current_directory + `/${dir}`;
+		debug.log('Current Directory: ', Dashboard.state.current_directory);
 	});
 
 console_service

@@ -13,11 +13,9 @@ import (
 func GenerateRootToken(isContributor bool) (string, error) {
 
 	claims := jwt.MapClaims{
-		"exp":         time.Now().Add(time.Hour * 24 * 7).Unix(),
-		"permissions": "root",
-		"contributor": false,
-		"name":        "Jakub Klimkiewicz",
-		"login":       "root",
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"name":  "Jakub Klimkiewicz",
+		"login": "root",
 	}
 
 	err := godotenv.Load("../.env")
@@ -34,8 +32,8 @@ func GenerateRootToken(isContributor bool) (string, error) {
 func GenerateToken(contributor models.Contributor) (string, error) {
 
 	claims := jwt.MapClaims{
-		"id":          contributor.ID,
 		"exp":         time.Now().Add(time.Hour * 2).Unix(),
+		"id":          contributor.ID,
 		"permissions": contributor.Permissions,
 		"contributor": true,
 		"name":        contributor.Name,
@@ -44,7 +42,8 @@ func GenerateToken(contributor models.Contributor) (string, error) {
 
 	err := godotenv.Load("../.env")
 	if err != nil {
-		logger.ErrorLog("Nie udalo sie zaladowac pliku .env")
+		logger.ErrorLog("Erorr during .env preloading")
+		return "", err
 	}
 
 	secret := os.Getenv("TOKEN")
