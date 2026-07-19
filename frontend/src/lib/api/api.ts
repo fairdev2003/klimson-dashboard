@@ -12,6 +12,7 @@ import { StorageV2 } from './requests/storagev2';
 import { Redis } from './requests/redis';
 import { UserClass } from './requests/user';
 import { goto } from '$app/navigation';
+import { Dashboard } from '$lib/dashboard/logic';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -120,15 +121,36 @@ export class Api extends ApiStatic {
 		this.api.interceptors.request.use((config) => {
 			(config as any).metadata = { startTime: new Date() };
 
-			if (Api.token) {
-				config.headers.Authorization = `Bearer ${Api.token}`;
-			}
+			return config;
+		});
+
+		this.api.interceptors.request.use((config) => {
+			const requestId = 'request-' + Math.random();
+			(config as any)._requestId = requestId;
+
+			Dashboard.http.pushRequest({
+				id: requestId,
+				method: config.method?.toUpperCase() || 'GET',
+				endpoint: config.url || '',
+				startTime: new Date()
+			});
 
 			return config;
 		});
 
 		this.api.interceptors.response.use(
-			(response) => response,
+			(response) => {
+				const requestId = (response.config as any)._requestId;
+				const index = Dashboard.http.httpRequests.findIndex((r) => r.id === requestId);
+
+				if (index !== -1) {
+					const end = new Date();
+					Dashboard.http.httpRequests[index].duration =
+						end.getTime() - Dashboard.http.httpRequests[index].startTime.getTime();
+				}
+
+				return response;
+			},
 			(error) => {
 				if (error.response && error.response.status === 401) {
 					goto('/login');

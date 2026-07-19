@@ -1,6 +1,8 @@
 import { onMount } from 'svelte';
 import { console_service } from './console_service.svelte';
 import { debug } from '$lib/dashboard/stores/debug';
+import { TerminalKeyboardEvents } from './shortcuts.svelte';
+import { TerminalSettings } from './settings.svelte';
 
 type TerminalSavedInput = {
 	user_input: string;
@@ -12,15 +14,40 @@ export type TerminalNaming = {
 	path: string;
 };
 
-class Terminal {
+export type TerminalPage = 'user' | 'http' | 'only-logs';
+
+export class Terminal {
+	public terminalOpened: boolean = $state(false);
+	public terminalPage: TerminalPage = $state('user');
 	private latest_input_records: TerminalSavedInput[] = $state([]);
 	private t_naming: TerminalNaming | undefined = $state();
 	private t_disabled: boolean = $state(false);
 	public last_record_user_iterator = $state(-1);
 	private readonly MAX_INPUT_MEMORY = 30;
+	public debugContainer: HTMLDivElement | undefined = $state();
+	public loaded = $state(false);
+	public boxRef: HTMLDivElement | null = $state(null);
+	public terminalFocused: boolean = $state(false);
+
+	public pos = $state({ x: 20, y: 0 });
+	public isDragging = $state(false);
+	public commandLineValue: string = $state('');
+	public inputRef: HTMLInputElement | undefined = $state();
+
+	public fullscreen = $state(false);
+
+	public inputFocused = $state(false);
 
 	public get debug() {
 		return debug;
+	}
+
+	public keyboard_event: TerminalKeyboardEvents;
+	public settings: TerminalSettings;
+
+	constructor() {
+		this.keyboard_event = new TerminalKeyboardEvents(this);
+		this.settings = new TerminalSettings(this);
 	}
 
 	public get console() {

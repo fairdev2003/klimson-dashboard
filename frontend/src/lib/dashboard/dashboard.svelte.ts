@@ -12,17 +12,21 @@ import {
 	dashboardLoaded
 } from '$lib/dashboard/stores/data.store';
 import { debug } from '$lib/dashboard/stores/debug';
-import { toast } from '$lib/dashboard/stores/toast';
-import type { Component } from 'svelte';
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { DashboardState } from '$lib/dashboard/logic';
 import { DashboardMisc } from './dashboard_misc.svelte';
-import axios from 'axios';
-
-export const dockComponent = writable<any>(BaseDockComponent);
+import Constants from './constants';
+import type { Component } from 'svelte';
+import { DashboardHttpLogger } from './http.svelte';
 
 class DashboardClass {
-	constructor() {}
+	private _constants: Constants;
+	private _http: DashboardHttpLogger;
+
+	constructor() {
+		this._constants = new Constants();
+		this._http = new DashboardHttpLogger();
+	}
 
 	public get state() {
 		return DashboardState;
@@ -32,28 +36,29 @@ class DashboardClass {
 		return DashboardMisc;
 	}
 
+	public get constants() {
+		return this._constants;
+	}
+
+	public get http() {
+		return this._http;
+	}
+
 	public async Load(): Promise<boolean> {
 		debug.image('https://api.klimson.dev/interface/bucket/random/zbysiu.png');
 
 		dashboardLoadState.set('Autoryzacja');
 		dashboardLoaded.set(false);
 		try {
-			const verify: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify', {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-			});
+			const verify: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify');
 
 			if (!verify.data.access) return false;
 		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				if (error.code === '401') {
-					console.log(error.message);
-					goto('/login');
-				}
-			}
+			console.log(error);
+			goto('/login');
 		}
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
-		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
 		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
 
 		routes.set(routesResponse.data);
@@ -63,16 +68,11 @@ class DashboardClass {
 
 		debug.system('Server is up and ready!');
 
-		toast.success('Aktualne dane załadowane');
 		dashboard_load_date.set(this.miscellaneous.GetDateTime());
-
-		dashboardLoadState.set('Lazy Loading dashboard components!');
-		await preloadCode('/dashboard/database');
-		await preloadCode('/dashboard/context_storage');
 
 		dashboardLoaded.set(true);
 		debug.system("Terminal initialized. Type 'cmds' to view available commands");
-		terminal.set_terminal_naming({ name: 'klimson-dashboard', path: 'main' });
+		terminal.set_terminal_naming(this.constants.TerminalNaming);
 		return true;
 	}
 }

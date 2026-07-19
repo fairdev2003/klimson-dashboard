@@ -11,7 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { blur } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
-	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
 
 	let bookmarkModalOpened: boolean = $state(false);
 </script>
@@ -50,9 +50,7 @@
 					>
 						<Icon icon="zondicons:reload" width="25" height="25" />
 					</div>
-					{#key $dockComponent}
-						<svelte:component this={$dockComponent} />
-					{/key}
+					<Dashboard.state.dockComponent />
 				</div>
 			</div>
 		</div>

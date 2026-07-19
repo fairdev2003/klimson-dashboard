@@ -34,7 +34,7 @@
 	import SecondHubContainer from './widgets/containers/SecondHubContainer.svelte';
 	import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 	import { blur, fade } from 'svelte/transition';
-	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
 
 	let loading: boolean = $state(false);
 
@@ -43,7 +43,7 @@
 	let benchmarkKey: TimeResponse = $state('blogResponseTime');
 
 	onMount(() => {
-		dockComponent.set(BaseDockComponent);
+		Dashboard.state.setDockComponent(BaseDockComponent);
 	});
 </script>
 

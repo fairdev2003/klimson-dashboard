@@ -7,10 +7,10 @@
 	import PG3DClanMemberTable from '$lib/components/dashboard/table/pg3d/PG3DClanMemberTable.svelte';
 	import { clan_info } from '$lib/components/dashboard/table/pg3d/clan.store';
 	import PG3DDocky from '$lib/components/dashboard/dock/boxes/PG3DDocky.svelte';
-	import { dockComponent } from '$lib/dashboard/dashboard.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
 
 	onMount(async () => {
-		dockComponent.set(PG3DDocky);
+		Dashboard.state.setDockComponent(PG3DDocky);
 		const context_response = await api.context_storage.GetSinglePrivateContext('clan_id');
 		const clan_id = context_response.data.value;
 		const response = await api.pg3d.GetClanInfo(clan_id);

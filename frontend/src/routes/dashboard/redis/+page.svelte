@@ -13,7 +13,7 @@
 	import { goto } from '$app/navigation';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { debug } from '$lib/dashboard/stores/debug';
-	import Dashboard, { dockComponent } from '$lib/dashboard/dashboard.svelte';
+	import Dashboard from '$lib/dashboard/dashboard.svelte';
 
 	async function get_tables(id: any): Promise<ServerResponse<BackendResponse<{ rdbs: string[] }>>> {
 		Dashboard.state.setLoaderPercent(70);
@@ -35,7 +35,7 @@
 	}
 
 	onMount(() => {
-		dockComponent.set(RedisWritableDocky);
+		Dashboard.state.setDockComponent(RedisWritableDocky);
 	});
 
 	type RedisHubView = 'start' | 'react' | 'auth';
@@ -379,6 +379,8 @@
 					{/key}
 				</div>
 				{#key redisWritableForm.value}
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 					<p
 						onclick={() => {
 							if (redisWritableForm.value) {

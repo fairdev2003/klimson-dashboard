@@ -13,7 +13,7 @@ import { notifications, type NotificationRecord } from '../../navbar/notificatio
 import type { StorageRecord } from '$lib/api/requests/storage';
 import { base_url } from '$lib/api/api.store';
 
-class ConsoleService {
+export class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
 	private commands: Map<string, CommandBuilder> = new Map();
 	private unknown_command_handler: (user_input: string, name: string) => void = $state(() => {});
@@ -107,6 +107,12 @@ class ConsoleService {
 			console.warn(`Unknown command: ${name}`);
 		}
 	}
+
+	public runAndOpenTerminal(input: string) {
+		this.run(input);
+
+		terminal.terminalOpened = true;
+	}
 }
 
 const console_service = new ConsoleService();
@@ -173,7 +179,6 @@ console_service
 		}
 	});
 
-// base_url
 console_service
 	.registerCommand('api')
 	.setDescription('Do actions based on api.ts state')
