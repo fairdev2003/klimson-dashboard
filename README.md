@@ -37,23 +37,41 @@ Chmura plików zatem stała sie jedną z wazniejszych funkcji tego projektu 😁
 
 Mam w planach stworzenia coś typu: [useState](https://react.dev/reference/react/useState) (z reacta) lub [writable](https://svelte.dev/docs/svelte/stores) (ze svelte), gdzie zmiany sa odświeżane na **kliencie** wraz ze **zmiana zmiennej na serwerze**. Zmienna będzie reaktywna i bedzie wykorzystywać mechanizm PUBSUB z redisa. Łącząc to z Websocketem jestem w stanie zrobić reaktywny stan łączony z oddzielnym serwerem.
 
-```go
-func Redis() *redis.Client {
-	client := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("RDB_URL"),
-		Password: os.Getenv("RDB_PASS"),
-		DB:       0,
-	})
+---
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+## Start aplikacji
 
-	response, err := client.Ping(ctx).Result()
-	if err != nil {
-		logger.ErrorLog("Error during connecting to redis database: %v", err)
-	}
+Aby wystartować aplikacje jest wymagane posiadanie `Node.js 26.*` oraz `golang 23.*`
 
-	logger.GreenServerLog("✓ Connected to redis storage successfully with message: ", response)
-	return client
-}
+### Konfiguracja środowiska
+
+Szczegóły konfiguracji backendu znajduje się w [`.env.example`](https://github.com/fairdev2003/klimson-dashboard/blob/master/backend/.env.example).
+
+Wymagane:
+
+- `Twoje unikalne zhashowane hasło`
+- Postagres `url`
+- `Refresh token`
+- Spotify `client_id`, `client_secret` oraz `refresh_token` z twojego portalu developerskiego
+- `hasło` oraz `url` do bazy danych redis
+
+---
+
+Frontend (SvelteKit/Node.js):
+
+```bash
+    cd frontend
+    npm i
+    npm run dev
 ```
+
+Backend (Go):
+
+```bash
+    cd backend/cmd
+    go run .
+```
+
+## Licencja
+
+Zobacz [LICENSE](LICENSE).
