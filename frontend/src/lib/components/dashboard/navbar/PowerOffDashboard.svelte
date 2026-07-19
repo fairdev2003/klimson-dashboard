@@ -23,7 +23,7 @@
 	border="borderless"
 	size="accept_preset"
 	form_config={{
-		onAccept: () => {
+		onLogout: () => {
 			console_service.run('logout');
 		},
 		onCancel: () => {

@@ -24,7 +24,7 @@ export class ConsoleService {
 
 	public loading = $state(false);
 
-	registerCommand(name: string): CommandBuilder {
+	public registerCommand(name: string): CommandBuilder {
 		const cmd = new CommandBuilder(name);
 		this.commands.set(name, cmd);
 		return cmd;

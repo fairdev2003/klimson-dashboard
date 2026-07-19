@@ -7,7 +7,7 @@
 
 <div class="text-white text-sm flex flex-col gap-4">
 	{#each Dashboard.http.httpRequests as request}
-		<div class="flex justify-between items-center w-full">
+		<div class:error={request.isError} class="flex justify-between items-center w-full">
 			<div class="gap-4 flex">
 				{@render Method(request.method)}
 				<div class="flex items-center">
@@ -62,6 +62,9 @@
 
 <style>
 	@import 'tailwindcss';
+	.error {
+		@apply bg-red-500/50;
+	}
 	.get {
 		@apply text-green-500 bg-green-500/50 font-black;
 	}

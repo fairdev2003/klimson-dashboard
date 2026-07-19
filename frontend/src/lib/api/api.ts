@@ -13,6 +13,7 @@ import { Redis } from './requests/redis';
 import { UserClass } from './requests/user';
 import { goto } from '$app/navigation';
 import { Dashboard } from '$lib/dashboard/logic';
+import { debug } from '$lib/terminal/logic';
 
 /**
  * Klasa bazowa definiująca konfigurację API.
@@ -132,7 +133,8 @@ export class Api extends ApiStatic {
 				id: requestId,
 				method: config.method?.toUpperCase() || 'GET',
 				endpoint: config.url || '',
-				startTime: new Date()
+				startTime: new Date(),
+				isError: false
 			});
 
 			return config;
@@ -152,6 +154,21 @@ export class Api extends ApiStatic {
 				return response;
 			},
 			(error) => {
+				const requestId = error.requestId;
+				console.log('Error config:', error.config);
+
+				if (requestId) {
+					const index = Dashboard.http.httpRequests.findIndex((r) => r.id === requestId);
+
+					if (index !== -1) {
+						const end = new Date();
+						Dashboard.http.httpRequests[index].duration =
+							end.getTime() - Dashboard.http.httpRequests[index].startTime.getTime();
+						Dashboard.http.httpRequests[index].isError = true;
+						debug.error(error);
+					}
+				}
+
 				if (error.response && error.response.status === 401) {
 					goto('/login');
 				}

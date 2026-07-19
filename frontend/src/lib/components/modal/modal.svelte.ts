@@ -5,6 +5,7 @@ import gsap from 'gsap';
 export type FormControlsProps = {
 	onCancel?: () => void;
 	onLog?: () => void;
+	onLogout?: () => void;
 	onDelete?: () => void;
 	onSubmit?: () => void;
 	onAccept?: () => void;

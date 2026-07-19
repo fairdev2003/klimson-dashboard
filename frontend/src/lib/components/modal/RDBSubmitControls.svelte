@@ -10,12 +10,13 @@
 		rdb_submit_controls_props.onLog ||
 		rdb_submit_controls_props.onSubmit ||
 		rdb_submit_controls_props.onDeny ||
-		rdb_submit_controls_props.onAccept;
+		rdb_submit_controls_props.onAccept ||
+		rdb_submit_controls_props.onLogout;
 </script>
 
 <div class="flex flex-col gap-2 justify-between">
 	{#if statement}
-		<div class="border-t-2 border-neutral-700 my-2"></div>
+		{@render Divider()}
 	{/if}
 	<div class="flex gap-2 items-center justify-between">
 		<div class="flex gap-1 justify-center items-center">
@@ -63,6 +64,17 @@
 					>Yes</button
 				>
 			{/if}
+			{#if rdb_submit_controls_props.onLogout}
+				<button
+					onclick={rdb_submit_controls_props.onLogout}
+					class="bg-neutral-800 px-3 p-1 rounded-md hover:bg-neutral-700 cursor-pointer text-red-400"
+					>Logout</button
+				>
+			{/if}
 		</div>
 	</div>
 </div>
+
+{#snippet Divider()}
+	<div class="border-t-2 border-neutral-700 my-2"></div>
+{/snippet}

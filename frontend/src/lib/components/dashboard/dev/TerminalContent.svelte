@@ -25,7 +25,7 @@
 	class:h-150={terminal.fullscreen}
 	class:w-200={!terminal.fullscreen}
 	class:h-100={!terminal.fullscreen}
-	class="flex relative flex-col gap-1 overflow-y-auto bg-neutral-950/95 p-4 font-mono text-[11px] backdrop-blur-md"
+	class="flex relative flex-col gap-1 overflow-y-auto bg-neutral-900/95 p-4 font-mono text-[11px] backdrop-blur-md"
 >
 	{#if terminal.terminalPage === 'user'}
 		<UserTerminal />

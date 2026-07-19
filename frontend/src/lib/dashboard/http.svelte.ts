@@ -4,6 +4,7 @@ export type HTTPRequest = {
 	endpoint: string;
 	startTime: Date;
 	duration?: number;
+	isError: boolean;
 };
 export class DashboardHttpLogger {
 	public httpRequests: HTTPRequest[] = $state([]);
