@@ -11,6 +11,7 @@ import { formatter } from './formatter';
 import { bold, tail, italic, red, span } from '$lib/terminal/style';
 import { notifications, type NotificationRecord } from '../../navbar/notification_service.svelte';
 import type { StorageRecord } from '$lib/api/requests/storage';
+import { base_url } from '$lib/api/api.store';
 
 class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
@@ -169,6 +170,54 @@ console_service
 			debug.error(error);
 		} finally {
 			goto('/login');
+		}
+	});
+
+// base_url
+console_service
+	.registerCommand('api')
+	.setDescription('Do actions based on api.ts state')
+	.setAction((args) => {
+		const [action_arg, server_arg] = args;
+
+		type Action = { handler: () => void; name: string };
+		type Api = { href: string; name: string };
+
+		const apis: Api[] = [
+			{ href: 'https://api.klimson.dev', name: 'prod' },
+			{ href: 'https://localhost:8090', name: 'dev' }
+		];
+		const actions: Action[] = [
+			{
+				handler: () => {
+					const found_server = apis.find((api) => api.name === server_arg);
+					if (found_server) {
+						base_url.set(found_server.name);
+					} else {
+						debug.error('Something went wrong');
+					}
+					window.location.reload();
+				},
+				name: 'set'
+			}
+		];
+
+		if (!actions.includes(action_arg)) {
+			debug.error("Invalid server_arg value. Available: 'set'");
+
+			return;
+		}
+
+		if (!apis.includes(server_arg)) {
+			debug.error("Invalid server_arg value. Available 'dev', 'prod'");
+			return;
+		}
+
+		const found_action = actions.find((action) => action.name === action_arg);
+		const found_api = apis.find((api) => api.name === server_arg);
+
+		if (found_action && found_api) {
+			found_action.handler;
 		}
 	});
 

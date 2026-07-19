@@ -75,12 +75,23 @@
 
 	async function setCommand(value: string) {
 		commandLineValue = value;
+
 		await tick();
-		if (inputRef) {
-			inputRef.setSelectionRange(inputRef.value.length, inputRef.value.length);
-			inputRef.focus();
-		}
+
+		requestAnimationFrame(() => {
+			if (inputRef) {
+				inputRef.focus();
+				const len = inputRef.value.length;
+				inputRef.setSelectionRange(len, len);
+			}
+		});
 	}
+
+	type Props = {
+		standalone?: boolean;
+	};
+
+	let { standalone = false }: Props = $props();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -95,7 +106,7 @@
 			inputRef?.focus();
 			inputFocused = true;
 		}}
-		class="fixed z-2000 flex flex-col shadow-2xl transition-shadow"
+		class={`${standalone ? 'flex' : 'fixed'} z-2000 flex flex-col shadow-2xl transition-shadow`}
 		style="left: {pos.x}px; bottom: {20 - pos.y}px; {isDragging ? 'z-index: 1000' : ''}"
 	>
 		{#if logOpened}
@@ -159,7 +170,7 @@
 					<TerminalRecord naming={full_terminal_naming} {entry} />
 				{/each}
 
-				{@render Input()}
+				<TerminalInput bind:inputRef bind:commandLineValue />
 			</div>
 		{:else}
 			<button
@@ -184,17 +195,6 @@
 			<TerminalPrefix naming={terminal.terminal_naming} />
 		</span>
 		<div class="relative flex items-center w-full">
-			{#if !console_service.hasActiveRequests}{/if}
-
-			<!-- <div
-				onclick={() => {
-					inputRef?.focus();
-				}}
-				class="absolute top-max bg-transparent cursor-text h-5 w-full border-0 text-neutral-400 text-xs placeholder-neutral-400 outline-none focus:outline-none focus:ring-0"
-			>
-				{commandLineValue}
-			</div> -->
-
 			<input
 				bind:value={commandLineValue}
 				bind:this={inputRef}
@@ -283,7 +283,6 @@
 <style>
 	@import 'tailwindcss';
 
-	/* Custom Scrollbar dla efektu terminala */
 	div::-webkit-scrollbar {
 		width: 4px;
 	}
