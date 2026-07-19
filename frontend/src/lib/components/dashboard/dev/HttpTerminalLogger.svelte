@@ -1,11 +1,8 @@
 <script lang="ts">
+	import { base_url } from '$lib/api/api.store';
 	import Dashboard from '$lib/dashboard/dashboard.svelte';
-	import type { Component } from '@lucide/svelte';
-	import GetMethod from './methods/GetMethod.svelte';
-
-	const recordMap: Record<string, any> = {
-		GET: GetMethod
-	};
+	import Icon from '@iconify/svelte';
+	import MovingTooltip from '../MovingTooltip.svelte';
 </script>
 
 <div class="text-white text-sm flex flex-col gap-4">
@@ -14,11 +11,39 @@
 			<div class="gap-4 flex">
 				{@render Method(request.method)}
 				<div class="flex items-center">
-					<p class="font-mono text-blue-500 text-xs font-black uppercase">{request.endpoint}</p>
+					<MovingTooltip>
+						{#snippet tooltipContent()}
+							<div class="text-xs flex gap-2">
+								<span class="font-black text-purple-500">{$base_url}</span>
+								<span>{request.endpoint}</span>
+							</div>
+						{/snippet}
+
+						<a
+							class="font-mono flex items-center gap-1 text-blue-500 text-xs font-black uppercase hover:underline cursor-pointer"
+							href={`${$base_url}${request.endpoint}`}
+						>
+							<p>{request.endpoint}</p>
+							{#if request.endpoint.includes('admin')}
+								<div class="text-neutral-400">
+									<Icon icon="material-symbols:lock" />
+								</div>
+							{/if}
+						</a>
+					</MovingTooltip>
 				</div>
 			</div>
 			<div class="mr-5">
-				<p class="text-neutral-400">{request.duration}ms</p>
+				{#if request.duration}
+					<p
+						class:text-green-500={request.duration > 0 && request.duration < 100}
+						class:text-orange-500={request.duration >= 100 && request.duration < 200}
+						class:text-red-500={request.duration > 200}
+						class="font-black"
+					>
+						{request.duration}ms
+					</p>
+				{/if}
 			</div>
 		</div>
 	{/each}

@@ -7,6 +7,16 @@
 	import HttpTerminalLogger from './HttpTerminalLogger.svelte';
 	import TerminalSettings from './TerminalSettings.svelte';
 	import UserTerminal from './UserTerminal.svelte';
+	import { tick } from 'svelte';
+	import LogTerminal from './LogTerminal.svelte';
+
+	$effect(() => {
+		if ($debug && terminal.debugContainer) {
+			tick().then(() => {
+				terminal.debugContainer!.scrollTo({ top: terminal.debugContainer!.scrollHeight });
+			});
+		}
+	});
 </script>
 
 <div
@@ -19,6 +29,9 @@
 >
 	{#if terminal.terminalPage === 'user'}
 		<UserTerminal />
+	{/if}
+	{#if terminal.terminalPage === 'only-logs'}
+		<LogTerminal />
 	{/if}
 	{#if terminal.terminalPage === 'http'}
 		<HttpTerminalLogger />

@@ -19,11 +19,23 @@
 			value: 'http'
 		}
 	];
+	let dropdownElement: HTMLDivElement | undefined = $state();
+
+	function handleClickOutside(event: MouseEvent) {
+		const target = event.target as HTMLElement;
+
+		const clickedDropdown = target.closest('.dropdown-container');
+
+		if (!clickedDropdown) {
+			opened = false;
+		}
+	}
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+	bind:this={dropdownElement}
 	onmousedown={(e) => e.stopPropagation()}
 	onmousemove={(e) => e.stopPropagation()}
 	onclick={(e) => e.stopPropagation()}
@@ -34,7 +46,7 @@
 		<div
 			in:slide={{ duration: 300 }}
 			out:slide={{ duration: 300 }}
-			class="absolute top-0 left-0 -right-10 z-10 w-60 p-3 bg-neutral-800 rounded-xl flex gap-2 flex-col"
+			class="dropdown-container absolute top-0 left-0 -right-10 z-10 w-60 p-3 bg-neutral-800 rounded-xl flex gap-2 flex-col"
 		>
 			{#each options as option}
 				{@render OptionButton(option)}
@@ -68,6 +80,8 @@
 		<Icon icon="mdi:chevron-down" />
 	</button>
 {/snippet}
+
+<svelte:document onclick={(e) => handleClickOutside(e)} />
 
 <style>
 	@import 'tailwindcss';
