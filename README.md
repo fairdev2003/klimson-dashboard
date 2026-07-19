@@ -5,7 +5,7 @@ gdzie zrobię wszystko tak jakbym chciał. Od jakiegoś czasu marzyłem o takim 
 miejscu gdzie wszystkie "mikro serwisy" bedą ze soba spójne i bede mógł nimi łatwo zarządzać.
 Z tego tez tytułu stworzyłem coś co pozwala połączyć moje wszystkie zajawki w jedno miejsce.
 
-![image](https://api.klimson.dev/interface/bucket/klimson.dev/projects/dashboard/assets/hub.png)
+![image](https://api.klimson.dev/interface/bucket/klimson.dev/projects/dashboard/assets/hub2.png)
 
 _Strona główna mojego panelu_
 
