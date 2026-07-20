@@ -68,6 +68,20 @@ func (gc GlobalController) DeleteUser(ctx *gin.Context) {
 	khttp.SuccessResponse(ctx, nil, "User deleted successfully")
 }
 
+func (gc GlobalController) GetYourself(ctx *gin.Context) {
+	isRoot := ctx.GetBool("isRoot")
+	if isRoot {
+		claims, exists := ctx.Get("claims")
+		if !exists {
+			return
+		}
+
+		khttp.SuccessResponse(ctx, gin.H{"claims": claims})
+		return
+	}
+
+}
+
 func (gc GlobalController) RegisterUserController() {
 	users := gc.adminPath.Group("/users")
 	{
@@ -76,5 +90,7 @@ func (gc GlobalController) RegisterUserController() {
 		users.GET("/get-user/:id", gc.GetUser)
 		users.PUT("/update-user/:id", gc.UpdateUser)
 		users.DELETE("/delete-user/:id", gc.DeleteUser)
+		users.GET("/me", gc.GetYourself)
+
 	}
 }

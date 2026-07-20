@@ -6,8 +6,4 @@
 
 <div class="lg:grid flex flex-col lg:grid-cols-10 w-full gap-5">
 	<LatestFilesWidget />
-	<div class="flex flex-col h-80 gap-5 col-span-3">
-		<BlackoutWidget />
-		<div class="border border-neutral-700 bg-neutral-800 rounded-lg h-1/2">s</div>
-	</div>
 </div>

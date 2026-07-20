@@ -10,6 +10,12 @@ import (
 	"github.com/zgierz/klimson/backend/models"
 )
 
+type RootJwtClaims struct {
+	Exp   time.Time
+	Name  string
+	Login string
+}
+
 func GenerateRootToken(isContributor bool) (string, error) {
 
 	claims := jwt.MapClaims{

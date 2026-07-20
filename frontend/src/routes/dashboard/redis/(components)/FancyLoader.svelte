@@ -18,7 +18,7 @@
 	const { color = 'red', centerAnimationEnabled, rotate = 720, size = 'big' }: Props = $props();
 
 	const loaderStyles = tv({
-		base: 'h-10 top-0 w-10 border-[5px] absolute z-2',
+		base: 'h-10 top-0 w-10  absolute z-2',
 		variants: {
 			color: {
 				red: 'border-red-500',
@@ -28,9 +28,9 @@
 				gray: 'border-neutral-600'
 			},
 			size: {
-				big: 'h-10 w-10',
-				medium: 'h-6 w-6',
-				minimalistic: 'w-3 h-3'
+				big: 'h-10 w-10 border-[5px]',
+				medium: 'h-6 w-6 border-[5px]',
+				minimalistic: 'w-3 h-3 border-[2px]'
 			}
 		},
 		defaultVariants: {

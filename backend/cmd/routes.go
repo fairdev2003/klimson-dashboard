@@ -175,8 +175,11 @@ func InitRoutes() {
 
 	cpu_hub := helpers.NewHub("cpu")
 	logger_ws := helpers.NewHub("logger")
+	state_hub := helpers.GetState()
 	go cpu_hub.Run()
 	go logger_ws.Run()
+
+	// websocket_registry := helpers.NewRegistry()
 
 	go func() {
 		ticker := time.NewTicker(2 * time.Second)
@@ -192,6 +195,6 @@ func InitRoutes() {
 	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, &models.WebsocketIsland{
 		CPUHub:    (*models.WSHub)(cpu_hub),
 		LoggerHub: (*models.WSHub)(logger_ws),
-	}, latestFiles, rdb)
+	}, latestFiles, rdb, state_hub)
 	newQuizController.RegisterRoutes()
 }

@@ -26,8 +26,8 @@
 		onLogout: () => {
 			console_service.run('logout');
 		},
-		onCancel: () => {
-			powerOffModalOpened = false;
+		onLockScreen: () => {
+			console_service.run('lockscreen');
 		}
 	}}
 >

@@ -11,7 +11,8 @@
 		rdb_submit_controls_props.onSubmit ||
 		rdb_submit_controls_props.onDeny ||
 		rdb_submit_controls_props.onAccept ||
-		rdb_submit_controls_props.onLogout;
+		rdb_submit_controls_props.onLogout ||
+		rdb_submit_controls_props.onLockScreen;
 </script>
 
 <div class="flex flex-col gap-2 justify-between">
@@ -32,6 +33,13 @@
 					onclick={rdb_submit_controls_props.onLog}
 					class="bg-neutral-800 px-4 p-1 hover:bg-neutral-700 rounded-md text-orange-400 cursor-pointer text-sm h-8"
 					><Icon icon="catppuccin:log" /></button
+				>
+			{/if}
+			{#if rdb_submit_controls_props.onLockScreen}
+				<button
+					onclick={rdb_submit_controls_props.onLockScreen}
+					class="bg-neutral-800 px-4 p-1 hover:bg-neutral-700 rounded-md text-orange-400 cursor-pointer text-sm h-8"
+					>Lockscreen</button
 				>
 			{/if}
 		</div>

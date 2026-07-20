@@ -57,6 +57,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		contributor, _ := claims["contributor"].(bool)
 		if !contributor {
 			c.Set("isRoot", true)
+			c.Set("claims", claims)
 		} else {
 			permissions, _ := claims["permissions"].(string)
 			c.Set("permissions", permissions)

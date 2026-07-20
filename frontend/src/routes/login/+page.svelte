@@ -3,7 +3,7 @@
 	import { api } from '$lib/api/api';
 	import Button from '$lib/components/Button.svelte';
 	import type { AxiosResponse } from 'axios';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { blur } from 'svelte/transition';
 	import AnimatedPadlock from './(components)/AnimatedPadlock.svelte';
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
@@ -23,6 +23,19 @@
 	};
 
 	let key = $state(false);
+
+	let interval: ReturnType<typeof setInterval>;
+
+	onMount(() => {
+		interval = setInterval(async () => {
+			if (session_authorized) return;
+			await CheckIfAuthorized();
+		}, 5000);
+	});
+
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 
 	async function CheckIfAuthorized() {
 		try {

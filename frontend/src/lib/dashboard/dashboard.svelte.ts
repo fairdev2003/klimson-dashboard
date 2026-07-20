@@ -1,6 +1,6 @@
 import { goto, preloadCode } from '$app/navigation';
 import { api } from '$lib/api/api';
-import type { ServerResponse } from '$lib/api/types';
+import type { BackendResponse, ServerResponse } from '$lib/api/types';
 import { terminal } from '$lib/components/dashboard/dev/console/terminal.svelte';
 import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 import { dashboard_load_date } from '$lib/components/dashboard/stores/main';
@@ -18,6 +18,7 @@ import { DashboardMisc } from './dashboard_misc.svelte';
 import Constants from './constants';
 import type { Component } from 'svelte';
 import { DashboardHttpLogger } from './http.svelte';
+import { userLogin } from './stores/persist';
 
 class DashboardClass {
 	private _constants: Constants;
@@ -53,6 +54,23 @@ class DashboardClass {
 			const verify: ServerResponse<{ access: boolean }> = await api.api.get('/admin/verify');
 
 			if (!verify.data.access) return false;
+		} catch (error) {
+			console.log(error);
+			goto('/login');
+		}
+		try {
+			const current_user: ServerResponse<
+				BackendResponse<{
+					token: string;
+					claims: {
+						name: string;
+						login: string;
+						exp: string;
+					};
+				}>
+			> = await api.api.get('/admin/users/me');
+
+			userLogin.set(current_user.data.claims.login);
 		} catch (error) {
 			console.log(error);
 			goto('/login');

@@ -10,6 +10,7 @@ export type FormControlsProps = {
 	onSubmit?: () => void;
 	onAccept?: () => void;
 	onDeny?: () => void;
+	onLockScreen?: () => void;
 	initialForm?: any;
 	currentForm?: any;
 };

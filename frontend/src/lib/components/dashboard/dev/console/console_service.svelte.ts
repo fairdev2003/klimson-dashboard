@@ -144,6 +144,81 @@ console_service
 	});
 
 console_service
+	.registerCommand('test')
+	.setDescription('Test command')
+	.setAction(async (args) => {
+		try {
+			const response: ServerResponse<
+				BackendResponse<{
+					token: string;
+					claims: {
+						name: string;
+						login: string;
+						exp: string;
+					};
+				}>
+			> = await api.api.get('/admin/users/me');
+
+			if (response.status === 200) {
+				if (!args || args[0] === 'claims') {
+					debug.silent(response.data.claims);
+					return;
+				}
+			}
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				error.cause;
+			}
+		}
+	});
+
+console_service
+	.registerCommand('state')
+	.setDescription('Golang state management')
+	.setAction(async (args) => {
+		let [action, key, value] = args;
+
+		if (action === 'get') {
+			if (!key) {
+				debug.error('Key arg is required to get state from golang server');
+				return;
+			}
+
+			try {
+				const response = await api.api.get(`/state/get/${key}`);
+
+				debug.log(response.data);
+			} catch (error) {
+				debug.error(error);
+			}
+			return;
+		}
+		if (action === 'set') {
+			if (!key) {
+				debug.error('Key arg is required to get state from golang server');
+				return;
+			}
+			if (!value) {
+				debug.error('Key arg is required to set server golang state');
+				return;
+			}
+			try {
+				const response = await api.api.post(`/state/set`, {
+					key,
+					value
+				});
+
+				debug.log(response.data);
+			} catch (error) {
+				debug.error(error);
+			}
+			return;
+		}
+
+		debug.error('Action arg is required!');
+	});
+
+console_service
 	.registerCommand('history')
 	.setDescription('Prinitng user input history.')
 	.setAction(() => {
@@ -176,6 +251,20 @@ console_service
 			debug.error(error);
 		} finally {
 			goto('/login');
+		}
+	});
+
+console_service
+	.registerCommand('lockscreen')
+	.setDescription('Terminating cms session')
+	.setAction(async () => {
+		try {
+			await api.api.post('/auth/logout');
+		} catch (error) {
+			debug.error('Erorr during logout');
+			debug.error(error);
+		} finally {
+			goto('/login/lockscreen');
 		}
 	});
 

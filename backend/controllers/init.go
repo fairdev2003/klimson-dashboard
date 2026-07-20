@@ -18,9 +18,10 @@ type GlobalController struct {
 	Hub        *models.WebsocketIsland
 	Files      []models.ListRecord
 	rdb        *redis.Client
+	state      *helpers.StateHub
 }
 
-func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *models.WebsocketIsland, files []models.ListRecord, rdb *redis.Client) GlobalController {
+func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *models.WebsocketIsland, files []models.ListRecord, rdb *redis.Client, state *helpers.StateHub) GlobalController {
 	return GlobalController{
 		db:         db,
 		ctx:        ctx,
@@ -29,6 +30,7 @@ func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterG
 		Hub:        hub,
 		Files:      files,
 		rdb:        rdb,
+		state:      state,
 	}
 }
 
@@ -65,6 +67,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.RegisterV2StorageEndpoints()
 	controller.RegisterUserController()
 	controller.RegisterRedisEndpoints("/redis")
+	controller.RegisterStateEndpoints("/state")
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")

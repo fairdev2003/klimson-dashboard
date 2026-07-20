@@ -15,6 +15,14 @@ type WSHub struct {
 	Name      string
 }
 
+func NewHub(name string) *WSHub {
+	return &WSHub{
+		Clients:   make(map[*websocket.Conn]bool),
+		Broadcast: make(chan interface{}),
+		Name:      name,
+	}
+}
+
 var Upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -22,14 +30,6 @@ var Upgrader = websocket.Upgrader{
 		logger.GreenServerLog("Origin: ", "s")
 		return true
 	},
-}
-
-func NewHub(name string) *WSHub {
-	return &WSHub{
-		Clients:   make(map[*websocket.Conn]bool),
-		Broadcast: make(chan interface{}),
-		Name:      name,
-	}
 }
 
 func (h *WSHub) Send(data interface{}) {
@@ -49,4 +49,40 @@ func (h *WSHub) Run() {
 		}
 		h.Mu.Unlock()
 	}
+}
+
+type WebsocketRegistry struct {
+	mu   sync.RWMutex
+	hubs map[string]*WSHub
+}
+
+func NewRegistry() *WebsocketRegistry {
+	return &WebsocketRegistry{
+		hubs: make(map[string]*WSHub),
+	}
+}
+
+func (r *WebsocketRegistry) Register(path string, hub *WSHub) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.hubs[path] = hub
+	go hub.Run()
+}
+
+func (r *WebsocketRegistry) GetHub(path string) *WSHub {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	return r.hubs[path]
+}
+
+func (r *WebsocketRegistry) InitializeHubs(names ...string) {
+	for _, name := range names {
+		path := "/ws/" + name
+		r.Register(path, NewHub(name))
+	}
+}
+func (r *WebsocketRegistry) InitializeHub(name string) {
+	path := "/ws/" + name
+	r.Register(path, NewHub(name))
+
 }
