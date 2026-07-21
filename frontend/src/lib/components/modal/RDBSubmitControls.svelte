@@ -38,9 +38,11 @@
 			{#if rdb_submit_controls_props.onLockScreen}
 				<button
 					onclick={rdb_submit_controls_props.onLockScreen}
-					class="bg-neutral-800 px-4 p-1 hover:bg-neutral-700 rounded-md text-orange-400 cursor-pointer text-sm h-8"
-					>Lockscreen</button
+					class="bg-neutral-800 items-center flex gap-1 px-4 p-1 hover:bg-neutral-700 rounded-md text-blue-400 cursor-pointer text-sm h-8"
 				>
+					<p>Lockscreen</p>
+					<Icon icon="mdi:lock" />
+				</button>
 			{/if}
 		</div>
 
