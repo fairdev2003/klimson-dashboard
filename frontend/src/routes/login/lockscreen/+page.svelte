@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import gsap from 'gsap';
 	import RDBInput from '$lib/components/modal/RDBInput.svelte';
-	import { blur } from 'svelte/transition';
+	import { blur, slide } from 'svelte/transition';
 	import { userLogin } from '$lib/dashboard/stores/persist';
 	import { goto } from '$app/navigation';
 	import type { AxiosResponse } from 'axios';
@@ -10,6 +10,9 @@
 	import Loader from '$lib/components/dashboard/Loader.svelte';
 	import FancyLoader from '../../dashboard/redis/(components)/FancyLoader.svelte';
 	import { load } from '../../dashboard/content_manager/+page';
+	import Button from '$lib/components/Button.svelte';
+	import { spotifyApp } from '$lib/components/spotify/spotify.svelte';
+	import Icon from '@iconify/svelte';
 
 	let timeString = $state('');
 	let dateString = $state('');
@@ -39,6 +42,7 @@
 	let interval: ReturnType<typeof setInterval>;
 	let dateContainer: HTMLDivElement | undefined;
 	let loginContainer: HTMLDivElement | undefined;
+	let spotifyContainer: HTMLDivElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
 
 	let pass: string = $state('');
@@ -73,7 +77,8 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		await spotifyApp.zamontujKurwe();
 		if (!$userLogin) {
 			goto('/login');
 		}
@@ -89,10 +94,91 @@
 	onDestroy(() => {
 		clearInterval(interval);
 	});
+
+	const slugs = ['background1', 'background2', 'background3', 'background4'] as const;
+	type BackgroundSlug = (typeof slugs)[number];
+	type Background = { name: string; slug: string; url: string };
+
+	const backgrounds: Background[] = [
+		{
+			name: 'Archipelac',
+			slug: 'background1',
+			url: 'https://api.klimson.dev/interface/bucket/backgrounds/background1.webp'
+		},
+		{
+			name: 'Meteor Rain',
+			slug: 'background2',
+			url: 'https://api.klimson.dev/interface/bucket/backgrounds/background2.svg'
+		},
+
+		{
+			name: 'Arch linux',
+			slug: 'background3',
+			url: 'https://api.klimson.dev/interface/bucket/backgrounds/background3.webp'
+		},
+
+		{
+			name: 'Modded MC Base',
+			slug: 'background4',
+			url: 'https://api.klimson.dev/interface/bucket/backgrounds/background4.webp'
+		},
+		{
+			name: 'Sernik',
+			slug: 'background5',
+			url: 'https://api.klimson.dev/interface/bucket/backgrounds/background5.webp'
+		}
+	];
+	let currentWallpaper: Background | undefined = $state(
+		backgrounds.find((e) => e.slug === 'background1')
+	);
+	let nextWallpaper: Background | undefined = $state();
+
+	type SingleBackground = (typeof backgrounds)[number];
+	let selected_background: BackgroundSlug = $state('background3');
+
+	let currentBgDiv: HTMLDivElement | undefined;
+	let nextBgDiv: HTMLDivElement | undefined;
+
+	function changeBackground(backgroundSlug: string) {
+		const targetBg = backgrounds.find((e) => e.slug === backgroundSlug);
+		if (!targetBg || targetBg.slug === currentWallpaper?.slug) return;
+
+		selected_background = targetBg.slug;
+		nextWallpaper = targetBg;
+
+		if (!nextBgDiv || !currentBgDiv) return;
+
+		gsap.fromTo(
+			nextBgDiv,
+			{ opacity: 0 },
+			{
+				opacity: 1,
+				duration: 1,
+				ease: 'power2.inOut',
+				onComplete: () => {
+					currentWallpaper = targetBg;
+					nextWallpaper = undefined;
+					gsap.set(nextBgDiv, { opacity: 0 });
+				}
+			}
+		);
+	}
+
+	let backgroundSelectionMenuOpened = $state(false);
 </script>
 
 <div class="relative flex justify-center items-center w-screen h-screen overflow-hidden">
-	<div class="absolute inset-0 background -z-10"></div>
+	<div
+		bind:this={currentBgDiv}
+		class="absolute background inset-0 -z-10"
+		style="background-image: url('{currentWallpaper?.url}'); opacity: 1;"
+	></div>
+
+	<div
+		bind:this={nextBgDiv}
+		class="absolute background inset-0 -z-10"
+		style="background-image: url('{nextWallpaper?.url}'); opacity: 0;"
+	></div>
 
 	<div class="flex flex-col justify-between items-center mb-70 select-none">
 		<div bind:this={dateContainer} class="flex flex-col justify-center items-center">
@@ -102,12 +188,18 @@
 		<div
 			class="flex flex-col justify-center gap-y-5 items-center opacity-0"
 			bind:this={loginContainer}
+			style="border-radius: 8px;"
 		>
-			<img
+			<!-- <img
 				class="size-30 rounded-full"
 				src="https://klimson.dev/_app/immutable/assets/explore_more.DVfVQDvY.png"
 				alt="xD"
-			/>
+			/> -->
+			<div
+				class="size-30 border-2 justify-center items-center flex rounded-full bg-white/40 border-white/50"
+			>
+				<Icon icon="mdi:user" class="size-22 text-white/60" />
+			</div>
 			<p class="font-thin text-2xl lilita-one-regular text-white">{$userLogin}</p>
 			<div class="relative">
 				<input
@@ -135,6 +227,85 @@
 	</div>
 
 	<div lang="flex justify-center items-center"></div>
+
+	<div class="fixed hidden m-4 bottom-0 left-0 flex flex-col gap-4">
+		{#each backgrounds as _bg}
+			<button
+				class="bg-white/10 p-2 px-4 rounded-xl lilita text-white hover:bg-white/20 transition-colors"
+				onclick={(e) => {
+					e.stopPropagation();
+					changeBackground(_bg.slug);
+				}}>{_bg.name}</button
+			>
+		{/each}
+	</div>
+	<div class="group fixed m-4 bottom-0 left-0 flex flex-col gap-4">
+		{#if backgroundSelectionMenuOpened}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<div
+				in:slide={{ duration: 300 }}
+				class="h-120 w-100 bg-selection-container bg-white/20 rounded-2xl items-center gap-2 flex flex-col p-3 overflow-y-auto"
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+			>
+				{#each backgrounds as _bg}
+					<img
+						onclick={() => {
+							changeBackground(_bg.slug);
+						}}
+						src={_bg.url}
+						class="w-1/2 aspect-video object-cover h-1/2 hover:opacity-90 cursor-pointer"
+					/>
+				{/each}
+			</div>
+		{/if}
+		<button
+			class="bg-white/20 hover:bg-white/30 cursor-pointer size-12 rounded-full items-center flex justify-center text-white/90"
+			><Icon
+				icon="mdi-light:chevron-up"
+				width="50"
+				height="50"
+				onclick={(e) => {
+					e.stopPropagation();
+					backgroundSelectionMenuOpened = !backgroundSelectionMenuOpened;
+				}}
+				onmouseup={() => {
+					console.log('MOUSE IS DOW');
+				}}
+				class="mb-1.5 ml-0.5"
+			/></button
+		>
+	</div>
+
+	{#if spotifyApp.spotify?.item?.name}
+		<div
+			bind:this={spotifyContainer}
+			class="spotify fixed bottom-15 left-1/2 px-6 p-4 flex-col -translate-x-1/2 bg-white/40 rounded-2xl gap-2 flex min-w-100"
+		>
+			<div
+				class="flex gap-4 items-center justify-between"
+				onclick={(e) => {
+					e.stopPropagation();
+				}}
+			>
+				<div class="flex gap-4">
+					<img src={spotifyApp.getAlbumCover()} class="rounded-xl size-15" alt="album_cover" />
+					<div class="flex gap-1 justify-center flex-col">
+						<p class="lilita text-white/90 truncate max-w-65">{spotifyApp.getSong()}</p>
+						<p class="lilita text-xs text-white/70 truncate max-w-65">{spotifyApp.getArtist()}</p>
+					</div>
+				</div>
+
+				<div class="controls flex gap-2 text-white">
+					<Icon icon="raphael:arrowleft" class="size-10" />
+
+					<Icon icon="material-symbols:pause" class="size-10" />
+					<Icon icon="raphael:arrowright" class="size-10" />
+				</div>
+			</div>
+		</div>
+	{/if}
 </div>
 
 <svelte:document
@@ -157,12 +328,25 @@
 				duration: 0.25,
 				ease: 'power2.out'
 			});
+			gsap.to(spotifyContainer, {
+				y: 60,
+				opacity: 0,
+
+				duration: 0.25,
+				ease: 'power2.out'
+			});
+
+			gsap.to(spotifyContainer, {
+				scale: 0.6,
+				duration: 0.25,
+				ease: 'power2.out'
+			});
 			gsap.fromTo(
 				loginContainer,
 				{
 					y: 60,
 					opacity: 0,
-					scale: 0,
+					scale: 0.6,
 					duration: 0.25,
 					ease: 'power2.out'
 				},
@@ -199,7 +383,25 @@
 				ease: 'power2.out'
 			});
 
-			gsap.to(loginContainer, { opacity: 0, y: 60, scale: 0, ease: 'power2.out' });
+			gsap.to(spotifyContainer, {
+				scale: 1,
+				duration: 0.25,
+				ease: 'power2.out'
+			});
+			gsap.to(spotifyContainer, {
+				y: 0,
+				opacity: 1,
+
+				duration: 0.25,
+				ease: 'power2.out'
+			});
+			gsap.to(loginContainer, {
+				opacity: 0,
+				duration: 0.35,
+				y: 60,
+				scale: 0.6,
+				ease: 'power2.out'
+			});
 		}
 	}}
 />
@@ -207,11 +409,34 @@
 <style>
 	@import 'tailwindcss';
 
-	.background {
-		@apply bg-neutral-950 blur-sm bg-[url('../../../lib/assets/background2.svg')] bg-no-repeat bg-cover;
+	/* Stylowanie scrollbara dla przeglądarek opartych na Chromium (Chrome, Edge, Safari) */
+	.bg-selection-container::-webkit-scrollbar {
+		width: 8px; /* szerokość scrollbara */
+		display: none;
 	}
 
-	.lilita-one-regular {
+	.background4 {
+		@apply bg-[url('../../../lib/assets/background4.webp')];
+	}
+
+	.background3 {
+		@apply bg-[url('../../../lib/assets/background3.webp')];
+	}
+
+	.background2 {
+		@apply bg-[url('../../../lib/assets/background2.svg')];
+	}
+
+	.background1 {
+		@apply bg-[url('../../../lib/assets/background1.webp')];
+	}
+
+	.background {
+		@apply bg-neutral-950 blur-md bg-no-repeat bg-cover;
+	}
+
+	.lilita-one-regular,
+	.lilita {
 		font-family: 'Lilita One', sans-serif;
 		font-weight: 900;
 		font-style: normal;
