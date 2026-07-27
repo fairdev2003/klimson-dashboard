@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { browser, dev } from '$app/environment';
 import axios, { type AxiosInstance } from 'axios';
 import type { ApiClassParams, ApiConfig } from './types';
 import { Misc } from './requests/misc';
@@ -112,7 +112,7 @@ export class Api extends ApiStatic {
 		if (params?.prod_prefix) this._prefix = params.prod_prefix;
 
 		this.api = axios.create({
-			baseURL: get(base_url),
+			baseURL: this._baseURL,
 			headers: {
 				Accept: 'application/json'
 			},
@@ -154,7 +154,7 @@ export class Api extends ApiStatic {
 				return response;
 			},
 			(error) => {
-				const requestId = error.requestId;
+				const requestId = error.config?._requestId;
 				console.log('Error config:', error.config);
 
 				if (requestId) {
@@ -170,7 +170,9 @@ export class Api extends ApiStatic {
 				}
 
 				if (error.response && error.response.status === 401) {
-					goto('/login');
+					if (browser) {
+						goto('/login');
+					}
 				}
 
 				return Promise.reject(error);

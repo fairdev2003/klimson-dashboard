@@ -7,16 +7,20 @@
 	import TerminalPageDropdown from './TerminalPageDropdown.svelte';
 
 	function handleMouseDown(e: MouseEvent) {
+		e.preventDefault();
 		terminal.isDragging = true;
+
 		const onMouseMove = (m: MouseEvent) => {
 			terminal.pos.x += m.movementX;
 			terminal.pos.y += m.movementY;
 		};
+
 		const onMouseUp = () => {
 			terminal.isDragging = false;
 			window.removeEventListener('mousemove', onMouseMove);
 			window.removeEventListener('mouseup', onMouseUp);
 		};
+
 		window.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('mouseup', onMouseUp);
 	}

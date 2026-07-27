@@ -30,23 +30,24 @@
 						onclick={() => {
 							window.history.back();
 						}}
-						class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
+						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
 					>
-						<Icon icon="mingcute:left-line" width="30" height="30" />
+						<Icon icon="mingcute:left-line" width="24" height="24" />
 					</div>
 					<div
 						onclick={() => {
-							window.history.back();
+							window.history.forward();
 						}}
-						class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
+						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
 					>
-						<Icon icon="mingcute:right-line" width="30" height="30" />
+						<Icon icon="mingcute:right-line" width="24" height="24" />
 					</div>
+
 					<div
 						onclick={() => {
-							window.location.reload();
+							window.history.forward();
 						}}
-						class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
+						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
 					>
 						<Icon icon="zondicons:reload" width="25" height="25" />
 					</div>

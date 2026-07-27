@@ -32,7 +32,7 @@
 {#if $debugOn && terminal.loaded}
 	<div
 		bind:this={terminal.boxRef}
-		class={`${standalone ? 'flex' : 'fixed'} z-2000 flex transition-all flex-col shadow-2xl`}
+		class={`${standalone ? 'flex' : 'fixed'} z-2000 flex ${terminal.isDragging ? '' : 'transition-all'} flex-col shadow-2xl`}
 		style="left: {terminal.pos.x}px; bottom: {20 - terminal.pos.y}px; {terminal.isDragging
 			? 'z-index: 1000'
 			: ''}"

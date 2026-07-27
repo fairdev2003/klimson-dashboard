@@ -24,17 +24,10 @@
 
 	let key = $state(false);
 
-	let interval: ReturnType<typeof setInterval>;
-
-	onMount(() => {
-		interval = setInterval(async () => {
-			if (session_authorized) return;
-			await CheckIfAuthorized();
-		}, 5000);
-	});
-
-	onDestroy(() => {
-		clearInterval(interval);
+	onMount(async () => {
+		padlock_loading = true;
+		await CheckIfAuthorized();
+		padlock_loading = false;
 	});
 
 	async function CheckIfAuthorized() {
@@ -95,13 +88,6 @@
 			loading = false;
 		}
 	}
-
-	onMount(async () => {
-		padlock_loading = true;
-		setTimeout(async () => {
-			await CheckIfAuthorized();
-		}, 2000);
-	});
 
 	let padlock_loading = $state(true);
 </script>

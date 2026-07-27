@@ -100,9 +100,9 @@
 	});
 </script>
 
-<div class="relative hidden justify-center w-[500px] md:flex lg:flex z-100">
+<div class="relative hidden justify-center w-125 md:flex lg:flex z-100">
 	<input
-		class="h-[50px] w-full bg-neutral-800 border border-neutral-700/60 rounded-xl px-4 outline-none"
+		class="h-12.5 w-full flex items-center bg-neutral-800 border border-neutral-700/60 rounded-xl px-4 outline-none"
 		bind:value
 		onclick={() => {
 			opened = true;

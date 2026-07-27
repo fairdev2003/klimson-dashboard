@@ -59,7 +59,7 @@
 				$settings_page_open = 'customization';
 				goto('/dashboard/settings');
 			}}
-			class="p-2 hover:bg-neutral-700 rounded-xl cursor-pointer"
+			class="size-13 items-center flex justify-center hover:bg-neutral-700 rounded-xl cursor-pointer"
 		>
 			<Icon icon="boxicons:edit-filled" width="30" height="30" />
 		</button>
