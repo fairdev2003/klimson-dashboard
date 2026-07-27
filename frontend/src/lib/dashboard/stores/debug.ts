@@ -10,6 +10,7 @@ export type EntryType =
 	| 'silent'
 	| 'raw'
 	| 'format'
+	| 'pretty_format'
 	| 'image';
 
 export type MessageDebugLogMetadata = { message?: string };
@@ -63,6 +64,9 @@ export class DebugService {
 
 	public format(...msg: any[]) {
 		this.addLog({ html: msg.join(' ') }, 'format');
+	}
+	public pretty_format(...msg: any[]) {
+		this.addLog({ html: msg.join(' ') }, 'pretty_format');
 	}
 	public image(src: string) {
 		this.addLog({ src }, 'image');

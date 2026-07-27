@@ -75,13 +75,7 @@
 </div>
 
 {#snippet CMSTextLogo()}
-	<Pixeletedsraka
-		onclick={() => {
-			if (page.route.id !== '/dashboard') {
-				goto('/dashboard');
-				return true;
-			}
-			return false;
-		}}
-	/>
+	<a class="pr-5 text-blue-500 pb-2" href="/dashboard">
+		<Icon icon="dinkie-icons:mango" width="40" height="40" />
+	</a>
 {/snippet}

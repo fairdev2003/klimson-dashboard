@@ -12,6 +12,7 @@
 	import { blur } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
 	import { Dashboard } from '$lib/dashboard/logic';
+	import { terminal } from '$lib/terminal/logic';
 
 	let bookmarkModalOpened: boolean = $state(false);
 </script>
@@ -21,7 +22,7 @@
 {#if $dashboard_config.dock}
 	<div
 		style="position: sticky; top: 10px;"
-		class="m-3 h-17 p-4 flex justify-between items-center rounded-xl z-100 inset-0 border-neutral-700/60 bg-neutral-900"
+		class="h-17 p-10 px-5 flex justify-between items-center z-100 inset-0 border-neutral-700/60 bg-neutral-900"
 	>
 		<div class="flex h-full items-center">
 			<div class="flex items-center gap-5">
@@ -55,13 +56,23 @@
 				</div>
 			</div>
 		</div>
-		<div
-			onclick={() => {
-				goto('/dashboard/settings');
-			}}
-			class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
-		>
-			<Icon icon="material-symbols:settings" width="25" height="25" />
+		<div class="flex gap-4">
+			<div
+				onclick={() => {
+					terminal.terminalOpened = !terminal.terminalOpened;
+				}}
+				class="size-10 cursor-pointer rounded-lg hover:bg-neutral-700 hover:text-blue-500 flex items-center justify-center"
+			>
+				<Icon icon="ri:terminal-line" width="25" height="25" />
+			</div>
+			<div
+				onclick={() => {
+					goto('/dashboard/settings');
+				}}
+				class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
+			>
+				<Icon icon="material-symbols:settings" width="25" height="25" />
+			</div>
 		</div>
 	</div>
 {/if}

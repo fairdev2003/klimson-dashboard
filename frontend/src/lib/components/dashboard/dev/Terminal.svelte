@@ -7,6 +7,7 @@
 	import TerminalButton from './TerminalButton.svelte';
 	import TerminalContent from './TerminalContent.svelte';
 	import TerminalHeader from './TerminalHeader.svelte';
+	import { blur } from 'svelte/transition';
 
 	$effect(() => {
 		if ($debug && terminal.debugContainer) {
@@ -41,15 +42,7 @@
 			<TerminalHeader />
 			<TerminalContent />
 		{:else}
-			<TerminalButton
-				onclick={async () => {
-					terminal.terminalOpened = true;
-					if (terminal.inputRef) {
-						await tick();
-						terminal.inputRef.focus();
-					}
-				}}
-			/>
+			<!-- sssssh -->
 		{/if}
 	</div>
 {/if}

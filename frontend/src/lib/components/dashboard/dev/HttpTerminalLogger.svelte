@@ -9,7 +9,7 @@
 	{#each Dashboard.http.httpRequests as request}
 		<div class:error={request.isError} class="flex justify-between items-center w-full">
 			<div class="gap-4 flex">
-				{@render Method(request.method)}
+				{@render Method(request.method, request.isError)}
 				<div class="flex items-center">
 					<MovingTooltip>
 						{#snippet tooltipContent()}
@@ -49,11 +49,12 @@
 	{/each}
 </div>
 
-{#snippet Method(method: string)}
+{#snippet Method(method: string, hasError: boolean)}
 	<div
-		class:get={method === 'GET'}
-		class:post={method === 'POST'}
-		class:put={method === 'PUT'}
+		class:get={method === 'GET' && !hasError}
+		class:post={method === 'POST' && !hasError}
+		class:put={method === 'PUT' && !hasError}
+		class:error={hasError}
 		class=" w-20 px-4 p-2 items-center flex justify-center rounded-lg"
 	>
 		<p>{method}</p>
@@ -63,7 +64,7 @@
 <style>
 	@import 'tailwindcss';
 	.error {
-		@apply bg-red-500/50;
+		@apply bg-red-500/50 rounded-lg;
 	}
 	.get {
 		@apply text-green-500 bg-green-500/50 font-black;

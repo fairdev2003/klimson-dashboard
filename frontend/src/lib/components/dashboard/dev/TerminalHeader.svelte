@@ -5,6 +5,7 @@
 	import { debug } from '$lib/terminal/logic';
 	import TerminalSettings from './TerminalSettings.svelte';
 	import TerminalPageDropdown from './TerminalPageDropdown.svelte';
+	import { blur } from 'svelte/transition';
 
 	function handleMouseDown(e: MouseEvent) {
 		e.preventDefault();
@@ -28,6 +29,8 @@
 
 <div
 	role="presentation"
+	in:blur={{ duration: 300 }}
+	out:blur={{ duration: 300 }}
 	onmousedown={handleMouseDown}
 	class:w-300={terminal.fullscreen}
 	class:w-150={!terminal.fullscreen}
@@ -69,7 +72,7 @@
 		<button
 			title="Close terminal - F2"
 			class="p-1 text-white hover:text-blue-500"
-			onclick={() => (terminal.terminalOpened = false)}
+			onclick={() => (terminal.terminalOpened = !terminal.terminalOpened)}
 		>
 			<X class="h-3 w-3" />
 		</button>

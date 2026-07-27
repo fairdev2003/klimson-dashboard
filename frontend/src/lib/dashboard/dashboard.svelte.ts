@@ -46,7 +46,7 @@ class DashboardClass {
 	}
 
 	public async Load(): Promise<boolean> {
-		debug.image('https://api.klimson.dev/interface/bucket/random/zbysiu.png');
+		debug.image('https://api.klimson.dev/interface/bucket/random/nugget_cat.png');
 
 		dashboardLoadState.set('Autoryzacja');
 		dashboardLoaded.set(false);

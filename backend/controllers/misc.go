@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/disk"
@@ -98,4 +99,27 @@ func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {
 		"arch":       arch,
 		"os":         osName,
 	})
+}
+
+func (controller GlobalController) KlimsonFetch(ctx *gin.Context) {
+	stats := helpers.SystemStats{
+		SystemOS:    helpers.GetUbuntuVersion(),
+		Arch:        runtime.GOARCH,
+		NumCPU:      runtime.NumCPU(),
+		Goroutines:  runtime.NumGoroutine(),
+		MemoryAlloc: helpers.GetMemoryUsage(),
+		Uptime:      helpers.GetSystemUptime(),
+		Timestamp:   time.Now(),
+	}
+
+	ctx.JSON(http.StatusOK, stats)
+}
+
+func (controller GlobalController) RegisterMiscEndpoints(groupPrefix string) {
+
+	miscGroupAdmin := controller.adminPath.Group(groupPrefix)
+	// miscGroupPublic := controller.publicPath.Group(groupPrefix)
+
+	miscGroupAdmin.GET("/klimson-fetch", controller.KlimsonFetch)
+
 }

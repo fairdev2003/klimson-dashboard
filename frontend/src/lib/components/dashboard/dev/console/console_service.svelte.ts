@@ -120,7 +120,7 @@ console_service.onUnknownCommand((input, name) => {
 	debug.console(input);
 
 	debug.system(`Command with name '${name}' does not exist!`);
-	debug.system(`Type 'cmds' to view available commands.`);
+	debug.system(`Type 'PrettyFormatRecord' to view available commands.`);
 });
 
 console_service.onCommand((command, input) => {
@@ -650,24 +650,15 @@ console_service
 		required: false
 	})
 	.setAction((args) => {
-		const [dev] = args;
 		const command_register = console_service.getCommandsRegister();
 		debug.log(`\n`);
 		debug.log(`(${command_register.length}) Commands: `);
 		debug.log(`\n`);
 
-		let cmds_string: string = '';
-
-		command_register.forEach((command) => {
-			const desc = command.description ? ` - ${command.description}` : '';
-
-			cmds_string = cmds_string + `${command.name}${desc}\n\n`;
-			debug.raw(`${command.name}${desc}`);
-		});
-
-		if (Boolean(dev)) {
-			debug.format(bold(terminal.console.dumpAvailableCommands()));
-		}
+		debug.pretty_format(terminal.console.dumpAvailableCommands());
+		debug.pretty_format(
+			`Type ${bold('command name')} and ${bold('help')} next to it to see command usage and help`
+		);
 	});
 
 export const console_loading = writable<boolean>(false);

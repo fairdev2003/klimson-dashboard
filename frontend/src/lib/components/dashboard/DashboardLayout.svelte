@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { contextMenuOptions } from '$lib/dashboard/stores/store';
 	import { type Snippet } from 'svelte';
-	import {
-		dashboard_config,
-		isMobile,
-		mobile_sidebar_open,
-		sidebar_open
-	} from '$lib/dashboard/stores/persist';
+	import { dashboard_config, isMobile, sidebar_open } from '$lib/dashboard/stores/persist';
 	import { fade } from 'svelte/transition';
 	import ContextMenu from './ContextMenu.svelte';
 

@@ -68,6 +68,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.RegisterUserController()
 	controller.RegisterRedisEndpoints("/redis")
 	controller.RegisterStateEndpoints("/state")
+	controller.RegisterMiscEndpoints("/misc")
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")
