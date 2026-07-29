@@ -134,7 +134,7 @@ func InitRoutes() {
 
 			token, err := handlers.GenerateRootToken(false)
 
-			c.SetCookie("token", token, 86400, "/", "", false, true)
+			c.SetCookie("k-token", token, 86400, "/", "", false, true)
 			c.Writer.Header().Set("X-Token", token)
 
 			if err != nil {
@@ -160,7 +160,7 @@ func InitRoutes() {
 				return
 			}
 
-			c.SetCookie("token", token, 3600, "/", "", false, true)
+			c.SetCookie("k-token", token, 3600, "/", "", false, true)
 
 			khttp.SuccessResponse(c, gin.H{}, "Login was successfull")
 		}

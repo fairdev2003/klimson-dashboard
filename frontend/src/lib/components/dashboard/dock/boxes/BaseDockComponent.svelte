@@ -48,7 +48,7 @@
 	}
 </script>
 
-<div class="justify-between w-full text-start flex gap-1 h-full">
+<div class="justify-between w-full text-start lg:flex md:flex gap-1 h-full sm:hidden">
 	<div class="flex gap-2 items-center justify-between">
 		<div class="flex gap-10 items-center">
 			<p class="font-black">Dashboard Hub</p>
@@ -100,7 +100,7 @@
 		bookmarkModalOpened = !bookmarkModalOpened;
 	}}
 	title="Add bookmark"
-	className="w-100"
+	className="w-100 "
 >
 	<div class="flex flex-col gap-2">
 		<div class="flex flex-col gap-2">

@@ -125,12 +125,16 @@
 		<div
 			in:fade={{ duration: 300 }}
 			out:fade={{ duration: 300 }}
-			class="fixed w-[500px] border border-neutral-700 p-3 z-200 bg-neutral-900 rounded-xl"
+			class="fixed w-125 border border-neutral-700 p-3 z-200 bg-neutral-900 rounded-xl"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<input
 				bind:this={inputContainerRef}
 				bind:value
+				oncontextmenu={(e) => {
+					e.preventDefault();
+					value = '';
+				}}
 				class="w-full bg-neutral-800 p-3 rounded-lg border-0 outline-none"
 				placeholder="Search..."
 			/>

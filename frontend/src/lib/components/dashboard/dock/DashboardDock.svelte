@@ -3,7 +3,7 @@
 	import { ChevronLeft, ChevronRight, Dot, Grip } from '@lucide/svelte';
 	import { page } from '$app/stores';
 	import Loader from '../Loader.svelte';
-	import { dashboard_config, route } from '$lib/dashboard/stores/persist';
+	import { dashboard_config, debugOn, route } from '$lib/dashboard/stores/persist';
 	import Icon from '@iconify/svelte';
 	import { base_url } from '$lib/api/api.store';
 	import { toast } from '$lib/dashboard/stores/toast';
@@ -57,14 +57,17 @@
 			</div>
 		</div>
 		<div class="flex gap-4">
-			<div
+			<button
+				title="Toggle terminal"
 				onclick={() => {
-					terminal.terminalOpened = !terminal.terminalOpened;
+					$debugOn = !$debugOn;
 				}}
-				class="size-10 cursor-pointer rounded-lg hover:bg-neutral-700 hover:text-blue-500 flex items-center justify-center"
+				class:terminal-button-base={!$debugOn}
+				class:terminal-button-selected={$debugOn}
+				class="size-10 cursor-pointer rounded-lg flex items-center justify-center"
 			>
 				<Icon icon="ri:terminal-line" width="25" height="25" />
-			</div>
+			</button>
 			<div
 				onclick={() => {
 					goto('/dashboard/settings');
@@ -77,4 +80,14 @@
 	</div>
 {/if}
 
-{#snippet Tabs()}{/snippet}
+<style>
+	@import 'tailwindcss';
+
+	.terminal-button-base {
+		@apply hover:bg-neutral-700 hover:text-white;
+	}
+
+	.terminal-button-selected {
+		@apply text-white bg-blue-700 hover:bg-blue-600;
+	}
+</style>

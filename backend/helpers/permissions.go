@@ -15,11 +15,14 @@ type PermissionsMetadata struct {
 	Name          string `json:"name"`
 	Color         string `json:"color"`
 	Description   string `json:"description"`
+	Category      string `json:"category"`
 }
 
 var (
 	permissionsMu       sync.Mutex
 	permissionsRegistry = make(map[string]PermissionsMetadata)
+	categoriesList      = []string{}
+	uniqueCategories    = make(map[string]struct{})
 )
 
 func GetAllDefinedPermissions() []PermissionsMetadata {
@@ -33,10 +36,38 @@ func GetAllDefinedPermissions() []PermissionsMetadata {
 	return list
 }
 
-func RequirePermission(meta PermissionsMetadata) gin.HandlerFunc {
+func GetAllDefinedPermissionCategories() []string {
+	permissionsMu.Lock()
+	defer permissionsMu.Unlock()
+
+	list := make([]string, 0, len(categoriesList))
+	for _, categoryName := range categoriesList {
+		list = append(list, categoryName)
+	}
+	return list
+}
+
+func appendCategories(meta PermissionsMetadata) {
+	uniqueCategories[meta.Category] = struct{}{}
+
+	var categoriesList []string
+	for category := range uniqueCategories {
+		categoriesList = append(categoriesList, category)
+	}
+}
+
+func appendPermissions(meta PermissionsMetadata) {
 	permissionsMu.Lock()
 	permissionsRegistry[meta.PermissionTag] = meta
 	permissionsMu.Unlock()
+}
+
+func RequirePermission(meta PermissionsMetadata) gin.HandlerFunc {
+	// appending permissions for later fetch from the app state
+	appendPermissions(meta)
+
+	// creating categories list based on added permission via **RequirePermission** function
+	appendCategories(meta)
 
 	return func(c *gin.Context) {
 

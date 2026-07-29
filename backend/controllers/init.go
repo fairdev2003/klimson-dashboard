@@ -7,6 +7,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/models"
+	"github.com/zgierz/klimson/backend/permission"
 	"gorm.io/gorm"
 )
 
@@ -79,29 +80,13 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
 	// protected file storage
-	controller.adminPath.POST("/storage/interface/create-folder/*folder", helpers.RequirePermission(
-		helpers.PermissionsMetadata{
-			Name:          "Create Private Folder",
-			Icon:          "chuj go wie",
-			PermissionTag: "storage:private:create-folder",
-			Color:         "bg-blue-500",
-			Description:   "",
-		},
-	), controller.CreateFolder)
+	controller.adminPath.POST("/storage/interface/create-folder/*folder", helpers.RequirePermission(permission.STORAGE_CREATE_FOLDER), controller.CreateFolder)
 	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
 	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
 	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
 	controller.adminPath.POST("/storage/interface/edit-file/*filepath", controller.PushChangedTextFile)
 	controller.adminPath.POST("/storage/interface/new-file/*filepath", controller.NewFile)
-	controller.adminPath.GET("/storage/latest", helpers.RequirePermission(
-		helpers.PermissionsMetadata{
-			Name:          "Latest Files",
-			Icon:          "chuj go wie",
-			PermissionTag: "storage:latest-files",
-			Color:         "bg-blue-500",
-			Description:   "",
-		},
-	), controller.GetLatesFiles)
+	controller.adminPath.GET("/storage/latest", helpers.RequirePermission(permission.STORAGE_LATEST), controller.GetLatesFiles)
 
 	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
 
@@ -115,7 +100,7 @@ func (controller GlobalController) RegisterRoutes() {
 
 	controller.adminPath.POST("/v2/storage/new-file/*folder", controller.UploadNewFile)
 	controller.adminPath.GET("/v2/storage/get/*filepath", controller.GetRecords)
-	controller.adminPath.POST("/v2/storage/create-folder", controller.CreateV2Folder)
+	controller.adminPath.POST("/v2/storage/create-folder", helpers.RequirePermission(permission.V2_CREATE_FOLDER), controller.CreateV2Folder)
 
 	// pg3d
 	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)
@@ -126,17 +111,10 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)
 
 	// misc
-	controller.adminPath.GET("/disk", helpers.RequirePermission(
-		helpers.PermissionsMetadata{
-			Name:          "Disk Info",
-			Icon:          "vaadin:harddrive",
-			PermissionTag: "disk:info",
-			Color:         "bg-blue-500",
-			Description:   "",
-		},
-	), controller.GetStorageLeftPercentage)
+	controller.adminPath.GET("/disk", helpers.RequirePermission(permission.DISK_INFO), controller.GetStorageLeftPercentage)
 
 	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
+	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)
 
 	// database crud
 	controller.adminPath.GET("/database/list/tables", controller.GetTables)

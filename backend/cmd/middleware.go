@@ -13,10 +13,10 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString, err := c.Cookie("token")
+		tokenString, err := c.Cookie("k-token")
 
 		if err != nil {
-			logger.ErrorLog("Brak ciasteczka 'token'!")
+			logger.ErrorLog("No cooklie 'k-token'!")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Brak autoryzacji"})
 			return
 		}

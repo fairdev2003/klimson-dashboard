@@ -22,6 +22,7 @@
 	import RDBInput from '$lib/components/modal/RDBInput.svelte';
 	import { terminal } from '$lib/terminal/logic';
 	import { bold } from '$lib/terminal/style';
+	import RolePage from './(components)/(sections)/RolePage.svelte';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
@@ -80,7 +81,9 @@
 </script>
 
 <div in:fade={{ duration: 150 }} class="flex flex-col m-8 my-4 gap-4">
-	<div class="flex justify-between items-center border-b border-neutral-700 pb-4">
+	<div
+		class="flex lg justify-between items-center lg:flex-row sm:flex-col sm:items-start sm:gap-4 md:flex-col md:items-start md:gap-4 mt-4 border-b border-neutral-700 pb-4"
+	>
 		<div class="flex-col flex gap-1">
 			<Heading>
 				<div class="flex gap-2 items-center">
@@ -115,22 +118,35 @@
 			</div>
 		</div>
 
-		<div class="flex gap-4">
+		<div class="flex gap-4 items-center">
 			<Button onclick={() => account_controller.DumpData()} theme="base">Dump data</Button>
-			<Button
-				theme="base"
-				onclick={() => {
-					implementRoleModalOpened = true;
-				}}>Implement role</Button
-			>
-			<Button
-				onclick={() => {
-					userForm = createEmptyUser;
 
-					addUserModalOpened = true;
-				}}
-				theme="secondary">Add account</Button
-			>
+			{#if selectedLabel === 'roles'}
+				<Button
+					theme="secondary"
+					onclick={() => {
+						implementRoleModalOpened = true;
+					}}>Implement role</Button
+				>
+			{/if}
+			{#if selectedLabel === 'acc'}
+				<Button
+					onclick={() => {
+						userForm = createEmptyUser;
+
+						addUserModalOpened = true;
+					}}
+					theme="secondary">Add account</Button
+				>
+			{/if}
+			{#if selectedLabel === 'perms'}
+				<button
+					onclick={() => {}}
+					class="p-3 items-center flex justify-center bg-neutral-800 hover:text-blue-500 rounded-xl cursor-pointer"
+				>
+					<Icon icon="mdi:reload" width="22" height="22" />
+				</button>
+			{/if}
 		</div>
 	</div>
 
@@ -147,7 +163,7 @@
 						last_name: user.last_name,
 						nickname: user.nickname,
 						pfp: user.pfp,
-						blocked: user
+						blocked: user.blocked
 					};
 
 					editUserModalOpened = true;
@@ -156,7 +172,7 @@
 		{/if}
 
 		{#if selectedLabel === 'roles'}
-			<Roles />
+			<RolePage bind:implementRoleModalOpened />
 		{/if}
 
 		{#if selectedLabel === 'perms'}
@@ -164,18 +180,6 @@
 		{/if}
 	</div>
 </div>
-
-<RDBModal
-	bind:opened={implementRoleModalOpened}
-	border="borderless"
-	title="Adding new role"
-	size="form_preset"
-	form_config={{
-		onLog: () => {}
-	}}
->
-	<RDBInput label="ROLE NAME" />
-</RDBModal>
 
 <RDBModal
 	border="borderless"
@@ -244,7 +248,6 @@
 
 <RDBModal
 	border="borderless"
-	bind:form={userForm}
 	form_config={{
 		onSubmit: async () => {
 			if (!currentUser) {

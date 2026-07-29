@@ -25,8 +25,12 @@ func GetDiskUsage() (uint64, uint64, error) {
 
 func (controller GlobalController) GetPermissionsList(ctx *gin.Context) {
 	perms := helpers.GetAllDefinedPermissions()
+	khttp.SuccessResponse(ctx, gin.H{"perms": perms})
+}
 
-	ctx.JSON(200, perms)
+func (controller GlobalController) GetPermissionCategoriesList(ctx *gin.Context) {
+	categories := helpers.GetAllDefinedPermissionCategories()
+	khttp.SuccessResponse(ctx, gin.H{"categories": categories})
 }
 
 func ListFiles(folderPath string) ([]models.ListRecord, error) {

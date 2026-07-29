@@ -12,7 +12,11 @@
 </script>
 
 <div class="bg-neutral-800 gap-3 w-full flex items-center p-2 rounded-lg">
-	<img alt="pfp" src={pfp_logo} class="size-12 rounded-full" />
+	<img
+		alt="pfp"
+		src="https://api.klimson.dev/interface/bucket/klimson.dev/mango.jpg"
+		class="size-12 rounded-full"
+	/>
 	<div class="flex flex-col h-full justify-center">
 		<p class="text-neutral-400 text-sm text-start">
 			Jakub

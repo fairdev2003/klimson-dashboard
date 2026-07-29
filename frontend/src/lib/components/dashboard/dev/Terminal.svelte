@@ -42,7 +42,11 @@
 			<TerminalHeader />
 			<TerminalContent />
 		{:else}
-			<!-- sssssh -->
+			<TerminalButton
+				onclick={() => {
+					terminal.terminalOpened = !terminal.terminalOpened;
+				}}
+			/>
 		{/if}
 	</div>
 {/if}

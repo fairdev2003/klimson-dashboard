@@ -32,6 +32,7 @@ export type PermissionRegistry = {
 	tag: string;
 	color: string;
 	description: string;
+	category: string;
 };
 
 class Misc {
@@ -60,8 +61,8 @@ class Misc {
 		return response;
 	}
 
-	public async GetPermissionRegistry(): Promise<ServerResponse<PermissionRegistry[]>> {
-		const response: ServerResponse<PermissionRegistry[]> = await this.api.get(
+	public async GetPermissionRegistry(): Promise<ServerResponse<{ perms: PermissionRegistry[] }>> {
+		const response: ServerResponse<{ perms: PermissionRegistry[] }> = await this.api.get(
 			'/admin/permissions/all',
 			{ withCredentials: true }
 		);
