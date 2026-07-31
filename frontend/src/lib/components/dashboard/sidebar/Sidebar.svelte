@@ -15,6 +15,7 @@
 	import SidebarPill from './SidebarPill.svelte';
 	import PagesSelector from './PagesSelector.svelte';
 	import SidebarToggler from './SidebarToggler.svelte';
+	import Dashboard from '$lib/dashboard/dashboard.svelte';
 
 	let content_show: boolean = $state(true);
 
@@ -60,7 +61,7 @@
 				in:slide={{ duration: 300 }}
 				out:slide={{ duration: 300 }}
 			>
-				{#each contents as content, i}
+				{#each Dashboard.constants.SidebarContents as content, i}
 					<SidebarItem {content} />
 				{/each}
 			</nav>

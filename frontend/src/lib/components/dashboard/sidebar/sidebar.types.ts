@@ -22,13 +22,6 @@ export const contents: SidebarItems = [
 		href: '/dashboard/database',
 		name: 'Database Editor',
 		disabled: false
-
-		// child: [
-		// 	{
-		// 		name: 'Users Database',
-		// 		href: '/dashboard/database/users'
-		// 	}
-		// ]
 	},
 	{
 		icon: 'devicon:redis',
