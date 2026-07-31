@@ -5,23 +5,13 @@
 	import { onMount } from 'svelte';
 	import { cubicOut } from 'svelte/easing';
 	import { fly, slide } from 'svelte/transition';
+	import DockMenuItem from './DockMenuItem.svelte';
+	import SidebarPill from '../sidebar/SidebarPill.svelte';
 
 	type Props = { mobileDockOpened: boolean };
 
+	let routesSectionOpened = $state(true);
 	let { mobileDockOpened = $bindable() }: Props = $props();
-
-	function whizz(node: HTMLElement, { from, to }: { from: DOMRect; to: DOMRect }, params: any) {
-		const dx = from.left - to.left;
-		const dy = from.top - to.top;
-
-		const d = Math.sqrt(dx * dx + dy * dy);
-
-		return {
-			delay: 0,
-			duration: Math.sqrt(d) * 120,
-			easing: cubicOut
-		};
-	}
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -31,19 +21,26 @@
 		e.stopPropagation();
 	}}
 	transition:fly={{ y: -40, duration: 250, easing: cubicOut }}
-	class="lg:hidden p-4 flex h-150 shadow-2xl w-full bg-neutral-900 absolute z-20 border-b border-neutral-800"
+	class="lg:hidden p-4 flex flex-col gap-4 h-dvh shadow-2xl w-full bg-neutral-900 absolute z-20 border-b border-neutral-800"
 >
-	<div class="flex flex-col gap-2 w-full">
-		{#each Dashboard.constants.SidebarContents as item}
-			<button
-				onclick={() => {
-					goto(item.href);
-					mobileDockOpened = false;
-				}}
-				class="text-start bg-neutral-800 p-2 rounded-xl"
-			>
-				{item.name}
-			</button>
-		{/each}
+	<div class="flex flex-col gap-4 w-full overflow-auto scroll-class">
+		<SidebarPill />
+		<DockMenuItem bind:opened={routesSectionOpened} name="Dashboard Routes">
+			<div class="flex flex-wrap gap-2 mt-4" transition:slide={{ duration: 300 }}>
+				{#each Dashboard.constants.SidebarContents as item}
+					<button
+						onclick={() => {
+							goto(item.href);
+							mobileDockOpened = false;
+						}}
+						class="bg-neutral-800 p-2 rounded-xl"
+					>
+						<p class="mx-2">
+							{item.name}
+						</p>
+					</button>
+				{/each}
+			</div>
+		</DockMenuItem>
 	</div>
 </div>
