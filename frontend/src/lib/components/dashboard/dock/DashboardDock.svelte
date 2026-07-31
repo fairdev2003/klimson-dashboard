@@ -14,6 +14,7 @@
 	import { Dashboard } from '$lib/dashboard/logic';
 	import { terminal } from '$lib/terminal/logic';
 	import DockMenu from './DockMenu.svelte';
+	import DockBackground from './DockBackground.svelte';
 
 	let mobileDockOpened = $state(false);
 
@@ -74,10 +75,7 @@
 		</div>
 	</div>
 	{#if mobileDockOpened}
-		<div
-			transition:fly={{ duration: 450 }}
-			class="absolute z-1 bg-black/50 h-screen w-screen"
-		></div>
+		<DockBackground />
 		<DockMenu />
 	{/if}
 {/if}

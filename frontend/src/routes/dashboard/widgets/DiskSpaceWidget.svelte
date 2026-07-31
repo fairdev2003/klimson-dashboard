@@ -63,7 +63,7 @@
 		<div class:justify-between={loadingRoute} class="flex gap-4 items-center">
 			<div class="flex gap-4 items-center">
 				<Icon icon="entypo:drive" width="40" height="40" />
-				<Heading>Disk space</Heading>
+				<Heading>Disk</Heading>
 			</div>
 			{#if loadingRoute}
 				<Loader theme="regular" />
