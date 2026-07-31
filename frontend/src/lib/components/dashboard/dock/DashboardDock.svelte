@@ -9,12 +9,29 @@
 	import { toast } from '$lib/dashboard/stores/toast';
 	import EditingFile from './boxes/EditingFile.svelte';
 	import { goto } from '$app/navigation';
-	import { blur } from 'svelte/transition';
+	import { blur, fly, slide } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
 	import { Dashboard } from '$lib/dashboard/logic';
 	import { terminal } from '$lib/terminal/logic';
+	import DockMenu from './DockMenu.svelte';
 
-	let bookmarkModalOpened: boolean = $state(false);
+	let mobileDockOpened = $state(false);
+
+	function toggleMobileDockSection(state?: boolean) {
+		if (!state) {
+			mobileDockOpened = !mobileDockOpened;
+		} else {
+			mobileDockOpened = state;
+		}
+
+		if (mobileDockOpened) {
+			document.documentElement.style.overflow = 'hidden';
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.documentElement.style.overflow = '';
+			document.body.style.overflow = '';
+		}
+	}
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -27,32 +44,10 @@
 		<div class="flex h-full items-center">
 			<div class="flex items-center gap-5">
 				<div class="flex justify-center gap-2 items-center">
-					<div
-						onclick={() => {
-							window.history.back();
-						}}
-						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
-					>
-						<Icon icon="mingcute:left-line" width="24" height="24" />
+					{@render Controls()}
+					<div class="lg:flex hidden">
+						<Dashboard.state.dockComponent />
 					</div>
-					<div
-						onclick={() => {
-							window.history.forward();
-						}}
-						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
-					>
-						<Icon icon="mingcute:right-line" width="24" height="24" />
-					</div>
-
-					<div
-						onclick={() => {
-							window.history.forward();
-						}}
-						class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
-					>
-						<Icon icon="zondicons:reload" width="25" height="25" />
-					</div>
-					<Dashboard.state.dockComponent />
 				</div>
 			</div>
 		</div>
@@ -78,7 +73,57 @@
 			</div>
 		</div>
 	</div>
+	{#if mobileDockOpened}
+		<div
+			transition:fly={{ duration: 450 }}
+			class="absolute z-1 bg-black/50 h-screen w-screen"
+		></div>
+		<DockMenu />
+	{/if}
 {/if}
+
+{#snippet Controls()}
+	<div>
+		<!-- PC & Large Devices View -->
+		<div class="lg:flex hidden gap-2 items-center">
+			<div
+				onclick={() => {
+					window.history.back();
+				}}
+				class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
+			>
+				<Icon icon="mingcute:left-line" width="24" height="24" />
+			</div>
+			<div
+				onclick={() => {
+					window.history.forward();
+				}}
+				class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
+			>
+				<Icon icon="mingcute:right-line" width="24" height="24" />
+			</div>
+
+			<div
+				onclick={() => {
+					window.history.forward();
+				}}
+				class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
+			>
+				<Icon icon="zondicons:reload" width="25" height="25" />
+			</div>
+		</div>
+
+		<!-- Mobile View -->
+		<button
+			onclick={() => {
+				toggleMobileDockSection();
+			}}
+			class="lg:hidden flex active:bg-neutral-400 duration-450 p-2 rounded-full"
+		>
+			<Icon icon="mdi:hamburger-menu" width="25" height="25" />
+		</button>
+	</div>
+{/snippet}
 
 <style>
 	@import 'tailwindcss';

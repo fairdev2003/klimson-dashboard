@@ -38,7 +38,7 @@
 </script>
 
 <div
-	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-4 text-[14px] text-white"
+	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-5 text-[14px] text-white"
 >
 	{#if Dashboard.state.dashboard_loader_on}
 		<div
@@ -52,14 +52,6 @@
 	<div class="flex flex-1 items-center min-w-0">
 		<!-- Logo (tylko desktop) -->
 		{@render CMSTextLogo()}
-
-		<!-- Przycisk menu (mobile/desktop toggle) -->
-		<button
-			onclick={toggleSidebar}
-			class="p-2 hover:bg-neutral-800 rounded-md flex lg:hidden transition-colors"
-		>
-			<Icon icon="material-symbols:menu" width="30" height="30" />
-		</button>
 
 		<!-- Wyszukiwarka (min-w-0 pozwala jej się kurczyć) -->
 		<div class="flex-1 max-w-sm min-w-0">
@@ -75,7 +67,7 @@
 </div>
 
 {#snippet CMSTextLogo()}
-	<a class="pr-5 text-blue-500 pb-2" href="/dashboard">
+	<a class="pr-5 text-blue-500 pb-2 ml-5" href="/dashboard">
 		<Icon icon="dinkie-icons:mango" width="40" height="40" />
 	</a>
 {/snippet}

@@ -32,8 +32,6 @@
 	oncontextmenu={(e) => handleRightClick(e)}
 	class="flex flex-col h-screen overflow-hidden bg-neutral-950 text-white"
 >
-	<MobileDock />
-
 	<header class="border-b h-[80px] border-neutral-700 flex items-center px-4 shrink-0">
 		<CMSNavbar />
 	</header>
