@@ -23,6 +23,7 @@
 	};
 
 	let key = $state(false);
+	let disclaimer: boolean = $state(false);
 
 	onMount(async () => {
 		padlock_loading = true;
@@ -92,13 +93,15 @@
 	let padlock_loading = $state(true);
 </script>
 
-<div class="relative flex h-screen w-full p-10 justify-center overflow-hidden">
+<div
+	class="relative flex min-h-screen w-full lg:p-10 py-8 px-4 items-start justify-center overflow-hidden"
+>
 	<div class="absolute inset-0 background -z-10 filter blur-sm scale-105"></div>
 
 	<div
 		class:bg-neutral-950={padlock_loading}
 		class:bg-neutral-900={!padlock_loading}
-		class="flex w-full max-h-120 max-w-md flex-col overflow-y-auto items-center justify-center gap-6 rounded-lg p-8 text-white shadow-2xl z-10"
+		class="flex lg:w-md w-full h-auto flex-col items-center justify-center gap-6 rounded-lg p-8 py-4 text-white shadow-2xl z-10"
 	>
 		<div class="pb-0 h-10 shrink-0">
 			{#if padlock_loading}
@@ -186,6 +189,25 @@
 				<p class="text-center text-sm text-red-500">{error}</p>
 			</div>
 		{/if}
+		<div class="flex mx-auto">
+			{#if disclaimer}
+				<div class="h-10 w-full flex justify-center">
+					<p in:blur={{ duration: 300 }}>Do you think you can register here nigga? 😭😭🙏</p>
+				</div>
+			{:else if !session_authorized}
+				<div class="h-10 w-full justify-center">
+					<p>
+						You don't have an account? <a
+							class="text-blue-500 hover:underline"
+							onclick={() => {
+								disclaimer = true;
+							}}
+							href="/login">Create new account</a
+						>
+					</p>
+				</div>
+			{/if}
+		</div>
 	</div>
 </div>
 

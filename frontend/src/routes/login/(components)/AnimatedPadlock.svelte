@@ -42,7 +42,7 @@
 
 <div
 	in:blur={{ duration: 300 }}
-	class="flex flex-col items-center justify-center w-8 h-10 relative"
+	class="flex flex-col items-center justify-center w-full h-full my-4 relative"
 >
 	<div
 		bind:this={shackleRef}
