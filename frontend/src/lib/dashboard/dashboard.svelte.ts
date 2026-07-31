@@ -77,12 +77,12 @@ class DashboardClass {
 		}
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
-		const [routesResponse] = await Promise.all([api.misc.GetRoutes()]);
+		const routesResponse = await Promise.all([api.misc.GetRoutes()]);
 
-		routes.set(routesResponse.data);
-		console.log(routesResponse.data);
+		routes.set(routesResponse[0].data);
+		console.log(routesResponse[0].data);
 
-		updateResponseTime('routesResponseTime', routesResponse.duration);
+		updateResponseTime('routesResponseTime', routesResponse[0].duration);
 
 		debug.system('Server is up and ready!');
 
