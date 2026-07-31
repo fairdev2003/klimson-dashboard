@@ -698,6 +698,10 @@ console_service
 		}
 	});
 
+console_service.registerCommand('klimsonfetch').setAction(() => {
+	debug.fastfetch();
+});
+
 console_service
 	.registerCommand('goto')
 	.addArgHandler((arg) => arg)
@@ -707,13 +711,13 @@ console_service
 		let uri = args[0];
 		if (['/', '.'].some((e) => e === uri)) {
 			goto('/dashboard' + uri);
-			debug.system(`Moved to '${Dashboard.constants.findSidebarItem(uri)?.name}'`);
+			debug.system(`Moved to 'Dashboard'`);
 
 			return;
 		}
 		if (!uri) {
 			goto('/dashboard');
-			debug.system(`Moved to '${Dashboard.constants.findSidebarItem(uri)?.name}'`);
+			debug.system(`Moved to 'Hub'`);
 
 			return;
 		}

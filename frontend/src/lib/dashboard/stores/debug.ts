@@ -10,6 +10,7 @@ export type EntryType =
 	| 'silent'
 	| 'raw'
 	| 'format'
+	| 'fastfetch'
 	| 'pretty_format'
 	| 'image';
 
@@ -70,6 +71,10 @@ export class DebugService {
 	}
 	public image(src: string) {
 		this.addLog({ src }, 'image');
+	}
+
+	public fastfetch() {
+		this.addLog({}, 'fastfetch');
 	}
 
 	public clear() {

@@ -4,6 +4,7 @@
 	import Icon from '@iconify/svelte';
 	import Input from '../../settings/components/Input.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 
 	let bookmarkModalOpened: boolean = $state(false);
 
@@ -93,7 +94,8 @@
 	<!-- <p class="animated-gradient-text font-black text-sm">{$dashboard_config.dock_custom_name}</p> -->
 </div>
 
-<Modal
+<RDBModal
+	size="form_preset"
 	bind:opened={bookmarkModalOpened}
 	onClose={() => {
 		bookmarkModalOpened = !bookmarkModalOpened;
@@ -157,9 +159,9 @@
 			theme="secondary">Add bookmark</Button
 		>
 	</div>
-</Modal>
+</RDBModal>
 
-<Modal
+<RDBModal
 	bind:opened={deleteModalOpened}
 	onClose={() => {
 		deleteModalOpened = !deleteModalOpened;
@@ -181,7 +183,7 @@
 			Delete
 		</Button>
 	</div>
-</Modal>
+</RDBModal>
 
 <style>
 	@import 'tailwindcss';

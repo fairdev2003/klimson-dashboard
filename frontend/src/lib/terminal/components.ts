@@ -1,3 +1,4 @@
+import FastfetchRecord from '$lib/components/dashboard/dev/(components)/records/FastfetchRecord.svelte';
 import FormatRecord from '$lib/components/dashboard/dev/(components)/records/FormatRecord.svelte';
 import ImageRecord from '$lib/components/dashboard/dev/(components)/records/ImageRecord.svelte';
 import PrettyFormatRecord from '$lib/components/dashboard/dev/(components)/records/PrettyFormatRecord.svelte';
@@ -19,5 +20,6 @@ export {
 	WarningRecord,
 	FormatRecord,
 	ImageRecord,
-	PrettyFormatRecord
+	PrettyFormatRecord,
+	FastfetchRecord
 };

@@ -12,7 +12,8 @@
 		WarningRecord,
 		FormatRecord,
 		ImageRecord,
-		PrettyFormatRecord
+		PrettyFormatRecord,
+		FastfetchRecord
 	} from '$lib/terminal/components';
 
 	type Props = {
@@ -32,7 +33,8 @@
 		raw: RawRecord,
 		format: FormatRecord,
 		image: ImageRecord,
-		pretty_format: PrettyFormatRecord
+		pretty_format: PrettyFormatRecord,
+		fastfetch: FastfetchRecord
 	};
 
 	let Component = $derived(recordMap[entry.type]);

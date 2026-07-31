@@ -8,6 +8,7 @@ import type { AxiosInstance, AxiosResponse } from 'axios';
 import type { RoutesResponse } from '../../../routes/dashboard/routes/types';
 import { Api } from '../api';
 import type { ServerResponse } from '../types';
+import type { KlimsonFetchType } from '$lib/types/stats';
 
 export type TableData = {
 	table: string;
@@ -80,6 +81,14 @@ class Misc {
 
 	public async GetDisk(): Promise<ServerResponse<DiskData>> {
 		const response: ServerResponse<DiskData> = await this.api.get('/admin/disk');
+
+		return response;
+	}
+
+	public async Fastfetch(): Promise<ServerResponse<KlimsonFetchType>> {
+		const response: ServerResponse<KlimsonFetchType> = await this.api.get(
+			'/admin/misc/klimson-fetch'
+		);
 
 		return response;
 	}

@@ -18,6 +18,13 @@
 
 	<div class="relative flex-1">
 		<input
+			onfocusin={() => {
+				terminal.inputFocused = true;
+			}}
+			onfocusout={() => {
+				terminal.inputFocused = false;
+			}}
+			spellcheck="false"
 			bind:value={commandLineValue}
 			bind:this={inputRef}
 			class="bg-transparent w-full text-neutral-400 text-xs outline-none focus:ring-0 border-0 p-0"

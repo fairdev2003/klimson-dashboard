@@ -3,21 +3,40 @@ import type { Terminal } from './terminal.svelte';
 
 export class TerminalKeyboardEvents {
 	constructor(private terminal: Terminal) {}
+	public async onAnyKeyClicked(e: KeyboardEvent) {
+		if (this.terminal.terminalFocused && this.terminal.inputRef) {
+			this.terminal.inputRef.focus();
+			this.terminal.terminalFocused = true;
+		}
+	}
+
+	public async onEscapeKeyClicked(e: KeyboardEvent) {
+		if (this.terminal.inputRef) {
+			e.preventDefault();
+			this.terminal.unfocusInput();
+		}
+	}
 
 	public async onSlashKeyClick(e: KeyboardEvent) {
-		e.preventDefault();
-		await tick();
-		this.terminal.inputRef?.focus();
+		if (this.terminal.terminalOpened) {
+			e.preventDefault();
+			await tick();
+			this.terminal.focusInput();
+			this.terminal.terminalFocused = true;
+		}
 	}
 
 	public async onF2KeyClicked(e: KeyboardEvent) {
 		this.terminal.terminalOpened = !this.terminal.terminalOpened;
 		this.terminal.fullscreen = false;
+		this.terminal.terminalFocused = true;
+
 		await tick();
-		this.terminal.inputRef?.focus();
+		this.terminal.focusInput();
 	}
 	public async onF3KeyClicked(e: KeyboardEvent) {
 		e.preventDefault();
+		this.terminal.terminalFocused = true;
 
 		if (!this.terminal.fullscreen) {
 			this.terminal.fullscreen = true;
@@ -34,9 +53,9 @@ export class TerminalKeyboardEvents {
 
 		requestAnimationFrame(() => {
 			if (this.terminal.inputRef) {
-				this.terminal.inputRef.focus();
 				const len = this.terminal.inputRef.value.length;
 				this.terminal.inputRef.setSelectionRange(len, len);
+				this.terminal.focusInput();
 			}
 		});
 	}
@@ -81,7 +100,7 @@ export class TerminalKeyboardEvents {
 		this.terminal.console.run(this.terminal.commandLineValue);
 
 		await tick();
-		this.terminal.inputRef?.focus();
+		this.terminal.focusInput();
 		this.terminal.commandLineValue = '';
 	}
 }

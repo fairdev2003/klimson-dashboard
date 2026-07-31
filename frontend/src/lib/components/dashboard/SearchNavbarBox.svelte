@@ -198,6 +198,7 @@
 <svelte:document
 	onkeydown={(e) => {
 		if (e.key === 'Escape' && opened) {
+			e.preventDefault();
 			opened = false;
 		}
 	}}

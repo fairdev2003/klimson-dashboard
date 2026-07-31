@@ -75,6 +75,16 @@
 	{/if}
 </div>
 
+<svelte:document
+	onkeydown={async (keyboard_event) => {
+		if (keyboard_event.key === 'Tab') {
+			keyboard_event.preventDefault();
+			$sidebar_open = !$sidebar_open;
+			return;
+		}
+	}}
+/>
+
 <style>
 	@import 'tailwindcss';
 

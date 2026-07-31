@@ -106,17 +106,36 @@ func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {
 }
 
 func (controller GlobalController) KlimsonFetch(ctx *gin.Context) {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+
 	stats := helpers.SystemStats{
 		SystemOS:    helpers.GetUbuntuVersion(),
+		GoVersion:   runtime.Version(),
 		Arch:        runtime.GOARCH,
 		NumCPU:      runtime.NumCPU(),
 		Goroutines:  runtime.NumGoroutine(),
-		MemoryAlloc: helpers.GetMemoryUsage(),
-		Uptime:      helpers.GetSystemUptime(),
-		Timestamp:   time.Now(),
+		ThreadCount: getThreadCountSafe(),
+
+		MemoryAlloc: helpers.FormatBytes(m.Alloc),
+		MemoryTotal: helpers.FormatBytes(m.TotalAlloc),
+		MemorySys:   helpers.FormatBytes(m.Sys),
+		HeapObjects: m.HeapObjects,
+		NumGC:       m.NumGC,
+
+		Uptime:     helpers.GetSystemUptime(),
+		ServerTime: time.Now(),
+		Timestamp:  time.Now(),
 	}
 
 	ctx.JSON(http.StatusOK, stats)
+}
+
+// Opcjonalna bezpieczna funkcja zastępcza, jeśli nie masz gotowej
+func getThreadCountSafe() int {
+	// W Go liczbę aktywnych wątków można też oszacować lub pobrać z debug,
+	// jeśli nie jest Ci niezbędna, możesz usunąć to pole ze struktury.
+	return 0
 }
 
 func (controller GlobalController) RegisterMiscEndpoints(groupPrefix string) {

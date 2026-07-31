@@ -36,6 +36,14 @@ export class Terminal {
 
 	public fullscreen = $state(false);
 
+	public focusInput() {
+		this.inputRef?.focus();
+	}
+
+	public unfocusInput() {
+		this.inputRef?.blur();
+	}
+
 	public inputFocused = $state(false);
 
 	public get debug() {
