@@ -13,6 +13,7 @@ body {
 
 html {
   touch-action: manipulation;
+  overscroll-behavior-y: none; 
 }
 
 body,

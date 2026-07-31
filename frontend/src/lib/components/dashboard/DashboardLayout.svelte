@@ -69,6 +69,6 @@
 	}
 
 	.dock-invisible {
-		@apply h-[calc(100dvh-66px)] overflow-y-auto;
+		@apply h-[calc(100dvh)] overflow-y-auto;
 	}
 </style>
