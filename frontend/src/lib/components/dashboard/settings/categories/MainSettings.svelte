@@ -21,12 +21,6 @@
 				client logs. Developer console can be moved in any direction on the dashboard."
 	/>
 
-	<CheckboxSettingsRecord
-		bind:checked={$sidebar_open}
-		title="Sidebar Force Open"
-		description="Force the sidebar to open on mobile devices. Can be broken due to errors now!"
-	/>
-
 	<ButtonSettingsRecord
 		title="Reset Dashboard config"
 		description="It will dump all of your dashboard configuration"

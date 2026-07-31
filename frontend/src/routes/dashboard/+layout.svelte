@@ -17,10 +17,6 @@
 	import Console from '$lib/components/dashboard/dev/Terminal.svelte';
 	import Dashboard from '$lib/dashboard/dashboard.svelte';
 
-	$effect(() => {
-		$route = page.url.pathname;
-	});
-
 	onMount(() => {
 		const preventZoom = (e: any) => {
 			if (e.touches.length > 1) {

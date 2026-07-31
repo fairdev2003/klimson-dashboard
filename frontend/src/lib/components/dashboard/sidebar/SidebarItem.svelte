@@ -8,8 +8,6 @@
 
 	type Props = { content: SidebarItemType };
 	let { content }: Props = $props();
-
-	let statement = $derived($route === content.href);
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -17,18 +15,15 @@
 {#if content.child}{:else}
 	<div
 		onclick={() => {
-			if (content.disabled) {
-				return;
-			}
-
+			$route = content.route;
 			goto(content.href);
 		}}
-		class:normal={!statement}
-		class:selected={statement}
+		class:normal={$route !== content.route}
+		class:selected={$route === content.route}
 		class:disabled={content.disabled}
 		class="flex overflow-hidden relative items-center px-3 cursor-pointer rounded-lg transition-colors h-10 gap-3"
 	>
-		<div class="flex gap-2 ml-1 items-center">
+		<div class="flex gap-2 items-center">
 			{#if content.icon}
 				<Icon icon={content.icon} />
 			{/if}
@@ -37,9 +32,6 @@
 				{content.name}
 			</p>
 		</div>
-		{#if statement}
-			<div in:fade={{ duration: 100 }} class="w-1 h-full left-0 bg-white/80 absolute"></div>
-		{/if}
 	</div>
 {/if}
 

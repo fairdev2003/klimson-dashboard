@@ -9,6 +9,7 @@
 	import { sidebar_open } from '$lib/dashboard/stores/store';
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
+	import { route } from '$lib/dashboard/stores/persist';
 
 	let contentRef: HTMLElement | null = $state(null);
 
@@ -59,9 +60,13 @@
 			{#each Dashboard.constants.SidebarContents as content, i}
 				<button
 					onclick={() => {
+						$route = content.route;
+
 						goto(content.href);
 					}}
-					class="p-2 cursor-pointer hover:bg-neutral-700 rounded-xl mb-4"
+					class:normal={$route !== content.route}
+					class:selected={$route === content.route}
+					class="p-2 focus:outline-none cursor-pointer rounded-xl mb-4"
 				>
 					<Icon icon={String(content.icon)} width="25" height="25"></Icon>
 				</button>
@@ -69,3 +74,15 @@
 		</nav>
 	{/if}
 </div>
+
+<style>
+	@import 'tailwindcss';
+
+	.selected {
+		@apply bg-blue-700 hover:bg-blue-700  text-white;
+	}
+
+	.normal {
+		@apply hover:bg-neutral-700 border-neutral-700;
+	}
+</style>

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
+	import { locale } from '$lib/dashboard/dashboard.svelte';
+	import { persistedWritable } from '$lib/dashboard/stores/persist';
 	import Icon from '@iconify/svelte';
 	import { blur } from 'svelte/transition';
 
@@ -7,21 +9,20 @@
 	let currentTime = $state('');
 	let currentDate = $state('');
 	let currentWeek = $state('');
-	let locale: Locale = $state('pl-Pl');
 
 	const updateDateTime = () => {
 		const now = new Date();
-		currentTime = now.toLocaleTimeString(locale, {
+		currentTime = now.toLocaleTimeString($locale, {
 			hour: '2-digit',
 			minute: '2-digit',
 			second: '2-digit'
 		});
-		currentDate = now.toLocaleDateString(locale, {
+		currentDate = now.toLocaleDateString($locale, {
 			day: 'numeric',
 			month: 'long',
 			year: 'numeric'
 		});
-		currentWeek = now.toLocaleDateString(locale, {
+		currentWeek = now.toLocaleDateString($locale, {
 			weekday: 'long'
 		});
 	};
@@ -63,9 +64,9 @@
 {#snippet LocalePill(change: Locale, name: string)}
 	<button
 		onclick={() => {
-			locale = change;
+			$locale = change;
 		}}
-		class:locale-selected={locale === change}
+		class:locale-selected={$locale === change}
 		class="bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 transition-colors cursor-pointer p-0.5 px-2 mt-1 rounded-full"
 	>
 		<p class="text-xs text-neutral-200">{name}</p>

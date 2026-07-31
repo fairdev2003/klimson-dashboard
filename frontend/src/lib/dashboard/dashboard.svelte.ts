@@ -18,7 +18,9 @@ import { DashboardMisc } from './dashboard_misc.svelte';
 import Constants from './constants';
 import type { Component } from 'svelte';
 import { DashboardHttpLogger } from './http.svelte';
-import { userLogin } from './stores/persist';
+import { persistedWritable, userLogin } from './stores/persist';
+
+export let locale = persistedWritable<string>('locale', 'pl-PL');
 
 class DashboardClass {
 	private _constants: Constants;

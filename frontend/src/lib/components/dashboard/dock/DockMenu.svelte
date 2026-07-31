@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Button from '$lib/components/Button.svelte';
 	import Dashboard from '$lib/dashboard/dashboard.svelte';
-	import { onMount } from 'svelte';
 	import { cubicOut } from 'svelte/easing';
 	import { fly, slide } from 'svelte/transition';
 	import DockMenuItem from './DockMenuItem.svelte';
 	import SidebarPill from '../sidebar/SidebarPill.svelte';
+	import { route } from '$lib/dashboard/stores/persist';
 
 	type Props = { mobileDockOpened: boolean };
 
@@ -29,11 +28,14 @@
 			<div class="flex flex-wrap gap-2 mt-4" transition:slide={{ duration: 300 }}>
 				{#each Dashboard.constants.SidebarContents as item}
 					<button
+						class:normal={item.route !== $route}
+						class:selected={item.route === $route}
 						onclick={() => {
 							goto(item.href);
+							$route = item.route;
 							mobileDockOpened = false;
 						}}
-						class="bg-neutral-800 p-2 rounded-xl"
+						class="bg-neutral-800 flex items-center justify-center p-2 rounded-xl"
 					>
 						<p class="mx-2">
 							{item.name}
@@ -44,3 +46,15 @@
 		</DockMenuItem>
 	</div>
 </div>
+
+<style>
+	@import 'tailwindcss';
+
+	.selected {
+		@apply bg-blue-700/60 hover:bg-blue-700  text-white;
+	}
+
+	.normal {
+		@apply bg-neutral-800 hover:bg-neutral-700 border-neutral-700;
+	}
+</style>

@@ -8,7 +8,6 @@
 	import Sidebar from './sidebar/Sidebar.svelte';
 	import CMSNavbar from './CMSNavbar.svelte';
 	import DashboardDock from './dock/DashboardDock.svelte';
-	import MobileDock from './sidebar/MobileDock.svelte';
 
 	type Props = {
 		children: Snippet;
