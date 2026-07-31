@@ -45,7 +45,6 @@
 			<div
 				class:dock-invisible={!$dashboard_config.dock}
 				class:dock-visible={$dashboard_config.dock}
-				class="pb-16 lg:pb-0"
 			>
 				{@render children()}
 			</div>

@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import RoleImplementModal from './RoleImplementModal.svelte';
 	import RoleRecord from '../RoleRecord.svelte';
+	import { blur } from 'svelte/transition';
 
 	type Props = {
 		implementRoleModalOpened?: boolean;
@@ -20,7 +21,7 @@
 	}: Props = $props();
 </script>
 
-<div class="flex flex-col gap-2">
+<div in:blur={{ duration: 150 }} class="flex flex-col gap-2 max-w-2xl mx-auto">
 	<RoleRecord role={{ name: 'Admin', permissions: [{ name: 'siema' }] }} />
 	<RoleRecord role={{ name: 'Moderator', permissions: [{ name: 'siema' }] }} />
 </div>

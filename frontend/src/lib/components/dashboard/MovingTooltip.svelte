@@ -43,10 +43,10 @@
 		<div
 			use:portal
 			in:fade={{ duration: 150, delay }}
-			class="text-white pointer-events-none fixed z-[9999] border-2 border-neutral-800/60 bg-neutral-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]"
+			class="text-white pointer-events-none fixed z-[9999] bg-neutral-900"
 			style="left: {mouseX}px; top: {mouseY}px; min-width: max-content;"
 		>
-			<div class="p-1">
+			<div class="p-2">
 				{@render tooltipContent()}
 			</div>
 		</div>
