@@ -1,71 +1,71 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
-	import MovingTooltip from '../MovingTooltip.svelte';
-	import { slide } from 'svelte/transition';
-	import { goto } from '$app/navigation';
-	import SidebarUserLogged from '../SidebarUserLogged.svelte';
-	import { page } from '$app/state';
-	import { isMobile, mobile_sidebar_open, route } from '$lib/dashboard/stores/persist';
-	import { contents, type SidebarItems } from './sidebar.types';
-	import SidebarItem from './SidebarItem.svelte';
-	import { sidebar_open } from '$lib/dashboard/stores/store';
-	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
-	import { nickname } from '../settings/store.svelte';
+	import gsap from 'gsap';
+	import SidebarToggler from './SidebarToggler.svelte';
 	import SidebarPill from './SidebarPill.svelte';
 	import PagesSelector from './PagesSelector.svelte';
-	import SidebarToggler from './SidebarToggler.svelte';
-	import Dashboard from '$lib/dashboard/dashboard.svelte';
+	import SidebarItem from './SidebarItem.svelte';
+	import { Dashboard } from '$lib/dashboard/logic';
+	import { sidebar_open } from '$lib/dashboard/stores/store';
+	import { goto } from '$app/navigation';
+	import Icon from '@iconify/svelte';
 
-	let content_show: boolean = $state(true);
-
-	export function setupMedia() {
-		if (typeof window === 'undefined') return;
-
-		const mql = window.matchMedia('(max-width: 768px)'); // 768px to domyślny 'md' w Tailwind
-		isMobile.set(mql.matches);
-
-		mql.addEventListener('change', (e) => {
-			isMobile.set(e.matches);
-		});
-	}
-
-	onMount(() => {
-		setupMedia();
-	});
-
-	type SContent = {
-		icon: string;
-		href: string;
-		name: string;
-	};
+	let contentRef: HTMLElement | null = $state(null);
 
 	$effect(() => {
-		if ($mobile_sidebar_open) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
+		if (!contentRef) return;
+
+		if ($sidebar_open) {
+			gsap.fromTo(contentRef, { x: -20 }, { x: 0, duration: 0.3, ease: 'power2.out' });
 		}
 	});
+
+	function handleToggle() {
+		if ($sidebar_open && contentRef) {
+			gsap.to(contentRef, {
+				x: -20,
+				duration: 0.2,
+				ease: 'power2.in',
+				onComplete: () => {
+					$sidebar_open = false;
+				}
+			});
+		} else {
+			$sidebar_open = true;
+		}
+	}
 </script>
 
-<div class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col m-5">
+<div
+	style="width: {$sidebar_open ? '300px' : '40px'}; transition: width 0.3s ease;"
+	class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col m-5"
+>
 	<div>
-		<SidebarToggler />
-		<SidebarPill />
-		<PagesSelector />
+		<SidebarToggler bind:opened={$sidebar_open} onclick={handleToggle} />
+	</div>
 
-		{#if $sidebar_open}
-			<nav
-				class="flex flex-col gap-2 mt-3"
-				in:slide={{ duration: 300 }}
-				out:slide={{ duration: 300 }}
-			>
+	{#if $sidebar_open}
+		<div bind:this={contentRef}>
+			<SidebarPill />
+
+			<nav class="flex flex-col gap-2 mt-3">
 				{#each Dashboard.constants.SidebarContents as content, i}
 					<SidebarItem {content} />
 				{/each}
 			</nav>
-		{/if}
-	</div>
-	<!-- svelte-ignore a11y_consider_explicit_label -->
+		</div>
+	{:else}
+		<nav class="flex flex-col gap-2 mt-3">
+			{#each Dashboard.constants.SidebarContents as content, i}
+				<button
+					onclick={() => {
+						goto(content.href);
+					}}
+					class="p-2 cursor-pointer hover:bg-neutral-700 rounded-xl mb-4"
+				>
+					<Icon icon={String(content.icon)} width="25" height="25"></Icon>
+				</button>
+			{/each}
+		</nav>
+	{/if}
 </div>

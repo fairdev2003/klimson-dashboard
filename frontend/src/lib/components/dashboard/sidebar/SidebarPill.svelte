@@ -5,7 +5,7 @@
 	import StoragePill from './StoragePill.svelte';
 </script>
 
-<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-3 -z-1">
 	{#if $dashboard_config.sidebar_preference.includes('profile')}
 		<SidebarUserLogged
 			name={$nickname}

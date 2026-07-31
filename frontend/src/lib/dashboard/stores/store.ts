@@ -2,6 +2,7 @@ import { get, writable } from 'svelte/store';
 import { emptyQuestion, preloaded_quiz_form } from '$lib/static/quiz';
 import { browser } from '$app/environment';
 import { toast } from './toast';
+import { persistedWritable } from './persist';
 
 export function persistentStore<T>(key: string, initial: T) {
 	if (!browser) {
@@ -37,7 +38,7 @@ export function persistentStore<T>(key: string, initial: T) {
 }
 
 export const page = writable<number>(0);
-export const sidebar_open = writable<boolean>(true);
+export const sidebar_open = persistedWritable<boolean>('sidebar_open', true);
 export const summary_open = writable<boolean>(false);
 export const selectedSummaryType = writable<
 	undefined | 'quiz' | 'question' | 'answer' | 'blog' | 'debug'
