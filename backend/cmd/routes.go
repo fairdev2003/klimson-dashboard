@@ -168,7 +168,7 @@ func InitRoutes() {
 	})
 
 	apiPath.POST("/auth/logout", func(ctx *gin.Context) {
-		ctx.SetCookie("token", "token", -1, "/", "", false, true)
+		ctx.SetCookie("k-token", "token", -1, "/", "", false, true)
 
 		khttp.SuccessResponse(ctx, gin.H{"success": true}, "Cookie is successfully deleted!")
 	})
