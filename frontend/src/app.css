@@ -5,9 +5,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 
 body {
+	touch-action: manipulation;
 	@apply bg-neutral-950;
 
 	@apply bg-neutral-950 bg-[url('./lib/assets/background.svg')] bg-no-repeat h-screen bg-cover;
+}
+
+html {
+  touch-action: manipulation;
 }
 
 body,
