@@ -3,6 +3,7 @@
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { onMount } from 'svelte';
 	import RoleImplementModal from './RoleImplementModal.svelte';
+	import RoleRecord from '../RoleRecord.svelte';
 
 	type Props = {
 		implementRoleModalOpened?: boolean;
@@ -19,8 +20,10 @@
 	}: Props = $props();
 </script>
 
-<div></div>
-
+<div class="flex flex-col gap-2">
+	<RoleRecord role={{ name: 'Admin', permissions: [{ name: 'siema' }] }} />
+	<RoleRecord role={{ name: 'Moderator', permissions: [{ name: 'siema' }] }} />
+</div>
 <RoleImplementModal bind:implementRoleModalOpened />
 
 <style>

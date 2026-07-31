@@ -16,6 +16,7 @@ type Role struct {
 	BaseModel
 	Name        string       `json:"name"`
 	Permissions []Permission `json:"permissions" gorm:"foreignKey:RoleID"`
+	Color       string       `json:"color"`
 }
 
 type Permission struct {

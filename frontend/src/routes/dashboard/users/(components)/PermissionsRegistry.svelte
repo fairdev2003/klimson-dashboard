@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex flex-col gap-5">
-	<div class="flex flex-col mx-auto w-2xl gap-4">
+	<div class="flex flex-col mx-auto lg:w-2xl md:w-9/10 w-full gap-4">
 		{#each Object.entries(registry ?? {}) as [category, perms]}
 			<PermissionCategory {perms} {category} />
 		{/each}

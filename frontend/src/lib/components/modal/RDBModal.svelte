@@ -49,8 +49,8 @@
 			},
 			size: {
 				auto: 'w-auto',
-				accept_preset: 'w-80 ',
-				form_preset: 'w-150 '
+				accept_preset: 'lg:w-80 w-9/10',
+				form_preset: 'lg:w-150 w-9/10'
 			},
 			border: {
 				normal: 'border border-neutral-700',

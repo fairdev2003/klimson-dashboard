@@ -82,7 +82,7 @@
 
 <div in:fade={{ duration: 150 }} class="flex flex-col m-8 my-4 gap-4">
 	<div
-		class="flex lg justify-between items-center lg:flex-row sm:flex-col sm:items-start sm:gap-4 md:flex-col md:items-start md:gap-4 mt-4 border-b border-neutral-700 pb-4"
+		class="flex lg justify-start flex-col lg:items-center lg:flex-row lg:justify-between lg:gap-0 items-start gap-4 mt-4 border-b border-neutral-700 pb-4"
 	>
 		<div class="flex-col flex gap-1">
 			<Heading>
@@ -94,7 +94,7 @@
 			<span class="text-sm font-md text-neutral-400"
 				>Control what users has permission to specific part of the dashboard.</span
 			>
-			<div class="flex mt-4 gap-2">
+			<div class="flex flex-wrap mt-4 gap-2">
 				<button
 					onclick={() => updateLabel('acc')}
 					class:selected-label-pill={selectedLabel === 'acc'}

@@ -11,7 +11,7 @@
 	let { users, usersLoading = $bindable(true), onEditButtonClick }: Props = $props();
 </script>
 
-<div class="flex flex-col gap-2 w-2xl mx-auto">
+<div class="flex flex-col gap-2 lg:w-2xl max-w-2xl mx-auto">
 	{#each users as user}
 		<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-6 items-center">
 			<div class="flex items-center gap-3">

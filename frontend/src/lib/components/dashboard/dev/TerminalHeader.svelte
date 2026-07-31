@@ -29,8 +29,6 @@
 
 <div
 	role="presentation"
-	in:blur={{ duration: 300 }}
-	out:blur={{ duration: 300 }}
 	onmousedown={handleMouseDown}
 	class:w-300={terminal.fullscreen}
 	class:w-150={!terminal.fullscreen}

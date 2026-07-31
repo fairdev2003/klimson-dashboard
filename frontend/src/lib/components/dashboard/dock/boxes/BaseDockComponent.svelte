@@ -51,7 +51,6 @@
 <div class="justify-between w-full text-start lg:flex md:flex gap-1 h-full sm:hidden">
 	<div class="flex gap-2 items-center justify-between">
 		<div class="flex gap-10 items-center">
-			<p class="font-black">Dashboard Hub</p>
 			<div class="flex gap-2">
 				{#each $dashboard_config.bookmarks as bookmark}
 					<button

@@ -1,5 +1,8 @@
 import type { TerminalNaming } from '$lib/components/dashboard/dev/console/terminal.svelte';
-import type { SidebarItems } from '$lib/components/dashboard/sidebar/sidebar.types';
+import type {
+	SidebarItems,
+	SidebarItemType
+} from '$lib/components/dashboard/sidebar/sidebar.types';
 
 class Constants {
 	public TerminalNaming: TerminalNaming = { name: 'srakens-pierdakens', path: 'main' };
@@ -22,6 +25,10 @@ class Constants {
 
 		return array;
 	}
+
+	public findSidebarItem(route: string): SidebarItemType | undefined {
+		return this.SidebarContents.find((e) => e.route === route);
+	}
 }
 
 export default Constants;
@@ -30,7 +37,7 @@ const contents: SidebarItems = [
 	{
 		icon: 'material-symbols:home',
 		href: '/dashboard',
-		route: '',
+		route: '/',
 		name: 'Hub',
 		disabled: false,
 		slug: 'hub'

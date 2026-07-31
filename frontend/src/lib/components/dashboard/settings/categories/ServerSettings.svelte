@@ -16,7 +16,7 @@
 	<DropdownSettingsRecord
 		error_text="Disabled due production frontend"
 		title="Connecting environment"
-		disabled={!dev}
+		disabled
 		description="Choose the server you want to connect in! It will refresh your page!"
 		options={[
 			{ key: 'Production', value: 'https://api.klimson.dev' },

@@ -705,11 +705,25 @@ console_service
 	.setDescription('Allow you to quickly go to available dashboard enpoints.')
 	.setAction((args) => {
 		let uri = args[0];
-		if (!(args[0] as string).includes('/')) {
-			uri = '/' + args[0];
+		if (['/', '.'].some((e) => e === uri)) {
+			goto('/dashboard' + uri);
+			debug.system(`Moved to '${Dashboard.constants.findSidebarItem(uri)?.name}'`);
+
+			return;
 		}
-		goto('/dashboard' + uri);
-		debug.system(`Moved to '${uri}'`);
+		if (!uri) {
+			goto('/dashboard');
+			debug.system(`Moved to '${Dashboard.constants.findSidebarItem(uri)?.name}'`);
+
+			return;
+		}
+		if (!Dashboard.constants.retrieveSidebarRoutes().includes(uri)) {
+			debug.error(`Route with name '${uri}' does't exists!`);
+			return;
+		}
+
+		goto('/dashboard' + '/' + uri);
+		debug.system(`Moved to '${Dashboard.constants.findSidebarItem(uri)?.name}'`);
 	});
 
 export { console_service };

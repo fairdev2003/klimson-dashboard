@@ -21,8 +21,6 @@
 
 <div
 	bind:this={terminal.debugContainer}
-	in:blur={{ duration: 300 }}
-	out:blur={{ duration: 300 }}
 	class:w-300={terminal.fullscreen}
 	class:h-150={terminal.fullscreen}
 	class:w-200={!terminal.fullscreen}
