@@ -15,6 +15,7 @@
 	import { terminal } from '$lib/terminal/logic';
 	import DockMenu from './DockMenu.svelte';
 	import DockBackground from './DockBackground.svelte';
+	import MobileDock from './MobileDock.svelte';
 
 	let mobileDockOpened = $state(false);
 
@@ -74,10 +75,7 @@
 			</div>
 		</div>
 	</div>
-	{#if mobileDockOpened}
-		<DockBackground />
-		<DockMenu />
-	{/if}
+	<MobileDock bind:mobileDockOpened />
 {/if}
 
 {#snippet Controls()}
