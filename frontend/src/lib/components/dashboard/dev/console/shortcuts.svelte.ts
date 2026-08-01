@@ -90,6 +90,14 @@ export class TerminalKeyboardEvents {
 		);
 	}
 
+	public async onArrowRightClicked(e: KeyboardEvent) {
+		if (e.key === 'ArrowRight') {
+			if (this.terminal.intelisense.intelisenseKeyValue) {
+				this.terminal.commandLineValue = this.terminal.intelisense.intelisenseKeyValue;
+			}
+		}
+	}
+
 	public async onConsoleClearClicked() {
 		this.terminal.debug.clear();
 	}

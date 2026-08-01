@@ -3,6 +3,7 @@ import { console_service } from './console_service.svelte';
 import { debug } from '$lib/dashboard/stores/debug';
 import { TerminalKeyboardEvents } from './shortcuts.svelte';
 import { TerminalSettings } from './settings.svelte';
+import { TerminalIntelisense } from './intelisense.svelte';
 
 type TerminalSavedInput = {
 	user_input: string;
@@ -52,14 +53,20 @@ export class Terminal {
 
 	public keyboard_event: TerminalKeyboardEvents;
 	public settings: TerminalSettings;
+	private _intelisense: TerminalIntelisense;
 
 	constructor() {
 		this.keyboard_event = new TerminalKeyboardEvents(this);
 		this.settings = new TerminalSettings(this);
+		this._intelisense = new TerminalIntelisense(this);
 	}
 
 	public get console() {
 		return console_service;
+	}
+
+	public get intelisense() {
+		return this._intelisense;
 	}
 
 	public set_input(record: TerminalSavedInput) {

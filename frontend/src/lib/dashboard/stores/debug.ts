@@ -1,3 +1,4 @@
+import type { KlimsonFetchType } from '$lib/types/stats';
 import { get, writable, type Writable } from 'svelte/store';
 
 export type EntryType =
@@ -18,11 +19,13 @@ export type MessageDebugLogMetadata = { message?: string };
 export type TerminaPrefixlDebugLogMetadata = { command?: string };
 export type FormatRecordTagMetadata = { html?: string };
 export type ImageDebugLogMetadata = { src?: string };
+export type FastfetchMetadata = { fastfetch?: KlimsonFetchType };
 
 export type DebugMetadata = MessageDebugLogMetadata &
 	TerminaPrefixlDebugLogMetadata &
 	FormatRecordTagMetadata &
-	ImageDebugLogMetadata;
+	ImageDebugLogMetadata &
+	FastfetchMetadata;
 
 export type TerminalEntry = {
 	date: number;
@@ -73,8 +76,8 @@ export class DebugService {
 		this.addLog({ src }, 'image');
 	}
 
-	public fastfetch() {
-		this.addLog({}, 'fastfetch');
+	public fastfetch(data: KlimsonFetchType) {
+		this.addLog({ fastfetch: data }, 'fastfetch');
 	}
 
 	public clear() {

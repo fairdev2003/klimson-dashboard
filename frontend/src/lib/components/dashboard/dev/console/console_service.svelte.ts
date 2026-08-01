@@ -12,6 +12,7 @@ import { bold, tail, italic, red, span } from '$lib/terminal/style';
 import { notifications, type NotificationRecord } from '../../navbar/notification_service.svelte';
 import type { StorageRecord } from '$lib/api/requests/storage';
 import { base_url } from '$lib/api/api.store';
+import type { Command } from '@lucide/svelte';
 
 export class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
@@ -147,29 +148,9 @@ console_service
 	.registerCommand('test')
 	.setDescription('Test command')
 	.setAction(async (args) => {
-		try {
-			const response: ServerResponse<
-				BackendResponse<{
-					token: string;
-					claims: {
-						name: string;
-						login: string;
-						exp: string;
-					};
-				}>
-			> = await api.api.get('/admin/users/me');
+		const register = console_service.getCommandsRegister();
 
-			if (response.status === 200) {
-				if (!args || args[0] === 'claims') {
-					debug.silent(response.data.claims);
-					return;
-				}
-			}
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				error.cause;
-			}
-		}
+		debug.log(register);
 	});
 
 console_service
@@ -698,8 +679,16 @@ console_service
 		}
 	});
 
-console_service.registerCommand('klimsonfetch').setAction(() => {
-	debug.fastfetch();
+console_service.registerCommand('klimsonfetch').setAction(async () => {
+	try {
+		const response = await api.misc.Fastfetch();
+
+		if (response.data) {
+			debug.fastfetch(response.data);
+		}
+	} catch (error) {
+		debug.error(error);
+	}
 });
 
 console_service

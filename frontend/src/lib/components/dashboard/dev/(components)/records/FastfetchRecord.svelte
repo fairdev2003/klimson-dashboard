@@ -6,19 +6,11 @@
 	import type { KlimsonFetchType } from '$lib/types/stats';
 	import { api } from '$lib/api/api';
 
-	let klimson_fastfetch: KlimsonFetchType | undefined = $state();
+	type Props = {
+		entry: TerminalEntry;
+	};
 
-	onMount(async () => {
-		try {
-			const response = await api.misc.Fastfetch();
-
-			if (response.data) {
-				klimson_fastfetch = response.data;
-			}
-		} catch (error) {
-			debug.error(error);
-		}
-	});
+	let { entry }: Props = $props();
 </script>
 
 <div class="flex items-center gap-2">
@@ -31,13 +23,13 @@
 				class="size-50"
 			/>
 		</div>
-		{#if klimson_fastfetch}
+		{#if entry.metadata.fastfetch}
 			<div class="flex flex-col">
 				<span class="text-blue-500 font-bold">Server Info</span>
 				<div class="w-full h-4"></div>
 
-				{#each Object.keys(klimson_fastfetch) as name}
-					{@render FastfetchRecord(name, klimson_fastfetch[name])}
+				{#each Object.keys(entry.metadata.fastfetch) as name}
+					{@render FastfetchRecord(name, entry.metadata.fastfetch[name])}
 				{/each}
 			</div>
 		{/if}
