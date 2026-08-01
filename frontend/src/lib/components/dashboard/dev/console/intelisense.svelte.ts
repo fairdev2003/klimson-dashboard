@@ -18,6 +18,6 @@ export class TerminalIntelisense {
 			.getCommandsRegister()
 			.find((e) => e.name.toLowerCase().startsWith(commandName.toLowerCase()));
 
-		this.intelisenseKeyValue = found?.name + ' ' + '-p skurwiel';
+		this.intelisenseKeyValue = found?.name;
 	}
 }
