@@ -1,12 +1,54 @@
 import { tick } from 'svelte';
 import type { Terminal } from './terminal.svelte';
+import { command } from '$app/server';
 
 export class TerminalKeyboardEvents {
 	constructor(private terminal: Terminal) {}
 	public async onAnyKeyClicked(e: KeyboardEvent) {
+		if (e.ctrlKey || e.metaKey) {
+			return;
+		}
+
+		const selection = window.getSelection();
+		if (selection && selection.toString().length > 0) {
+			return;
+		}
+
 		if (this.terminal.terminalFocused && this.terminal.inputRef) {
-			this.terminal.inputRef.focus();
-			this.terminal.terminalFocused = true;
+			if (document.activeElement !== this.terminal.inputRef) {
+				this.terminal.inputRef.focus();
+			}
+		}
+	}
+
+	public async handleTerminalInputEnclosure(e: KeyboardEvent) {
+		const pairs: Record<string, { left: string; right: string }> = {
+			'"': { left: '"', right: '"' },
+			"'": { left: "'", right: "'" },
+			'`': { left: '`', right: '`' },
+			'(': { left: '(', right: ')' },
+			'[': { left: '[', right: ']' },
+			'{': { left: '{', right: '}' }
+		};
+
+		if (e.shiftKey && Object.keys(pairs).includes(e.key)) {
+			e.preventDefault();
+			const selectedText = window.getSelection()?.toString();
+			if (selectedText) {
+				this.terminal.debug.log(selectedText);
+				this.terminal.commandLineValue = this.terminal.commandLineValue.replace(
+					selectedText,
+					`${pairs[e.key].left}${selectedText}${pairs[e.key].right}`
+				);
+			} else {
+				if (!this.terminal.commandLineValue.includes(' ')) {
+					this.terminal.commandLineValue =
+						this.terminal.commandLineValue + ` ${pairs[e.key].left}${pairs[e.key].right}`;
+				} else {
+					this.terminal.commandLineValue =
+						this.terminal.commandLineValue + `${pairs[e.key].left}${pairs[e.key].right}`;
+				}
+			}
 		}
 	}
 
@@ -92,8 +134,8 @@ export class TerminalKeyboardEvents {
 
 	public async onArrowRightClicked(e: KeyboardEvent) {
 		if (e.key === 'ArrowRight') {
-			if (this.terminal.intelisense.intelisenseKeyValue) {
-				this.terminal.commandLineValue = this.terminal.intelisense.intelisenseKeyValue;
+			if (this.terminal.intelisense.intelisenseValue) {
+				this.terminal.commandLineValue = this.terminal.intelisense.intelisenseValue;
 			}
 		}
 	}

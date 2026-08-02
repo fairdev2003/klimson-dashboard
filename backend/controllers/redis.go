@@ -5,8 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
+	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/logger"
+	"github.com/zgierz/klimson/backend/permission"
 )
 
 func (controller GlobalController) PingRedis(ctx *gin.Context) {
@@ -111,10 +113,12 @@ func (controller GlobalController) RegisterRedisEndpoints(groupPrefix string) {
 	redisGroupAdmin := controller.adminPath.Group(groupPrefix)
 	redisGroupPublic := controller.publicPath.Group(groupPrefix)
 
-	redisGroupPublic.GET("/ping", controller.PingRedis)
-	redisGroupPublic.GET("/get", controller.RDBGetKey)
-	redisGroupAdmin.PUT("/set", controller.RDBSetKey)
-	redisGroupAdmin.DELETE("del", controller.RDBSetKey)
+	redisGroupAdmin.PUT("/set", helpers.RequirePermission(permission.SET_REDIS_KEY), controller.RDBSetKey)
+	redisGroupAdmin.DELETE("del", helpers.RequirePermission(permission.DEL_REDIS_KEY), controller.RDBSetKey)
+	redisGroupAdmin.GET("/key/info", helpers.RequirePermission(permission.REDIS_KEY_INFO), controller.RDBGetKeyInfo)
+
 	redisGroupPublic.GET("/keys", controller.RDBGetAllExistingKeys)
-	redisGroupAdmin.GET("/key/info", controller.RDBGetKeyInfo)
+	redisGroupPublic.GET("/get", controller.RDBGetKey)
+	redisGroupPublic.GET("/ping", controller.PingRedis)
+
 }

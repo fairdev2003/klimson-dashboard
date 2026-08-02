@@ -80,12 +80,13 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.publicPath.GET("/interface/bucket/*folder", controller.Interface)
 
 	// protected file storage
+	// protected file storage
 	controller.adminPath.POST("/storage/interface/create-folder/*folder", helpers.RequirePermission(permission.STORAGE_CREATE_FOLDER), controller.CreateFolder)
-	controller.adminPath.POST("/storage/interface/upload-file/*folder", controller.UploadFile)
-	controller.adminPath.DELETE("/storage/interface/delete/*folder", controller.DeleteFileOrFolder)
-	controller.adminPath.POST("/storage/interface/rename/*folder", controller.RenameItem)
-	controller.adminPath.POST("/storage/interface/edit-file/*filepath", controller.PushChangedTextFile)
-	controller.adminPath.POST("/storage/interface/new-file/*filepath", controller.NewFile)
+	controller.adminPath.POST("/storage/interface/upload-file/*folder", helpers.RequirePermission(permission.STORAGE_UPLOAD_FILE), controller.UploadFile)
+	controller.adminPath.DELETE("/storage/interface/delete/*folder", helpers.RequirePermission(permission.STORAGE_DELETE), controller.DeleteFileOrFolder)
+	controller.adminPath.POST("/storage/interface/rename/*folder", helpers.RequirePermission(permission.STORAGE_RENAME), controller.RenameItem)
+	controller.adminPath.POST("/storage/interface/edit-file/*filepath", helpers.RequirePermission(permission.STORAGE_EDIT_FILE), controller.PushChangedTextFile)
+	controller.adminPath.POST("/storage/interface/new-file/*filepath", helpers.RequirePermission(permission.STORAGE_NEW_FILE), controller.NewFile)
 	controller.adminPath.GET("/storage/latest", helpers.RequirePermission(permission.STORAGE_LATEST), controller.GetLatesFiles)
 
 	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
@@ -98,14 +99,9 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.DELETE("/context_storage/delete/:id", controller.DeleteContextStorageRecord)
 	controller.adminPath.GET("/context_storage/private/single/:key", controller.GetPrivateContext)
 
-	controller.adminPath.POST("/v2/storage/new-file/*folder", controller.UploadNewFile)
-	controller.adminPath.GET("/v2/storage/get/*filepath", controller.GetRecords)
+	controller.adminPath.POST("/v2/storage/new-file/*folder", helpers.RequirePermission(permission.V2_NEW_FILE), controller.UploadNewFile)
+	controller.adminPath.GET("/v2/storage/get/*filepath", helpers.RequirePermission(permission.V2_GET_FILE), controller.GetRecords)
 	controller.adminPath.POST("/v2/storage/create-folder", helpers.RequirePermission(permission.V2_CREATE_FOLDER), controller.CreateV2Folder)
-
-	// pg3d
-	controller.publicPath.GET("/pg3d/clan_info/:clan_id", controller.GetClanInfo)
-	controller.publicPath.GET("/pg3d/player_data/:player_id", controller.GetPlayerData)
-	controller.publicPath.GET("/pg3d/clan/valor_history/:clan_id", controller.GetValorHistory)
 
 	// spotify
 	controller.publicPath.GET("/spotify/currently_playing", controller.GetPlaybackState)
@@ -117,6 +113,6 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)
 
 	// database crud
-	controller.adminPath.GET("/database/list/tables", controller.GetTables)
-	controller.adminPath.GET("/database/table/:table_name", controller.GetTableData)
+	controller.adminPath.GET("/database/list/tables", helpers.RequirePermission(permission.GET_DB_TABLES), controller.GetTables)
+	controller.adminPath.GET("/database/table/:table_name", helpers.RequirePermission(permission.GET_DB_TABLE), controller.GetTableData)
 }

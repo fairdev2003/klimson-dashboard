@@ -25,6 +25,8 @@ export class ConsoleService {
 
 	public loading = $state(false);
 
+	constructor() {}
+
 	public registerCommand(name: string): CommandBuilder {
 		const cmd = new CommandBuilder(name);
 		this.commands.set(name, cmd);
@@ -44,8 +46,6 @@ export class ConsoleService {
 		return commandsList.join(', ');
 	}
 
-	constructor() {}
-
 	public onUnknownCommand(handler: (user_input: string, name: string) => void) {
 		this.unknown_command_handler = handler;
 	}
@@ -61,6 +61,10 @@ export class ConsoleService {
 
 	public getCommandsRegister(): CommandBuilder[] {
 		return Array.from(this.commands.values());
+	}
+
+	public getCommand(commandName: string): CommandBuilder | undefined {
+		return this.commands.get(commandName);
 	}
 
 	public run(input: string) {
@@ -121,7 +125,7 @@ console_service.onUnknownCommand((input, name) => {
 	debug.console(input);
 
 	debug.system(`Command with name '${name}' does not exist!`);
-	debug.system(`Type 'PrettyFormatRecord' to view available commands.`);
+	debug.system(`Type 'cmds' to view available commands.`);
 });
 
 console_service.onCommand((command, input) => {
@@ -133,6 +137,7 @@ console_service.onCommand((command, input) => {
 	}
 
 	terminal.set_input({ user_input: input, id: terminal.input_history.length + 1 });
+	terminal.intelisense.intelisenseValue = '';
 	debug.console(input);
 	terminal.last_record_user_iterator = -1;
 });
@@ -151,6 +156,21 @@ console_service
 		const register = console_service.getCommandsRegister();
 
 		debug.log(register);
+	});
+
+console_service
+	.registerCommand('performance')
+	.setDescription('Test heap size of js/ts')
+	.setAction(() => {
+		if (performance instanceof Performance) {
+			if (performance.memory) {
+				debug.log(
+					'Użyta pamięć JS Heap:',
+					(performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2),
+					'MB'
+				);
+			}
+		}
 	});
 
 console_service

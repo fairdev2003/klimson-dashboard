@@ -8,23 +8,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/logger"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		tokenString, err := c.Cookie("k-token")
+	return func(ctx *gin.Context) {
+		tokenString, err := ctx.Cookie("k-token")
 
 		if err != nil {
 			logger.ErrorLog("No cooklie 'k-token'!")
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Brak autoryzacji"})
+			khttp.UnauthorizedResponse(ctx, nil, "Session is unauthorized!")
 			return
 		}
 
 		secret := os.Getenv("TOKEN")
 		if secret == "" {
 			logger.ErrorLog("Brak TOKEN w env")
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Konfiguracja serwera błąd"})
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Konfiguracja serwera błąd"})
 			return
 		}
 
@@ -37,32 +38,32 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if err != nil || !token.Valid {
 			logger.ErrorLog(fmt.Sprintf("Błąd JWT: %v", err))
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Niepoprawny token"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Niepoprawny token"})
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Błędne claims"})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Błędne claims"})
 			return
 		}
 
 		if exp, ok := claims["exp"].(float64); ok {
 			if int64(exp) < time.Now().Unix() {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token wygasł"})
+				ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token wygasł"})
 				return
 			}
 		}
 
 		contributor, _ := claims["contributor"].(bool)
 		if !contributor {
-			c.Set("isRoot", true)
-			c.Set("claims", claims)
+			ctx.Set("isRoot", true)
+			ctx.Set("claims", claims)
 		} else {
 			permissions, _ := claims["permissions"].(string)
-			c.Set("permissions", permissions)
+			ctx.Set("permissions", permissions)
 		}
 
-		c.Next()
+		ctx.Next()
 	}
 }

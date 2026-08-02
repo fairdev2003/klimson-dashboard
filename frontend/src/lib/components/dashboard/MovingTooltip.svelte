@@ -43,7 +43,7 @@
 		<div
 			use:portal
 			in:fade={{ duration: 150, delay }}
-			class="text-white pointer-events-none fixed z-[9999] bg-neutral-900"
+			class="text-white pointer-events-none fixed z-[9999] bg-neutral-900/80 rounded-md border border-neutral-700"
 			style="left: {mouseX}px; top: {mouseY}px; min-width: max-content;"
 		>
 			<div class="p-2">

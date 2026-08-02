@@ -11,7 +11,7 @@
 	let { inputRef = $bindable(), commandLineValue = $bindable() }: Props = $props();
 
 	let suggestionGhost = $derived.by(() => {
-		const fullKey = terminal.intelisense.intelisenseKeyValue || '';
+		const fullKey = terminal.intelisense.intelisenseValue || '';
 		if (
 			fullKey.toLowerCase().startsWith(commandLineValue.toLowerCase()) &&
 			commandLineValue.length > 0
@@ -34,7 +34,7 @@
 			<span class="text-transparent">{commandLineValue}</span>
 			<span class="text-neutral-600">{suggestionGhost}</span>
 
-			{#if !commandLineValue && !terminal.intelisense.intelisenseKeyValue}
+			{#if !commandLineValue && !terminal.intelisense.intelisenseValue}
 				<span class="text-neutral-600">Type '/' to proceed</span>
 			{/if}
 		</div>
@@ -48,6 +48,7 @@
 			}}
 			onkeydown={async (keyboard_event) => {
 				await terminal.keyboard_event.onArrowRightClicked(keyboard_event);
+				await terminal.keyboard_event.handleTerminalInputEnclosure(keyboard_event);
 			}}
 			oninput={(e) => {
 				terminal.intelisense.searchForSyntaxAndReturnCommand(terminal.commandLineValue);

@@ -222,7 +222,7 @@
 	.background {
 		@apply bg-neutral-950;
 
-		@apply bg-neutral-950 h-screen bg-[url('https://api.klimson.dev/interface/bucket/backgrounds/nigga2.webp')] bg-no-repeat blur-sm bg-cover;
+		/* @apply bg-neutral-950 h-screen bg-[url('https://api.klimson.dev/interface/bucket/backgrounds/nigga2.webp')] bg-no-repeat blur-sm bg-cover; */
 	}
 
 	.marker-overlay {

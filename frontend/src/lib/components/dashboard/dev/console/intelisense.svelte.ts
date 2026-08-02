@@ -1,16 +1,17 @@
 import type { CommandBuilder } from './command_builder.svelte';
+import { console_service } from './console_service.svelte';
 import type { Terminal } from './terminal.svelte';
 
 export class TerminalIntelisense {
 	constructor(private terminal: Terminal) {}
 
-	public intelisenseKeyValue: string | undefined = $state('');
+	public intelisenseValue: string | undefined = $state('');
 
 	public searchForSyntaxAndReturnCommand(prompt: string) {
 		const commandName = prompt.trim().split(/\s+/)[0];
 
 		if (!commandName) {
-			this.intelisenseKeyValue = undefined;
+			this.intelisenseValue = undefined;
 			return;
 		}
 
@@ -18,6 +19,6 @@ export class TerminalIntelisense {
 			.getCommandsRegister()
 			.find((e) => e.name.toLowerCase().startsWith(commandName.toLowerCase()));
 
-		this.intelisenseKeyValue = found?.name;
+		this.intelisenseValue = found?.name;
 	}
 }

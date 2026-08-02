@@ -35,6 +35,11 @@
 	class="flex relative w-full items-center justify-between border border-blue-800 bg-blue-800 p-2 text-white active:cursor-grabbing"
 >
 	<TerminalPageDropdown />
+	{#key terminal.intelisense.intelisenseValue}
+		<p class="text-orange-400" in:blur={{ duration: 150 }}>
+			{terminal.intelisense.intelisenseValue}
+		</p>
+	{/key}
 
 	<div class="flex items-center gap-2">
 		<div

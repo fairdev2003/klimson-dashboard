@@ -201,5 +201,9 @@
 			e.preventDefault();
 			opened = false;
 		}
+		if (e.key === 'p' && e.ctrlKey) {
+			e.preventDefault();
+			opened = !opened;
+		}
 	}}
 />

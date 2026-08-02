@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/models"
+	"github.com/zgierz/klimson/backend/permission"
 )
 
 // 1. CREATE (NewUser już masz, tutaj tylko wersja z Preloadem dla spójności)
@@ -85,11 +87,11 @@ func (gc GlobalController) GetYourself(ctx *gin.Context) {
 func (gc GlobalController) RegisterUserController() {
 	users := gc.adminPath.Group("/users")
 	{
-		users.POST("/new-user", gc.NewUser)
-		users.GET("/get-users", gc.ListUsers)
-		users.GET("/get-user/:id", gc.GetUser)
-		users.PUT("/update-user/:id", gc.UpdateUser)
-		users.DELETE("/delete-user/:id", gc.DeleteUser)
+		users.POST("/new-user", helpers.RequirePermission(permission.CREATE_USER), gc.NewUser)
+		users.GET("/get-users", helpers.RequirePermission(permission.GET_USERS_RECORDS), gc.ListUsers)
+		users.GET("/get-user/:id", helpers.RequirePermission(permission.GET_USER), gc.GetUser)
+		users.PUT("/update-user/:id", helpers.RequirePermission(permission.UPDATE_USER), gc.UpdateUser)
+		users.DELETE("/delete-user/:id", helpers.RequirePermission(permission.DELETE_USER), gc.DeleteUser)
 		users.GET("/me", gc.GetYourself)
 
 	}
