@@ -14,7 +14,7 @@
 		border,
 		padding_preset,
 		form_config,
-		backgroundExitLocked,
+		backgroundExitLocked = $bindable(),
 		titleStyle
 	}: ModalProps = $props();
 
@@ -37,7 +37,7 @@
 	});
 
 	const modalStyles = tv({
-		base: 'z-100 flex flex-col gap-2',
+		base: 'z-100 flex flex-col gap-2 ',
 		variants: {
 			bg_color: {
 				classic: 'bg-neutral-900'
@@ -49,9 +49,10 @@
 			},
 			size: {
 				auto: 'w-auto',
-				accept_preset: 'lg:w-80 w-9/10',
-				form_preset: 'lg:w-150 w-9/10'
+				accept_preset: 'lg:w-80 ',
+				form_preset: 'lg:w-150 h-7/10'
 			},
+			screen_size: {},
 			border: {
 				normal: 'border border-neutral-700',
 				form: 'border-2 border-blue-500',
@@ -93,11 +94,16 @@
 				onclick={(e) => {
 					modal.on_content_click(e);
 				}}
-				class={`${className} ${modalStyles({ size, border, padding_preset })}`}
+				class={`${className} ${modalStyles({ size, border, padding_preset })} flex flex-col max-h-[90vh]`}
 			>
 				<RDBModalBar {title} {titleStyle} onButtonClick={() => modal.on_exit_icon_click()} />
-				{@render children?.()}
-				<RDBSubmitControls {...form_config} />
+
+				<div class="flex flex-col flex-1 min-h-0 justify-between w-full">
+					<div class="overflow-auto flex-1 min-h-0 w-full px-1">
+						{@render children?.()}
+					</div>
+					<RDBSubmitControls {...form_config} />
+				</div>
 			</div>
 		</div>
 	</div>

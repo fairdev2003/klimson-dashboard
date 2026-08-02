@@ -14,6 +14,7 @@ import (
 	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -48,6 +49,9 @@ func InitRoutes() {
 	wsPath = server.Group("/ws")
 	adminPath = apiPath.Group("/admin")
 	adminPath.Use(AuthMiddleware())
+	adminPath.Use(helpers.AdminRateLimiter())
+	apiPath.Use(helpers.PublicRateLimiter())
+
 	adminPath.Use(helpers.CorsConf(origins))
 
 	// root routes

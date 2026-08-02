@@ -112,6 +112,9 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)
 
+	// dev endpoints
+	controller.adminPath.GET("/dev/send", helpers.RequirePermission(permission.SERVER_BINARY), controller.SendBinary)
+
 	// database crud
 	controller.adminPath.GET("/database/list/tables", helpers.RequirePermission(permission.GET_DB_TABLES), controller.GetTables)
 	controller.adminPath.GET("/database/table/:table_name", helpers.RequirePermission(permission.GET_DB_TABLE), controller.GetTableData)

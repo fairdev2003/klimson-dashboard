@@ -52,6 +52,12 @@ func UnauthorizedResponse(ctx *gin.Context, data any, m ...string) {
 	build_response(ctx, http.StatusUnauthorized, true, message, data)
 }
 
+// Returns a JSON which is made for response that has too many request registered (HTTP 429)
+func TooManyRequestsResponse(ctx *gin.Context, cooldown string, m ...string) {
+	message := getMessage(m, "Too many requests! Try again in: "+cooldown)
+	build_response(ctx, http.StatusTooManyRequests, true, message, nil)
+}
+
 // Returns a JSON which is made for response that is bad (HTTP 400)
 func BadRequestResponse(ctx *gin.Context, data any, m ...string) {
 	message := getMessage(m, "Request is bad")

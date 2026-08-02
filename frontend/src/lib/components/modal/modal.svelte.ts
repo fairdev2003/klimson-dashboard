@@ -40,12 +40,19 @@ export class ModalLogic {
 
 	private ShakeModalContainer() {
 		if (!this.modalContainer) return;
+
+		gsap.killTweensOf(this.modalContainer);
+
 		gsap.to(this.modalContainer, {
 			x: -10,
 			duration: 0.1,
 			repeat: 3,
 			yoyo: true,
-			ease: 'power1.inOut'
+			ease: 'power1.inOut',
+			onComplete: () => {
+				if (!this.modalContainer) return;
+				gsap.set(this.modalContainer, { x: 0 });
+			}
 		});
 	}
 

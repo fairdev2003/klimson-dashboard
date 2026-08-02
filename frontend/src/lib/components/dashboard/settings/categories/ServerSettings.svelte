@@ -5,6 +5,7 @@
 	import { debug } from '$lib/dashboard/stores/debug';
 	import { base_url } from '$lib/api/api.store';
 	import Heading from '../../typography/Heading.svelte';
+	import ButtonSettingsRecord from '../records/ButtonSettingsRecord.svelte';
 
 	let selectedServer: 'dev' | 'prod' = $state('prod');
 </script>
@@ -27,5 +28,11 @@
 			debug.log(e.key);
 			window.location.reload();
 		}}
+	/>
+
+	<ButtonSettingsRecord
+		title="Send Startup Code"
+		label="Choose File"
+		description="Send golang binary file into the server in chunks"
 	/>
 </div>

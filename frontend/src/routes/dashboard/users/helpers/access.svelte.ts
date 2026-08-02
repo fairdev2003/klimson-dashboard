@@ -1,18 +1,32 @@
 import { api } from '$lib/api/api';
 import { debug } from '$lib/dashboard/stores/debug';
+import type { Role } from '$lib/types/user';
 
 type Account = {};
 
-type UserRole = {};
-
 type PermissionRecord = {};
+
+const initialForm = {
+	name: '',
+	color: '',
+	permissions: [],
+	icon: ''
+};
 
 class AControllerData {
 	public accounts: Account[] = $state([]);
-	public roles: UserRole[] = $state([]);
+	public roles: Role[] = $state([]);
 	public permission_registry: PermissionRecord[] = $state([]);
-}
 
+	public role: Role = $state({ ...initialForm });
+
+	public resetRole() {
+		this.role.name = initialForm.name;
+		this.role.color = initialForm.color;
+		this.role.permissions = [];
+		this.role.icon = initialForm.icon;
+	}
+}
 class AccountController extends AControllerData {
 	super() {}
 
