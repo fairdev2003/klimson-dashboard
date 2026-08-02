@@ -105,5 +105,5 @@ export type Role = BaseModel & {
 
 type Permission = BaseModel & {
 	name: string;
-	role_id: string;
+	role_id?: string;
 };

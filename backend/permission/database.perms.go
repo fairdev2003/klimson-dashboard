@@ -7,7 +7,7 @@ var (
 		Name:          "Get All Available PSQL Tables",
 		Icon:          "devicon-plain:postgresql",
 		PermissionTag: "db:tables",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      DB,
 	}
@@ -16,7 +16,7 @@ var (
 		Name:          "View Specific Table",
 		Icon:          "devicon-plain:postgresql",
 		PermissionTag: "db:table",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      DB,
 	}

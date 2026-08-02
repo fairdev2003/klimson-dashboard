@@ -70,6 +70,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.RegisterRedisEndpoints("/redis")
 	controller.RegisterStateEndpoints("/state")
 	controller.RegisterMiscEndpoints("/misc")
+	controller.RegisterRoleController()
 
 	// file storage
 	storagePath := controller.publicPath.Group("/storage")
@@ -113,7 +114,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)
 
 	// dev endpoints
-	controller.adminPath.GET("/dev/send", helpers.RequirePermission(permission.SERVER_BINARY), controller.SendBinary)
+	controller.adminPath.GET("/dev/send", helpers.RequirePermission(permission.ADMIN), controller.SendBinary)
 
 	// database crud
 	controller.adminPath.GET("/database/list/tables", helpers.RequirePermission(permission.GET_DB_TABLES), controller.GetTables)

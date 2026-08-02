@@ -125,6 +125,7 @@
 				<Button
 					theme="secondary"
 					onclick={() => {
+						account_controller.resetRole();
 						implementRoleModalOpened = true;
 					}}>Implement role</Button
 				>

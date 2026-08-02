@@ -1,4 +1,5 @@
 import { api } from '$lib/api/api';
+import type { PermissionRegistry } from '$lib/api/requests/misc';
 import { debug } from '$lib/dashboard/stores/debug';
 import type { Role } from '$lib/types/user';
 
@@ -21,10 +22,7 @@ class AControllerData {
 	public role: Role = $state({ ...initialForm });
 
 	public resetRole() {
-		this.role.name = initialForm.name;
-		this.role.color = initialForm.color;
-		this.role.permissions = [];
-		this.role.icon = initialForm.icon;
+		this.role = initialForm;
 	}
 }
 class AccountController extends AControllerData {
@@ -42,6 +40,78 @@ class AccountController extends AControllerData {
 		} catch (err) {
 			debug.error({ message: err });
 		}
+	}
+
+	public roleHasPermission(perm: PermissionRegistry): boolean {
+		let temp_table: string[] = [];
+		this.role.permissions.forEach((e) => {
+			temp_table.push(e.name);
+		});
+
+		return temp_table.includes(perm.tag);
+	}
+
+	public ImplementPermToRole(perm: PermissionRegistry): void {
+		if (this.roleHasPermission(perm)) return;
+
+		this.role = { ...this.role, permissions: [...this.role.permissions, { name: perm.tag }] };
+		debug.log(this.role);
+	}
+
+	public RemovePermFromRole(perm: PermissionRegistry): void {
+		if (!this.roleHasPermission(perm)) return;
+
+		const newPerms = this.role.permissions.filter((e) => e.name !== perm.tag);
+
+		this.role = { ...this.role, permissions: newPerms };
+		debug.log(this.role);
+	}
+
+	public async CreateNewRole(role?: Role) {
+		if (role) {
+			this.role = role;
+		}
+
+		try {
+			const response = await api.user.CreateRole(this.role);
+
+			if (response.status === 201) {
+				debug.system('User successfully created!');
+				debug.log('Response: ', response.data);
+			}
+		} catch (error) {
+			debug.error(error);
+		} finally {
+			debug.system("Trycatch statement 'AccountController.CreateNewRole()' has ended!");
+		}
+	}
+
+	public async FetchRolesAndAssign() {
+		try {
+			const response = await api.user.ListRoles();
+
+			this.roles = response.data.data;
+		} catch (error) {
+			debug.error(error);
+		} finally {
+			debug.system("Trycatch statement 'AccountController.CreateNewRole()' has ended!");
+		}
+	}
+
+	public async DeleteRoleAndFetchNew(id: number): boolean {
+		try {
+			const delete_response = await api.user.DeleteRole(id);
+
+			if (delete_response.status === 200) {
+				debug.system('Roles successfully deleted!');
+				await this.FetchRolesAndAssign();
+			}
+		} catch (error) {
+			debug.error(error);
+		} finally {
+			debug.system("Trycatch statement 'AccountController.CreateNewRole()' has ended!");
+		}
+		return true;
 	}
 }
 

@@ -15,7 +15,8 @@
 		padding_preset,
 		form_config,
 		backgroundExitLocked = $bindable(),
-		titleStyle
+		titleStyle,
+		stickyBar
 	}: ModalProps = $props();
 
 	const modal = new ModalLogic({
@@ -33,7 +34,8 @@
 		border,
 		padding_preset,
 		backgroundExitLocked,
-		titleStyle
+		titleStyle,
+		stickyBar
 	});
 
 	const modalStyles = tv({
@@ -98,11 +100,22 @@
 			>
 				<RDBModalBar {title} {titleStyle} onButtonClick={() => modal.on_exit_icon_click()} />
 
-				<div class="flex flex-col flex-1 min-h-0 justify-between w-full">
-					<div class="overflow-auto flex-1 min-h-0 w-full px-1">
+				<div
+					class="flex flex-col flex-1 gap-4 min-h-0 justify-between w-full max-w-full overflow-hidden"
+				>
+					<div class="w-full shrink-0 px-1">
+						{@render stickyBar?.()}
+					</div>
+
+					<div
+						class="flex-1 sticky-0 min-h-0 w-full overflow-y-auto overflow-x-hidden px-1 box-border"
+					>
 						{@render children?.()}
 					</div>
-					<RDBSubmitControls {...form_config} />
+
+					<div class="w-full shrink-0 mt-3">
+						<RDBSubmitControls {...form_config} />
+					</div>
 				</div>
 			</div>
 		</div>

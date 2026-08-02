@@ -14,6 +14,7 @@ type User struct {
 
 type Role struct {
 	BaseModel
+	Icon        string       `json:"icon"`
 	Name        string       `json:"name"`
 	Permissions []Permission `json:"permissions" gorm:"foreignKey:RoleID"`
 	Color       string       `json:"color"`

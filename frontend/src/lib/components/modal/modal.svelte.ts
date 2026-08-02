@@ -29,6 +29,7 @@ export type ModalProps = {
 	form_config?: FormControlsProps;
 	backgroundExitLocked: boolean;
 	titleStyle?: TitleStyle;
+	stickyBar?: Snippet;
 };
 
 export class ModalLogic {

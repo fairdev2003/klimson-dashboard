@@ -84,15 +84,139 @@ func (gc GlobalController) GetYourself(ctx *gin.Context) {
 
 }
 
+type PermissionInput struct {
+	Name string `json:"name"`
+}
+
+type RoleInput struct {
+	Name        string              `json:"name" binding:"required"`
+	Color       string              `json:"color"`
+	Icon        string              `json:"icon"`
+	Permissions []models.Permission `json:"permissions"`
+}
+
+func (gc GlobalController) CreateRole(ctx *gin.Context) {
+	var input RoleInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		khttp.BadRequestResponse(ctx, nil, "JSON Error: "+err.Error())
+		return
+	}
+
+	var permissions []models.Permission
+
+	for _, pInput := range input.Permissions {
+		var perm models.Permission
+		gc.db.Where(models.Permission{Name: pInput.Name}).FirstOrCreate(&perm)
+		permissions = append(permissions, perm)
+	}
+
+	role := models.Role{
+		Name:        input.Name,
+		Color:       input.Color,
+		Icon:        input.Icon,
+		Permissions: permissions,
+	}
+
+	if result := gc.db.Create(&role); result.Error != nil {
+		khttp.InternalServerErrorResponse(ctx, nil, "Error during creating role: "+result.Error.Error())
+		return
+	}
+
+	gc.db.Preload("Permissions").First(&role, role.ID)
+
+	khttp.SuccessResponse(ctx, gin.H{"data": role}, "Role created successfully.")
+}
+
+func (gc GlobalController) GetRoles(ctx *gin.Context) {
+	var roles []models.Role
+	if result := gc.db.Preload("Permissions").Find(&roles); result.Error != nil {
+		khttp.InternalServerErrorResponse(ctx, nil, "Error during fetching the role: "+result.Error.Error())
+		return
+	}
+
+	khttp.SuccessResponse(ctx, gin.H{"data": roles})
+}
+
+func (gc GlobalController) GetRole(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var role models.Role
+
+	if result := gc.db.Preload("Permissions").First(&role, id); result.Error != nil {
+		khttp.NotFoundResponse(ctx)
+		return
+	}
+
+	khttp.SuccessResponse(ctx, gin.H{"data": role}, "Successfully fetched the role.")
+
+}
+
+func (gc GlobalController) UpdateRole(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var role models.Role
+
+	if result := gc.db.First(&role, id); result.Error != nil {
+		khttp.NotFoundResponse(ctx)
+		return
+	}
+
+	var input RoleInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		khttp.BadRequestResponse(ctx, nil, "JSON Erorr: "+err.Error())
+		return
+	}
+
+	var permissions []models.Permission
+	if len(input.Permissions) > 0 {
+		gc.db.Find(&permissions, input.Permissions)
+	}
+
+	role.Name = input.Name
+	role.Color = input.Color
+	gc.db.Save(&role)
+
+	gc.db.Model(&role).Association("Permissions").Replace(&permissions)
+
+	khttp.SuccessResponse(ctx, nil, "Roles was updated successfully.")
+}
+
+func (gc GlobalController) DeleteRole(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var role models.Role
+
+	if result := gc.db.First(&role, id); result.Error != nil {
+		khttp.NotFoundResponse(ctx)
+		return
+	}
+
+	if result := gc.db.Where("role_id = ?", role.ID).Delete(&models.Permission{}); result.Error != nil {
+		khttp.InternalServerErrorResponse(ctx, nil, "Error during deleting permissions: "+result.Error.Error())
+		return
+	}
+
+	if result := gc.db.Delete(&role); result.Error != nil {
+		khttp.InternalServerErrorResponse(ctx, nil, "Error during deleting the role: "+result.Error.Error())
+		return
+	}
+
+	khttp.SuccessResponse(ctx, nil, "Role and its permissions are successfully deleted.")
+}
+
 func (gc GlobalController) RegisterUserController() {
 	users := gc.adminPath.Group("/users")
-	{
-		users.POST("/new-user", helpers.RequirePermission(permission.CREATE_USER), gc.NewUser)
-		users.GET("/get-users", helpers.RequirePermission(permission.GET_USERS_RECORDS), gc.ListUsers)
-		users.GET("/get-user/:id", helpers.RequirePermission(permission.GET_USER), gc.GetUser)
-		users.PUT("/update-user/:id", helpers.RequirePermission(permission.UPDATE_USER), gc.UpdateUser)
-		users.DELETE("/delete-user/:id", helpers.RequirePermission(permission.DELETE_USER), gc.DeleteUser)
-		users.GET("/me", gc.GetYourself)
+	users.POST("/new-user", helpers.RequirePermission(permission.CREATE_USER), gc.NewUser)
+	users.GET("/get-users", helpers.RequirePermission(permission.GET_USERS_RECORDS), gc.ListUsers)
+	users.GET("/get-user/:id", helpers.RequirePermission(permission.GET_USER), gc.GetUser)
+	users.PUT("/update-user/:id", helpers.RequirePermission(permission.UPDATE_USER), gc.UpdateUser)
+	users.DELETE("/delete-user/:id", helpers.RequirePermission(permission.DELETE_USER), gc.DeleteUser)
+	users.GET("/me", gc.GetYourself)
 
-	}
+}
+
+func (gc GlobalController) RegisterRoleController() {
+	roles := gc.adminPath.Group("/users/roles")
+	roles.POST("/new-role", helpers.RequirePermission(permission.CREATE_ROLE), gc.CreateRole)
+	roles.GET("/get-roles", helpers.RequirePermission(permission.GET_ROLES_RECORDS), gc.GetRoles)
+	roles.GET("/get-role/:id", helpers.RequirePermission(permission.GET_ROLE), gc.GetRole)
+	roles.PUT("/update-role/:id", helpers.RequirePermission(permission.UPDATE_ROLE), gc.UpdateRole)
+	roles.DELETE("/delete-role/:id", helpers.RequirePermission(permission.DELETE_ROLE), gc.DeleteRole)
 }

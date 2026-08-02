@@ -2,17 +2,18 @@
 	import RDBInput from '$lib/components/modal/RDBInput.svelte';
 	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import { onMount } from 'svelte';
-	import RoleImplementModal from './RoleImplementModal.svelte';
 	import RoleRecord from '../RoleRecord.svelte';
 	import { blur } from 'svelte/transition';
+	import RoleImplementModal from '../(modals)/RoleImplementModal.svelte';
+	import account_controller from '../../helpers/access.svelte';
 
 	type Props = {
 		implementRoleModalOpened?: boolean;
 		roleUpdateModalState?: boolean;
 	};
 
-	onMount(() => {
-		// fetch role data here
+	onMount(async () => {
+		await account_controller.FetchRolesAndAssign();
 	});
 
 	let {
@@ -21,10 +22,12 @@
 	}: Props = $props();
 </script>
 
-<div in:blur={{ duration: 150 }} class="flex flex-col gap-2 max-w-2xl mx-auto">
-	<RoleRecord role={{ name: 'Admin', permissions: [{ name: 'siema' }] }} />
-	<RoleRecord role={{ name: 'Moderator', permissions: [{ name: 'siema' }] }} />
+<div class="flex flex-col gap-4 w-2xl mx-auto">
+	{#each account_controller.roles as role}
+		<RoleRecord {role} />
+	{/each}
 </div>
+
 <RoleImplementModal bind:implementRoleModalOpened />
 
 <style>

@@ -8,7 +8,7 @@ var (
 		Name:          "Create Private Folder (v2)",
 		Icon:          "material-symbols:folder",
 		PermissionTag: "storage:private:create-folder",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      STORAGE_V2,
 	}
@@ -16,7 +16,7 @@ var (
 		Name:          "Create Private Folder (v2)",
 		Icon:          "material-symbols:folder",
 		PermissionTag: "storage:private:get-file",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      STORAGE_V2,
 	}
@@ -24,7 +24,7 @@ var (
 		Name:          "Create Private Folder (v2)",
 		Icon:          "material-symbols:folder",
 		PermissionTag: "storage:private:new-file",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      STORAGE_V2,
 	}

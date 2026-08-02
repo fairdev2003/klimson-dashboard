@@ -46,6 +46,16 @@ func SuccessResponse(ctx *gin.Context, data any, m ...string) {
 	build_response(ctx, http.StatusOK, false, message, data)
 }
 
+// Returns a JSON which is made for response that is successful (HTTP 201)
+func StatusCreatedResponse(ctx *gin.Context, data any, m ...string) {
+	message := getMessage(m, "Content is successfully created!")
+	build_response(ctx, http.StatusCreated, false, message, data)
+}
+
+func NotFoundResponse(ctx *gin.Context) {
+	build_response(ctx, http.StatusNotFound, true, "Requested resource is not found.", nil)
+}
+
 // Returns a JSON which is made for response that is unauthorized (HTTP 401)
 func UnauthorizedResponse(ctx *gin.Context, data any, m ...string) {
 	message := getMessage(m, "Unauthorized Access")

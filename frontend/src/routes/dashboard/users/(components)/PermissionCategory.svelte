@@ -35,7 +35,7 @@
 				>
 					<div class="flex gap-4 items-center">
 						<div
-							class="text-blue-400 bg-blue-500/30 size-10 flex items-center justify-center rounded-lg"
+							class={`text-${permission.color} bg-${permission.color}/20 size-10 flex items-center justify-center rounded-lg`}
 						>
 							<Icon icon={permission.icon} width="20" height="20" />
 						</div>

@@ -8,7 +8,7 @@ var (
 		Name:          "User Creation",
 		Icon:          "mdi:user-add",
 		PermissionTag: "user:create",
-		Color:         "bg-blue-500",
+		Color:         "orange-500",
 		Description:   "",
 		Category:      USER,
 	}
@@ -16,7 +16,7 @@ var (
 		Name:          "Update the user",
 		Icon:          "fa7-solid:user-pen",
 		PermissionTag: "user:update",
-		Color:         "bg-blue-500",
+		Color:         "green-500",
 		Description:   "",
 		Category:      USER,
 	}
@@ -24,7 +24,7 @@ var (
 		Name:          "Delete the user",
 		Icon:          "mage:user-cross-fill",
 		PermissionTag: "user:delete",
-		Color:         "bg-blue-500",
+		Color:         "red-500",
 		Description:   "",
 		Category:      USER,
 	}
@@ -32,7 +32,7 @@ var (
 		Name:          "Get one user",
 		Icon:          "mdi:user",
 		PermissionTag: "user:get",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      USER,
 	}
@@ -40,7 +40,7 @@ var (
 		Name:          "Get all users",
 		Icon:          "user:list",
 		PermissionTag: "disk:info",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      USER,
 	}
@@ -52,11 +52,56 @@ var (
 		Name:          "Get Permission register",
 		Icon:          "bitcoin-icons:two-keys-filled",
 		PermissionTag: "roles:permissions:register",
-		Color:         "bg-blue-500",
+		Color:         "blue-500",
 		Description:   "",
 		Category:      USER,
 	}
 )
 
 // roles
-var ()
+var (
+	CREATE_ROLE = helpers.PermissionsMetadata{
+		Name:          "Create Role",
+		Icon:          "fluent:shield-task-24-regular",
+		PermissionTag: "role:create",
+		Color:         "blue-500",
+		Description:   "Allows creating new user roles",
+		Category:      USER,
+	}
+
+	GET_ROLES_RECORDS = helpers.PermissionsMetadata{
+		Name:          "View All Roles",
+		Icon:          "fluent:shield-task-24-regular",
+		PermissionTag: "roles:read",
+		Color:         "blue-500",
+		Description:   "Allows viewing the list of all roles",
+		Category:      USER,
+	}
+
+	GET_ROLE = helpers.PermissionsMetadata{
+		Name:          "View Specific Role",
+		Icon:          "fluent:shield-task-24-regular",
+		PermissionTag: "role:read",
+		Color:         "blue-500",
+		Description:   "Allows viewing details of a specific role",
+		Category:      USER,
+	}
+
+	UPDATE_ROLE = helpers.PermissionsMetadata{
+		Name:          "Update Role",
+		Icon:          "fluent:shield-task-24-regular",
+		PermissionTag: "role:update",
+		Color:         "blue-500",
+		Description:   "Allows updating role details and permissions",
+		Category:      USER,
+	}
+
+	DELETE_ROLE = helpers.PermissionsMetadata{
+		Name:          "Delete Role",
+		Icon:          "fluent:shield-task-24-regular",
+		PermissionTag: "role:delete",
+		Color:         "red-500",
+		Description:   "Allows deleting user roles",
+		Category:      USER,
+	}
+)

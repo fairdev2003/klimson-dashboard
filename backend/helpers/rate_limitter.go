@@ -17,7 +17,7 @@ func errorHandler(ctx *gin.Context, info ratelimit.Info) {
 }
 
 var publicRateLimitRuleConfig = ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
-	Rate:  time.Minute,
+	Rate:  time.Second,
 	Limit: 10,
 })
 var adminRateLimitRuleConfig = ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{

@@ -1,13 +1,22 @@
 <script lang="ts">
-	import RDBColorInput from '$lib/components/modal/RDBColorInput.svelte';
-	import type { Role } from '$lib/types/user';
+	import { api } from '$lib/api/api';
 	import { onMount } from 'svelte';
+	import { type PermissionRegistry } from '$lib/api/requests/misc';
+	import { debug } from '$lib/dashboard/stores/debug';
+	import PermissionToggle from '../PermissionToggle.svelte';
 
-	type Props = { role: Role };
+	let registry: Partial<Record<string, PermissionRegistry[]>> | undefined = $state();
 
-	let { role = $bindable() }: Props = $props();
+	onMount(async () => {
+		const response = await api.misc.GetPermissionRegistry();
 
-	onMount(() => {});
+		registry = Object.groupBy(response.data.perms, (perm) => perm.category);
+		debug.log(registry);
+	});
 </script>
 
-<div class="h-500"></div>
+<div class="flex flex-col gap-4">
+	{#each Object.entries(registry ?? {}).sort() as [category, perms]}
+		<PermissionToggle {perms} {category} />
+	{/each}
+</div>

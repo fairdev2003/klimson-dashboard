@@ -4,12 +4,12 @@ import "github.com/zgierz/klimson/backend/helpers"
 
 // SERVER/DEV PERMISSIONS
 var (
-	SERVER_BINARY = helpers.PermissionsMetadata{
-		Name:          "Send Binary Startup File",
+	ADMIN = helpers.PermissionsMetadata{
+		Name:          "Admin Role",
 		Icon:          "lucide:binary",
-		PermissionTag: "dev:binary-send",
-		Color:         "bg-blue-500",
-		Description:   "",
-		Category:      SERVER,
+		PermissionTag: "admin",
+		Color:         "purple-500",
+		Description:   "Has acccess to all things on the dashboard",
+		Category:      SUPER,
 	}
 )

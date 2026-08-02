@@ -8,7 +8,7 @@ var (
 		Name:          "Get All Users",
 		Icon:          "simple-icons:redis",
 		PermissionTag: "redis:set",
-		Color:         "bg-red-500",
+		Color:         "red-500",
 		Description:   "",
 		Category:      REDIS,
 	}
@@ -16,7 +16,7 @@ var (
 		Name:          "Get Specific Redis Private Key",
 		Icon:          "simple-icons:redis",
 		PermissionTag: "redis:get",
-		Color:         "bg-red-500",
+		Color:         "red-500",
 		Description:   "",
 		Category:      REDIS,
 	}
@@ -25,7 +25,7 @@ var (
 		Name:          "Delete Specific Redis Key",
 		Icon:          "simple-icons:redis",
 		PermissionTag: "redis:del",
-		Color:         "bg-red-500",
+		Color:         "red-500",
 		Description:   "",
 		Category:      REDIS,
 	}
@@ -33,7 +33,7 @@ var (
 		Name:          "Get Basic Information About Key",
 		Icon:          "simple-icons:redis",
 		PermissionTag: "redis:key-info",
-		Color:         "bg-red-500",
+		Color:         "red-500",
 		Description:   "",
 		Category:      REDIS,
 	}
