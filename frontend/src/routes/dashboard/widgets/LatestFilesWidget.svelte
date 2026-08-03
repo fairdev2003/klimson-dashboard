@@ -7,12 +7,6 @@
 	import { onMount } from 'svelte';
 
 	let files: StorageRecord[] = $state([]);
-
-	onMount(async () => {
-		const response = await api.storage.GetLatestStorageRecords();
-
-		files = response.data.files;
-	});
 </script>
 
 <button

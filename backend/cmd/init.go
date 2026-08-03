@@ -14,6 +14,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/zgierz/klimson/backend/config"
 	"github.com/zgierz/klimson/backend/helpers"
+	"github.com/zgierz/klimson/backend/helpers/maroto"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
 
@@ -108,7 +109,7 @@ func Redis() *redis.Client {
 }
 
 func AutoMigrateModels() {
-	if os.Getenv("AUTO_MIGRATE") == "true" {
+	if os.Getenv("AUTO_MIGRATE") == "true" || os.Getenv("APP_ENV") == "prod" {
 		var modelsToMigrate []any
 		for _, m := range models.MigratableModels {
 			modelsToMigrate = append(modelsToMigrate, m.Model)
@@ -159,7 +160,7 @@ func FetchEnvVariables() {
 
 func Init() {
 	helpers.ClearConsole()
-
+	maroto.GenerateSecurityCV()
 	LoadConfig()
 	FetchEnvVariables()
 	db = Db()

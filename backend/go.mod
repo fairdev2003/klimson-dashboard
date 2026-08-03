@@ -1,6 +1,6 @@
 module github.com/zgierz/klimson/backend
 
-go 1.25.0
+go 1.26.1
 
 require (
 	github.com/EdlinOrg/prominentcolor v1.0.0
@@ -13,22 +13,33 @@ require (
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.8 // indirect
 	github.com/andybalholm/brotli v1.2.2 // indirect
+	github.com/boombuler/barcode v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
+	github.com/f-amaral/go-async v0.3.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
+	github.com/hhrutter/lzw v1.0.0 // indirect
+	github.com/hhrutter/pkcs7 v0.2.0 // indirect
+	github.com/hhrutter/tiff v1.0.2 // indirect
 	github.com/icholy/digest v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.10.0 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	github.com/johnfercher/go-tree v1.1.0 // indirect
+	github.com/johnfercher/maroto/v2 v2.4.0 // indirect
 	github.com/klauspost/compress v1.19.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260627054121-477a66015f15 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
+	github.com/mattn/go-runewidth v0.0.21 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/oliamb/cutter v0.2.2 // indirect
+	github.com/pdfcpu/pdfcpu v0.11.1 // indirect
+	github.com/phpdave11/gofpdf v1.4.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
@@ -42,7 +53,9 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.mongodb.org/mongo-driver/v2 v2.8.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
+	golang.org/x/image v0.37.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (

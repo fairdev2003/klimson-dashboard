@@ -64,7 +64,6 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.RegisterV2StorageEndpoints()
 	controller.RegisterUserController()
 	controller.RegisterRedisEndpoints("/redis")
-	// controller.RegisterStateEndpoints("/state")
 	controller.RegisterMiscEndpoints("/misc")
 	controller.RegisterRoleController()
 
@@ -84,7 +83,6 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.POST("/storage/interface/rename/*folder", helpers.RequirePermission(permission.STORAGE_RENAME), controller.RenameItem)
 	controller.adminPath.POST("/storage/interface/edit-file/*filepath", helpers.RequirePermission(permission.STORAGE_EDIT_FILE), controller.PushChangedTextFile)
 	controller.adminPath.POST("/storage/interface/new-file/*filepath", helpers.RequirePermission(permission.STORAGE_NEW_FILE), controller.NewFile)
-
 	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
 
 	// context storage crud operations
@@ -104,7 +102,7 @@ func (controller GlobalController) RegisterRoutes() {
 
 	// misc
 	controller.adminPath.GET("/disk", helpers.RequirePermission(permission.DISK_INFO), controller.GetStorageLeftPercentage)
-	controller.adminPath.GET("/neofetch", helpers.RequirePermission(permission.NEOFETCH), controller.Neofetch)
+	controller.adminPath.GET("/security/cv", helpers.RequirePermission(permission.CV_RETRIEVE), controller.ReturnSecurityCV)
 
 	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)

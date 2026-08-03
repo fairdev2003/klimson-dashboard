@@ -10,4 +10,5 @@ var (
 	DB             = "SQL Database"
 	SUPER          = "Admin"
 	SERVER         = "Server Configuration"
+	CV             = "CV Generator Methods"
 )

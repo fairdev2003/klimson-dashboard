@@ -39,7 +39,7 @@
 
 <div
 	style="width: {$sidebar_open ? '300px' : '40px'}; transition: width 0.3s ease;"
-	class="sticky left-0 top-16.25 h-dvh z-500 overflow-hidden flex flex-col m-5"
+	class="sticky left-0 top-16.25 h-dvh z-500 overflow-auto flex flex-col m-5"
 >
 	<div>
 		<SidebarToggler bind:opened={$sidebar_open} onclick={handleToggle} />
@@ -49,7 +49,7 @@
 		<div bind:this={contentRef}>
 			<SidebarPill />
 
-			<nav class="flex flex-col gap-2 mt-3">
+			<nav class="flex flex-col gap-2 mt-3 overflow-auto h-9/10">
 				{#each Dashboard.constants.SidebarContents as content, i}
 					<SidebarItem {content} />
 				{/each}

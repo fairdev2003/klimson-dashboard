@@ -27,18 +27,19 @@ func InitRoutes() {
 
 	ctx := context.Background()
 	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev", "https://klimson.dev", "http://mojprojekt.test:5173"}
+
 	server.Use(helpers.NetworkLogger())
+	server.Use(helpers.CorsConf(origins))
 
 	apiPath = server.Group("/")
 	wsPath = server.Group("/ws")
 	adminPath = apiPath.Group("/admin")
+
+	adminPath.Use(helpers.CorsConf(origins))
 	adminPath.Use(AuthMiddleware())
 	adminPath.Use(helpers.AdminRateLimiter())
 	apiPath.Use(helpers.PublicRateLimiter())
-	server.Use(helpers.CorsConf(origins))
-	adminPath.Use(helpers.CorsConf(origins))
 
-	// root routes
 	apiPath.GET("/", func(c *gin.Context) {
 		c.JSON(200, "Nie powinno ciebie tu byc ://")
 	})
