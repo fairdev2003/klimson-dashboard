@@ -1,0 +1,12 @@
+{
+  "display_name": "HarcQuiz Klimson Api",
+  "internal_name": "harcquiz-api",
+  "description": "Serwer największej bazy quizów harcerskich",
+  "port": 8080,
+  "debug": true,
+  "api_config": {
+    "path": "/harc-api",
+    "version": "v1"
+  },
+  "config_path": "./"
+}

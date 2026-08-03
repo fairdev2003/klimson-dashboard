@@ -17,21 +17,17 @@ type GlobalController struct {
 	publicPath *gin.RouterGroup
 	adminPath  *gin.RouterGroup
 	Hub        *models.WebsocketIsland
-	Files      []models.ListRecord
 	rdb        *redis.Client
-	state      *helpers.StateHub
 }
 
-func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *models.WebsocketIsland, files []models.ListRecord, rdb *redis.Client, state *helpers.StateHub) GlobalController {
+func NewQuizController(db *gorm.DB, ctx context.Context, publicPath *gin.RouterGroup, adminPath *gin.RouterGroup, hub *models.WebsocketIsland, rdb *redis.Client) GlobalController {
 	return GlobalController{
 		db:         db,
 		ctx:        ctx,
 		publicPath: publicPath,
 		adminPath:  adminPath,
 		Hub:        hub,
-		Files:      files,
 		rdb:        rdb,
-		state:      state,
 	}
 }
 
@@ -68,7 +64,7 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.RegisterV2StorageEndpoints()
 	controller.RegisterUserController()
 	controller.RegisterRedisEndpoints("/redis")
-	controller.RegisterStateEndpoints("/state")
+	// controller.RegisterStateEndpoints("/state")
 	controller.RegisterMiscEndpoints("/misc")
 	controller.RegisterRoleController()
 
@@ -88,7 +84,6 @@ func (controller GlobalController) RegisterRoutes() {
 	controller.adminPath.POST("/storage/interface/rename/*folder", helpers.RequirePermission(permission.STORAGE_RENAME), controller.RenameItem)
 	controller.adminPath.POST("/storage/interface/edit-file/*filepath", helpers.RequirePermission(permission.STORAGE_EDIT_FILE), controller.PushChangedTextFile)
 	controller.adminPath.POST("/storage/interface/new-file/*filepath", helpers.RequirePermission(permission.STORAGE_NEW_FILE), controller.NewFile)
-	controller.adminPath.GET("/storage/latest", helpers.RequirePermission(permission.STORAGE_LATEST), controller.GetLatesFiles)
 
 	controller.publicPath.GET("/legal", controller.LegalReasonsTest)
 
@@ -109,6 +104,7 @@ func (controller GlobalController) RegisterRoutes() {
 
 	// misc
 	controller.adminPath.GET("/disk", helpers.RequirePermission(permission.DISK_INFO), controller.GetStorageLeftPercentage)
+	controller.adminPath.GET("/neofetch", helpers.RequirePermission(permission.NEOFETCH), controller.Neofetch)
 
 	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)

@@ -6,11 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/klimson/backend/khttp"
-	"github.com/zgierz/klimson/backend/logger"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/models"
 )
 
@@ -31,17 +29,17 @@ func (gc GlobalController) NewFile(ctx *gin.Context) {
 		Content string `json:"content"`
 	}
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
-		khttp.BadRequestResponse(ctx, nil, err.Error())
+		api.BadRequestResponse(ctx, nil, err.Error())
 		return
 	}
 
 	err := os.WriteFile(fullPath, []byte(requestBody.Content), 0644)
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, "Success!")
+	api.SuccessResponse(ctx, nil, "Success!")
 
 }
 
@@ -51,7 +49,7 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 	cleanPath := filepath.Clean(filePath)
 
 	if strings.Contains(cleanPath, "passwords.txt") {
-		c.AbortWithStatusJSON(403, gin.H{"error": "Access denied to config files"})
+		api.UnauthorizedResponse(c, nil, "Access denied to config files")
 		return
 	}
 
@@ -59,7 +57,7 @@ func (gc GlobalController) GetSecuredFile(c *gin.Context) {
 
 	info, err := os.Stat(fullPath)
 	if os.IsNotExist(err) || info.IsDir() {
-		c.AbortWithStatusJSON(404, gin.H{"error": "File not found"})
+		api.NotFoundResponse(c)
 		return
 	}
 
@@ -73,7 +71,7 @@ func (gc *GlobalController) PushChangedTextFile(c *gin.Context) {
 		Content string `json:"content"`
 	}
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Błędne dane", "success": false})
+		api.BadRequestResponse(c, nil, "Błędne dane")
 		return
 	}
 
@@ -81,17 +79,17 @@ func (gc *GlobalController) PushChangedTextFile(c *gin.Context) {
 
 	err := os.WriteFile(fullPath, []byte(requestBody.Content), 0644)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err, "success": false})
+		api.InternalServerErrorResponse(c, nil, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Plik zapisany pomyślnie", "success": true})
+	api.SuccessResponse(c, nil, "Plik zapisany pomyślnie")
 }
 
 func (gc GlobalController) UploadFile(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Brak pliku w żądaniu", "success": false})
+		api.BadRequestResponse(c, nil, "Brak pliku w żądaniu")
 		return
 	}
 
@@ -99,26 +97,11 @@ func (gc GlobalController) UploadFile(c *gin.Context) {
 	dst := filepath.Join("./static/uploads", folderPath, file.Filename)
 
 	if err := c.SaveUploadedFile(file, dst); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Błąd zapisu pliku", "success": false})
+		api.InternalServerErrorResponse(c, nil, "Błąd zapisu pliku")
 		return
 	}
 
-	newRecord := models.ListRecord{
-		Name:         file.Filename,
-		IsDir:        false,
-		ModifiedTime: time.Now(),
-		Size:         file.Size,
-	}
-
-	logger.ServerLog("Here!")
-	gc.Files = append(gc.Files, newRecord)
-
-	c.JSON(http.StatusOK, gin.H{"message": "Plik przesłany pomyślnie", "success": true})
-}
-
-func (gc GlobalController) GetLatesFiles(ctx *gin.Context) {
-	logger.ServerLog(gc.Files)
-	khttp.SuccessResponse(ctx, gin.H{"files": gc.Files})
+	api.SuccessResponse(c, nil, "Plik przesłany pomyślnie")
 }
 
 func (gc GlobalController) CreateFolder(c *gin.Context) {
@@ -126,7 +109,7 @@ func (gc GlobalController) CreateFolder(c *gin.Context) {
 		FolderName string `json:"folder_name"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Nieprawidłowe dane", "success": false})
+		api.BadRequestResponse(c, nil, "Nieprawidłowe dane")
 		return
 	}
 
@@ -134,16 +117,16 @@ func (gc GlobalController) CreateFolder(c *gin.Context) {
 	fullPath := filepath.Join("./static/uploads", folderPath, input.FolderName)
 
 	if _, err := os.Stat(fullPath); !os.IsNotExist(err) {
-		c.JSON(http.StatusConflict, gin.H{"message": "Folder o tej nazwie już istnieje", "success": false})
+		api.BadRequestResponse(c, nil, "Folder o tej nazwie już istnieje")
 		return
 	}
 
 	if err := os.MkdirAll(fullPath, 0755); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Błąd tworzenia folderu", "success": false})
+		api.InternalServerErrorResponse(c, nil, "Błąd tworzenia folderu")
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Folder stworzony", "success": true})
+	api.StatusCreatedResponse(c, nil, "Folder stworzony")
 }
 
 func (gc GlobalController) DeleteFileOrFolder(c *gin.Context) {
@@ -151,17 +134,17 @@ func (gc GlobalController) DeleteFileOrFolder(c *gin.Context) {
 	fullPath := filepath.Join("./static/uploads", targetPath)
 
 	if !strings.HasPrefix(fullPath, filepath.Clean("./static/uploads")) {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Błędna ścieżka"})
+		api.BadRequestResponse(c, nil, "Błędna ścieżka")
 		return
 	}
 
 	err := os.RemoveAll(fullPath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Nie udało się usunąć"})
+		api.InternalServerErrorResponse(c, nil, "Nie udało się usunąć")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Usunięto pomyślnie"})
+	api.SuccessResponse(c, nil, "Usunięto pomyślnie")
 }
 
 func (gc GlobalController) RenameItem(c *gin.Context) {
@@ -170,7 +153,7 @@ func (gc GlobalController) RenameItem(c *gin.Context) {
 		NewName string `json:"newName"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Błędne dane"})
+		api.BadRequestResponse(c, nil, "Błędne dane")
 		return
 	}
 
@@ -181,11 +164,11 @@ func (gc GlobalController) RenameItem(c *gin.Context) {
 
 	err := os.Rename(oldFullPath, newFullPath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Nie udało się zmienić nazwy"})
+		api.InternalServerErrorResponse(c, nil, "Nie udało się zmienić nazwy")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Nazwa zmieniona"})
+	api.SuccessResponse(c, nil, "Nazwa zmieniona")
 }
 
 func (gc GlobalController) ListFiles(c *gin.Context) {
@@ -194,7 +177,7 @@ func (gc GlobalController) ListFiles(c *gin.Context) {
 
 	entries, err := os.ReadDir(fullPath)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Błąd odczytu folderu")
+		api.InternalServerErrorResponse(c, nil, "Błąd odczytu folderu")
 		return
 	}
 
@@ -213,7 +196,7 @@ func (gc GlobalController) ListFiles(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, fileList)
+	api.SuccessResponse(c, fileList)
 }
 
 func (gc GlobalController) Interface(c *gin.Context) {
@@ -223,7 +206,7 @@ func (gc GlobalController) Interface(c *gin.Context) {
 
 	fileInfo, err := os.Stat(fullPath)
 	if err != nil {
-		c.String(http.StatusNotFound, "Błąd: Nie znaleziono folderu lub pliku")
+		api.NotFoundResponse(c)
 		return
 	}
 
@@ -234,7 +217,7 @@ func (gc GlobalController) Interface(c *gin.Context) {
 
 	entries, err := os.ReadDir(fullPath)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Błąd odczytu folderu")
+		api.InternalServerErrorResponse(c, nil, "Błąd odczytu folderu")
 		return
 	}
 

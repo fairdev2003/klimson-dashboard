@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/helpers"
-	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/permission"
 )
@@ -16,10 +16,10 @@ func (controller GlobalController) PingRedis(ctx *gin.Context) {
 	response, err := controller.rdb.Ping(controller.ctx).Result()
 
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, err)
+		api.InternalServerErrorResponse(ctx, err)
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"ping": response})
+	api.SuccessResponse(ctx, gin.H{"ping": response})
 }
 
 func (controller GlobalController) RDBSetKey(ctx *gin.Context) {
@@ -30,11 +30,11 @@ func (controller GlobalController) RDBSetKey(ctx *gin.Context) {
 
 	result, err := controller.rdb.Set(controller.ctx, key, value, 0).Result()
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
+	api.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
 }
 
 func (controller GlobalController) RDBGetKey(ctx *gin.Context) {
@@ -42,11 +42,11 @@ func (controller GlobalController) RDBGetKey(ctx *gin.Context) {
 
 	result, err := controller.rdb.Get(ctx, key).Result()
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
+	api.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
 }
 
 func (controller GlobalController) RDBDelKey(ctx *gin.Context) {
@@ -54,11 +54,11 @@ func (controller GlobalController) RDBDelKey(ctx *gin.Context) {
 
 	result, err := controller.rdb.Del(ctx, key).Result()
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
+	api.SuccessResponse(ctx, gin.H{"result": result}, "Success!")
 }
 
 func getAllKeys(ctx context.Context, client *redis.Client) ([]string, error) {
@@ -86,11 +86,11 @@ func (controller GlobalController) RDBGetAllExistingKeys(ctx *gin.Context) {
 	keys, err := getAllKeys(controller.ctx, controller.rdb)
 
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"rdbs": keys}, "Success!")
+	api.SuccessResponse(ctx, gin.H{"rdbs": keys}, "Success!")
 }
 
 func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
@@ -104,7 +104,7 @@ func (controller GlobalController) RDBGetKeyInfo(ctx *gin.Context) {
 
 	idle, _ := controller.rdb.ObjectIdleTime(ctx, key).Result()
 
-	khttp.SuccessResponse(ctx, gin.H{"memory_usage": mem, "type": kType, "ttl": ttl, "idle": idle}, "Request was successfull")
+	api.SuccessResponse(ctx, gin.H{"memory_usage": mem, "type": kType, "ttl": ttl, "idle": idle}, "Request was successfull")
 
 }
 

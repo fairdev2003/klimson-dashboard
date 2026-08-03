@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/models"
 	"gorm.io/gorm"
 )
@@ -14,16 +13,16 @@ func (controller GlobalController) CreateContextStorage(ctx *gin.Context) {
 	var context_storage models.ContextStorage
 
 	if err := ctx.ShouldBindJSON(&context_storage); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		api.BadRequestResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if err := controller.db.Create(&context_storage).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, context_storage)
+	api.StatusCreatedResponse(ctx, context_storage)
 }
 
 func (gc GlobalController) DeleteContextStorageRecord(ctx *gin.Context) {
@@ -31,11 +30,11 @@ func (gc GlobalController) DeleteContextStorageRecord(ctx *gin.Context) {
 	var context_storage models.ContextStorage
 
 	if err := gc.db.Delete(&context_storage, id).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Stats data deleted", "success": true})
+	api.SuccessResponse(ctx, nil, "Stats data deleted")
 }
 
 func (gc GlobalController) GetPrivateContextStorages(ctx *gin.Context) {
@@ -43,15 +42,11 @@ func (gc GlobalController) GetPrivateContextStorages(ctx *gin.Context) {
 
 	err := gc.db.Find(&storageItems).Error
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to retrieve context storage items",
-			"details": err.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Failed to retrieve context storage items: "+err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, storageItems)
+	api.SuccessResponse(ctx, storageItems)
 }
 
 func (controller GlobalController) GetPrivateContext(ctx *gin.Context) {
@@ -62,28 +57,21 @@ func (controller GlobalController) GetPrivateContext(ctx *gin.Context) {
 	result := controller.db.First(&storageItem, "key = ?", key)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			ctx.JSON(http.StatusNotFound, gin.H{
-				"status":  "error",
-				"message": "Context storage item not found",
-			})
+			api.NotFoundResponse(ctx)
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to retrieve context storage item",
-			"details": result.Error.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Failed to retrieve context storage item: "+result.Error.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, storageItem)
+	api.SuccessResponse(ctx, storageItem)
 }
 
 func (controller GlobalController) GetPublicContextStorage(ctx *gin.Context) {
 	id := ctx.Param("key")
 	if id == "" || id == ":key" {
-		khttp.BadRequestResponse(ctx, nil, "Key is required")
+		api.BadRequestResponse(ctx, nil, "Key is required")
 		return
 	}
 
@@ -91,16 +79,16 @@ func (controller GlobalController) GetPublicContextStorage(ctx *gin.Context) {
 
 	err := controller.db.First(&storage, "key = ?", id).Error
 	if err != nil {
-		khttp.BadRequestResponse(ctx, nil, "Context storage not found")
+		api.BadRequestResponse(ctx, nil, "Context storage not found")
 		return
 	}
 
 	if !*storage.Public {
-		khttp.UnauthorizedResponse(ctx, nil, "Is not public")
+		api.UnauthorizedResponse(ctx, nil, "Is not public")
 		return
 	}
 
-	ctx.JSON(200, storage)
+	api.SuccessResponse(ctx, storage)
 }
 
 func (controller GlobalController) UpdateContextStorage(ctx *gin.Context) {
@@ -110,39 +98,24 @@ func (controller GlobalController) UpdateContextStorage(ctx *gin.Context) {
 	result := controller.db.First(&existingItem, "key = ?", key)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			ctx.JSON(http.StatusNotFound, gin.H{
-				"status":  "error",
-				"message": "Context storage item not found",
-			})
+			api.NotFoundResponse(ctx)
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Database error while locating item",
-			"details": result.Error.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Database error while locating item: "+result.Error.Error())
 		return
 	}
 
 	var updateData models.ContextStorage
 	if err := ctx.ShouldBindJSON(&updateData); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Invalid JSON data",
-			"details": err.Error(),
-		})
+		api.BadRequestResponse(ctx, nil, "Invalid JSON data: "+err.Error())
 		return
 	}
 
 	if err := controller.db.Model(&existingItem).Updates(updateData).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to update context storage item",
-			"details": err.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Failed to update context storage item: "+err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, existingItem)
+	api.SuccessResponse(ctx, existingItem)
 }

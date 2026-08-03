@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"math/rand"
 	"net/http"
 	"time"
 
@@ -19,39 +18,24 @@ import (
 )
 
 var (
-	apiPath     *gin.RouterGroup
-	wsPath      *gin.RouterGroup
-	adminPath   *gin.RouterGroup
-	latestFiles []models.ListRecord
+	apiPath   *gin.RouterGroup
+	wsPath    *gin.RouterGroup
+	adminPath *gin.RouterGroup
 )
-
-func AddRandomRecords() {
-	names := []string{"dokument.txt", "zdjecie.jpg", "projekt.go", "backup.zip", "notatki.md"}
-
-	for i := 0; i < 3; i++ {
-		record := models.ListRecord{
-			Name:         names[rand.Intn(len(names))],
-			IsDir:        rand.Intn(2) == 0,
-			ModifiedTime: time.Now().Add(time.Duration(-rand.Intn(1000)) * time.Hour),
-			Size:         rand.Int63n(1024 * 1024),
-		}
-		latestFiles = append(latestFiles, record)
-	}
-}
 
 func InitRoutes() {
 
 	ctx := context.Background()
 	var origins []string = []string{"http://localhost:5173", "https://dashboard.klimson.dev", "https://klimson.dev", "http://mojprojekt.test:5173"}
-	server.Use(helpers.CorsConf(origins))
 	server.Use(helpers.NetworkLogger())
+
 	apiPath = server.Group("/")
 	wsPath = server.Group("/ws")
 	adminPath = apiPath.Group("/admin")
 	adminPath.Use(AuthMiddleware())
 	adminPath.Use(helpers.AdminRateLimiter())
 	apiPath.Use(helpers.PublicRateLimiter())
-
+	server.Use(helpers.CorsConf(origins))
 	adminPath.Use(helpers.CorsConf(origins))
 
 	// root routes
@@ -179,7 +163,6 @@ func InitRoutes() {
 
 	cpu_hub := helpers.NewHub("cpu")
 	logger_ws := helpers.NewHub("logger")
-	state_hub := helpers.GetState()
 	go cpu_hub.Run()
 	go logger_ws.Run()
 
@@ -195,10 +178,10 @@ func InitRoutes() {
 			})
 		}
 	}()
-	AddRandomRecords()
+
 	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, &models.WebsocketIsland{
 		CPUHub:    (*models.WSHub)(cpu_hub),
 		LoggerHub: (*models.WSHub)(logger_ws),
-	}, latestFiles, rdb, state_hub)
+	}, rdb)
 	newQuizController.RegisterRoutes()
 }

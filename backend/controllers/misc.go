@@ -1,17 +1,19 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"runtime"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/helpers"
-	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/models"
 )
 
@@ -25,12 +27,30 @@ func GetDiskUsage() (uint64, uint64, error) {
 
 func (controller GlobalController) GetPermissionsList(ctx *gin.Context) {
 	perms := helpers.GetAllDefinedPermissions()
-	khttp.SuccessResponse(ctx, gin.H{"perms": perms})
+	api.SuccessResponse(ctx, gin.H{"perms": perms})
 }
 
 func (controller GlobalController) GetPermissionCategoriesList(ctx *gin.Context) {
 	categories := helpers.GetAllDefinedPermissionCategories()
-	khttp.SuccessResponse(ctx, gin.H{"categories": categories})
+	api.SuccessResponse(ctx, gin.H{"categories": categories})
+}
+
+func (controller GlobalController) Neofetch(ctx *gin.Context) {
+	cmd := exec.Command("fastfetch", "--logo", "none")
+
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		api.InternalServerErrorResponse(ctx, nil, fmt.Sprintf("Error durinng executing the command neofetch: %v, %v", err, stderr.String()))
+		return
+	}
+
+	api.SuccessResponse(ctx, gin.H{"data": out.String()})
+
 }
 
 func ListFiles(folderPath string) ([]models.ListRecord, error) {
@@ -84,18 +104,18 @@ func (controller GlobalController) GetStorageLeftPercentage(ctx *gin.Context) {
 	arch, osName := getSystemInfo()
 
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if total == 0 {
-		khttp.SuccessResponse(ctx, gin.H{"percentage": 0, "used": 0, "total": 0, "arch": arch, "os": osName})
+		api.SuccessResponse(ctx, gin.H{"percentage": 0, "used": 0, "total": 0, "arch": arch, "os": osName})
 		return
 	}
 
 	percentage := (float64(used) / float64(total)) * 100
 
-	khttp.SuccessResponse(ctx, gin.H{
+	api.SuccessResponse(ctx, gin.H{
 		"percentage": percentage,
 		"used":       used,
 		"total":      total,
@@ -131,17 +151,13 @@ func (controller GlobalController) KlimsonFetch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, stats)
 }
 
-// Opcjonalna bezpieczna funkcja zastępcza, jeśli nie masz gotowej
 func getThreadCountSafe() int {
-	// W Go liczbę aktywnych wątków można też oszacować lub pobrać z debug,
-	// jeśli nie jest Ci niezbędna, możesz usunąć to pole ze struktury.
 	return 0
 }
 
 func (controller GlobalController) RegisterMiscEndpoints(groupPrefix string) {
 
 	miscGroupAdmin := controller.adminPath.Group(groupPrefix)
-	// miscGroupPublic := controller.publicPath.Group(groupPrefix)
 
 	miscGroupAdmin.GET("/klimson-fetch", controller.KlimsonFetch)
 

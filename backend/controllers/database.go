@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/models"
 	"gorm.io/gorm"
 )
@@ -20,11 +19,7 @@ func (controller GlobalController) GetTables(ctx *gin.Context) {
 	for _, m := range models.MigratableModels {
 		stmt := &gorm.Statement{DB: controller.db}
 		if err := stmt.Parse(m.Model); err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"status":  "error",
-				"message": "Failed to parse model schema",
-				"details": err.Error(),
-			})
+			api.InternalServerErrorResponse(ctx, nil, "Failed to parse model schema: "+err.Error())
 			return
 		}
 
@@ -35,8 +30,7 @@ func (controller GlobalController) GetTables(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "success",
+	api.SuccessResponse(ctx, gin.H{
 		"tables": tables,
 	})
 }
@@ -46,11 +40,7 @@ func (controller GlobalController) GetTableData(ctx *gin.Context) {
 
 	columnTypes, err := controller.db.Migrator().ColumnTypes(tableName)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to retrieve column structure for table " + tableName,
-			"details": err.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Failed to retrieve column structure for table "+tableName+": "+err.Error())
 		return
 	}
 
@@ -67,15 +57,12 @@ func (controller GlobalController) GetTableData(ctx *gin.Context) {
 	}
 
 	if currentModel == nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"status":  "error",
-			"message": "Table " + tableName + " is not registered in models",
-		})
+		api.NotFoundResponse(ctx)
 		return
 	}
 
 	if err := stmt.Parse(currentModel); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
@@ -106,16 +93,11 @@ func (controller GlobalController) GetTableData(ctx *gin.Context) {
 	var results []map[string]interface{}
 	err = controller.db.Table(tableName).Find(&results).Error
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to retrieve data from table " + tableName,
-			"details": err.Error(),
-		})
+		api.InternalServerErrorResponse(ctx, nil, "Failed to retrieve data from table "+tableName+": "+err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status":  "success",
+	api.SuccessResponse(ctx, gin.H{
 		"table":   tableName,
 		"columns": columns,
 		"count":   len(results),

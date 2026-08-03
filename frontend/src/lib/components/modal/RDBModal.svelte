@@ -50,8 +50,8 @@
 				small: 'rounded-md'
 			},
 			size: {
-				auto: 'w-auto',
-				accept_preset: 'lg:w-80 ',
+				auto: 'w-auto h-auto',
+				accept_preset: 'lg:w-80',
 				form_preset: 'lg:w-150 h-7/10'
 			},
 			screen_size: {},

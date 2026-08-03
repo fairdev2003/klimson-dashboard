@@ -22,6 +22,7 @@ func NetworkLogger() gin.HandlerFunc {
 
 func CorsConf(allowedOrigins []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
 		origin := c.Request.Header.Get("Origin")
 
 		isAllowed := false

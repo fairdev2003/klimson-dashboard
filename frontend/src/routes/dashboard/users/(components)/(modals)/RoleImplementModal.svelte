@@ -8,6 +8,7 @@
 	import RolePermSection from '../(sections)/RolePermSection.svelte';
 	import { debug } from '$lib/terminal/logic';
 	import account_controller from '../../helpers/access.svelte';
+	import MovingTooltip from '$lib/components/dashboard/MovingTooltip.svelte';
 
 	type Props = {
 		implementRoleModalOpened?: boolean;
@@ -45,21 +46,38 @@
 >
 	{#snippet stickyBar()}
 		<div class="flex flex-wrap p-4 px-0 top-0 gap-2 sticky mb-4 bg-neutral-900 w-full h-10">
-			<button
-				onclick={() => updateLabel('main-page')}
-				class:selected-label-pill={selectedLabel === 'main-page'}
-				class:normal-label-pill={selectedLabel !== 'main-page'}
-				class="base-label-pill"
-			>
-				Main Info
-			</button>
-			<button
-				onclick={() => updateLabel('perms')}
-				class:selected-label-pill={selectedLabel === 'perms'}
-				class:normal-label-pill={selectedLabel !== 'perms'}
-				class="base-label-pill">Permissions</button
-			>
-			<button class="base-label-pill disabled-label-pill">Binded Users</button>
+			<MovingTooltip>
+				{#snippet tooltipContent()}
+					<p class="text-xs max-w-40">Manage role info</p>
+				{/snippet}
+				<button
+					onclick={() => updateLabel('main-page')}
+					class:selected-label-pill={selectedLabel === 'main-page'}
+					class:normal-label-pill={selectedLabel !== 'main-page'}
+					class="base-label-pill"
+				>
+					Main Info
+				</button>
+			</MovingTooltip>
+
+			<MovingTooltip>
+				{#snippet tooltipContent()}
+					<p class="text-xs max-w-40">Manage permissions</p>
+				{/snippet}
+				<button
+					onclick={() => updateLabel('perms')}
+					class:selected-label-pill={selectedLabel === 'perms'}
+					class:normal-label-pill={selectedLabel !== 'perms'}
+					class="base-label-pill">Permissions</button
+				>
+			</MovingTooltip>
+
+			<MovingTooltip>
+				{#snippet tooltipContent()}
+					<p class="text-xs max-w-40">Section not available in create view</p>
+				{/snippet}
+				<button class="base-label-pill disabled-label-pill">Binded Users</button>
+			</MovingTooltip>
 		</div>
 	{/snippet}
 	<div class="flex flex-col gap-4">
@@ -69,9 +87,6 @@
 			{/if}
 			{#if selectedLabel === 'perms'}
 				<RolePermSection />
-			{/if}
-			{#if selectedLabel === 'users'}
-				<BindedUsers bind:role={account_controller.role} />
 			{/if}
 		</div>
 	</div>

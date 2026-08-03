@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/api"
 )
 
 const (
@@ -148,8 +148,9 @@ func RequestSpotify(spotify_url string, m ...string) (map[string]interface{}, er
 func (controller GlobalController) GetPlaybackState(ctx *gin.Context) {
 	playback_state, err := RequestSpotify(SPOTIFY_STATUS_URL)
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
+		return
 	}
 
-	khttp.SuccessResponse(ctx, playback_state)
+	api.SuccessResponse(ctx, playback_state)
 }

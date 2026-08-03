@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/imroc/req/v3"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/logger"
 )
 
@@ -29,12 +29,12 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 		Post("https://asteroidpg3d.xyz/api/get_clan_info")
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if !resp.IsSuccessState() {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": resp.Status})
+		api.InternalServerErrorResponse(ctx, nil, resp.Status)
 		return
 	}
 
@@ -46,7 +46,7 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 	logger.ServerLog("Received Json with id: " + clan_id + ": " + rawString)
 
 	if rawString == "" || rawString == "{}" {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "empty_response",
 			"message": "Clan not found or external API returned no data",
 			"raw":     resp.String(),
@@ -56,7 +56,7 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 
 	var formattedData interface{}
 	if err := json.Unmarshal([]byte(rawString), &formattedData); err != nil {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "partial_success",
 			"message": "Failed to parse inner JSON string, showing raw text",
 			"error":   err.Error(),
@@ -65,7 +65,7 @@ func (controller GlobalController) GetClanInfo(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, formattedData)
+	api.SuccessResponse(ctx, formattedData)
 }
 
 func (controller GlobalController) GetValorHistory(ctx *gin.Context) {
@@ -85,12 +85,12 @@ func (controller GlobalController) GetValorHistory(ctx *gin.Context) {
 		Get("https://asteroidpg3d.xyz/api/clan_income_history/" + clan_id)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if !resp.IsSuccessState() {
-		ctx.JSON(http.StatusBadGateway, gin.H{"error": "External API returned non-200 status"})
+		api.InternalServerErrorResponse(ctx, nil, "External API returned non-200 status")
 		return
 	}
 
@@ -100,7 +100,7 @@ func (controller GlobalController) GetValorHistory(ctx *gin.Context) {
 	}
 
 	if rawString == "" || rawString == "{}" {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "empty_response",
 			"message": "Clan not found or external API returned no data",
 			"raw":     resp.String(),
@@ -110,7 +110,7 @@ func (controller GlobalController) GetValorHistory(ctx *gin.Context) {
 
 	var formattedData interface{}
 	if err := json.Unmarshal([]byte(rawString), &formattedData); err != nil {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "partial_success",
 			"message": "Failed to parse inner JSON string, showing raw text",
 			"error":   err.Error(),
@@ -119,7 +119,7 @@ func (controller GlobalController) GetValorHistory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, formattedData)
+	api.SuccessResponse(ctx, formattedData)
 }
 
 func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
@@ -142,12 +142,12 @@ func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
 		Post("https://asteroidpg3d.xyz/api/get_player_info")
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
 	if !resp.IsSuccessState() {
-		ctx.JSON(http.StatusBadGateway, gin.H{"error": "External API returned non-200 status"})
+		api.InternalServerErrorResponse(ctx, nil, "External API returned non-200 status")
 		return
 	}
 
@@ -157,7 +157,7 @@ func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
 	}
 
 	if rawString == "" || rawString == "{}" {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "empty_response",
 			"message": "Clan not found or external API returned no data",
 			"raw":     resp.String(),
@@ -167,7 +167,7 @@ func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
 
 	var formattedData interface{}
 	if err := json.Unmarshal([]byte(rawString), &formattedData); err != nil {
-		ctx.JSON(http.StatusOK, gin.H{
+		api.SuccessResponse(ctx, gin.H{
 			"status":  "partial_success",
 			"message": "Failed to parse inner JSON string, showing raw text",
 			"error":   err.Error(),
@@ -176,5 +176,5 @@ func (controller GlobalController) GetPlayerData(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, formattedData)
+	api.SuccessResponse(ctx, formattedData)
 }

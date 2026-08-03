@@ -2,12 +2,11 @@ package controllers
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zgierz/klimson/backend/khttp"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
 )
@@ -16,7 +15,7 @@ func (gc GlobalController) UploadNewFile(ctx *gin.Context) {
 	file, err := ctx.FormFile("file")
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Brak pliku w żądaniu", "success": false})
+		api.BadRequestResponse(ctx, nil, "Brak pliku w żądaniu")
 		return
 	}
 
@@ -24,7 +23,7 @@ func (gc GlobalController) UploadNewFile(ctx *gin.Context) {
 	dst := filepath.Join("./static/private", folderPath, file.Filename)
 
 	if err := ctx.SaveUploadedFile(file, dst); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error(), "success": false})
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
 		return
 	}
 
@@ -38,25 +37,13 @@ func (gc GlobalController) UploadNewFile(ctx *gin.Context) {
 
 	errDB := gc.db.Debug().Create(storageEntry).Error
 	if errDB != nil {
-		fmt.Printf("BŁĄD BAZY: %v\n", errDB) // Sprawdź konsolę serwera!
-		khttp.InternalServerErrorResponse(ctx, nil, errDB.Error())
+		fmt.Printf("BŁĄD BAZY: %v\n", errDB)
+		api.InternalServerErrorResponse(ctx, nil, errDB.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Plik przesłany pomyślnie", "success": true})
+	api.SuccessResponse(ctx, nil, "Plik przesłany pomyślnie")
 }
-
-// erro := gc.db.Create(&models.Storage{
-// 		Name:        meta.Name,
-// 		Description: meta.Description,
-// 		Filename:    header.Filename,
-// 		Path:        path,
-// 		Filetype:    header.Header.Get("Content-Type"),
-// 	}).Error
-// 	if erro != nil {
-// 		khttp.InternalServerErrorResponse(ctx, nil, erro.Error())
-// 		return
-// 	}
 
 func (gc GlobalController) GetV2File(c *gin.Context) {
 	filePath := c.Param("filepath")
@@ -74,14 +61,15 @@ func (gc GlobalController) GetRecords(ctx *gin.Context) {
 
 	err := gc.db.Where("path = ?", filePath).Find(&storage).Error
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, err.Error())
+		api.InternalServerErrorResponse(ctx, nil, err.Error())
+		return
 	}
 
-	ctx.JSON(200, storage)
+	api.SuccessResponse(ctx, storage)
 }
 
 type CreateFolderRequest struct {
-	Name string `json:"name" binding:"required"` // 'required' wymusza podanie tej wartości
+	Name string `json:"name" binding:"required"`
 	Path string `json:"path" binding:"required"`
 }
 
@@ -89,19 +77,15 @@ func (gc GlobalController) CreateV2Folder(ctx *gin.Context) {
 	var req CreateFolderRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "Niepoprawne dane wejściowe: " + err.Error(),
-		})
+		api.BadRequestResponse(ctx, nil, "Niepoprawne dane wejściowe: "+err.Error())
 		return
 	}
 
-	// Teraz możesz bezpiecznie używać zmiennych req.Name oraz req.Path
 	fullPath := filepath.Join("./static/private", req.Path, req.Name)
 
 	err := os.MkdirAll(fullPath, 0755)
 	if err != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Nie udało się stworzyć folderu: "+err.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Nie udało się stworzyć folderu: "+err.Error())
 		return
 	}
 
@@ -115,11 +99,11 @@ func (gc GlobalController) CreateV2Folder(ctx *gin.Context) {
 
 	errDB := gc.db.Create(newFolder).Error
 	if errDB != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Błąd zapisu w bazie: "+errDB.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Błąd zapisu w bazie: "+errDB.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Folder " + req.Name + " utworzony"})
+	api.SuccessResponse(ctx, nil, "Folder "+req.Name+" utworzony")
 }
 
 func (gc GlobalController) RegisterV2StorageEndpoints() {

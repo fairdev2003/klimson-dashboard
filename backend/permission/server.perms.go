@@ -12,4 +12,12 @@ var (
 		Description:   "Has acccess to all things on the dashboard",
 		Category:      SUPER,
 	}
+	NEOFETCH = helpers.PermissionsMetadata{
+		Name:          "Neofetch execution",
+		Icon:          "mdi:ubuntu",
+		PermissionTag: "server:neofetch",
+		Color:         "purple-500",
+		Description:   "Access to built-in system command called neofetch",
+		Category:      SERVER,
+	}
 )

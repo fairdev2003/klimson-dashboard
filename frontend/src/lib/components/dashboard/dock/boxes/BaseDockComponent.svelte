@@ -167,7 +167,7 @@
 		deleteModalOpened = !deleteModalOpened;
 	}}
 	title="Are u sure?"
-	className="w-100"
+	size="auto"
 >
 	<p>Are you sure you want to delete this bookmark?</p>
 	<div class="flex justify-end mt-5">

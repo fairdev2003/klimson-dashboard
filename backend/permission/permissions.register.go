@@ -8,6 +8,6 @@ var (
 	USER           = "User Management"
 	REDIS          = "Redis Database"
 	DB             = "SQL Database"
-	SERVER         = "Server Endpoints"
 	SUPER          = "Admin"
+	SERVER         = "Server Configuration"
 )

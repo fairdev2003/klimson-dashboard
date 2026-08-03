@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/helpers"
-	"github.com/zgierz/klimson/backend/khttp"
 	"github.com/zgierz/klimson/backend/models"
 	"github.com/zgierz/klimson/backend/permission"
 )
@@ -12,17 +12,17 @@ import (
 func (gc GlobalController) NewUser(ctx *gin.Context) {
 	var user models.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
-		khttp.BadRequestResponse(ctx, nil, "Invalid json")
+		api.BadRequestResponse(ctx, nil, "Invalid json")
 		return
 	}
 
 	if err := gc.db.Create(&user).Error; err != nil {
-		khttp.BadRequestResponse(ctx, nil, err.Error())
+		api.BadRequestResponse(ctx, nil, err.Error())
 		return
 	}
 
 	gc.db.Preload("Role").First(&user, user.ID)
-	khttp.SuccessResponse(ctx, user, "User created successfully")
+	api.SuccessResponse(ctx, user, "User created successfully")
 }
 
 func (gc GlobalController) GetUser(ctx *gin.Context) {
@@ -30,16 +30,16 @@ func (gc GlobalController) GetUser(ctx *gin.Context) {
 	var user models.User
 
 	if err := gc.db.Preload("Role").First(&user, id).Error; err != nil {
-		khttp.BadRequestResponse(ctx, nil, "User not found")
+		api.BadRequestResponse(ctx, nil, "User not found")
 		return
 	}
-	khttp.SuccessResponse(ctx, gin.H{"user": user}, "User details")
+	api.SuccessResponse(ctx, gin.H{"user": user}, "User details")
 }
 
 func (gc GlobalController) ListUsers(ctx *gin.Context) {
 	var users []models.User
 	gc.db.Preload("Role").Find(&users)
-	khttp.SuccessResponse(ctx, gin.H{"users": users}, "Users list")
+	api.SuccessResponse(ctx, gin.H{"users": users}, "Users list")
 }
 
 func (gc GlobalController) UpdateUser(ctx *gin.Context) {
@@ -47,27 +47,27 @@ func (gc GlobalController) UpdateUser(ctx *gin.Context) {
 	var user models.User
 
 	if err := gc.db.First(&user, id).Error; err != nil {
-		khttp.BadRequestResponse(ctx, nil, "User not found")
+		api.BadRequestResponse(ctx, nil, "User not found")
 		return
 	}
 
 	if err := ctx.ShouldBindJSON(&user); err != nil {
-		khttp.BadRequestResponse(ctx, nil, "Invalid json")
+		api.BadRequestResponse(ctx, nil, "Invalid json")
 		return
 	}
 
 	gc.db.Save(&user)
-	khttp.SuccessResponse(ctx, nil, "User updated successfully")
+	api.SuccessResponse(ctx, nil, "User updated successfully")
 }
 
 func (gc GlobalController) DeleteUser(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	if err := gc.db.Delete(&models.User{}, id).Error; err != nil {
-		khttp.BadRequestResponse(ctx, nil, "Failed to delete user")
+		api.BadRequestResponse(ctx, nil, "Failed to delete user")
 		return
 	}
-	khttp.SuccessResponse(ctx, nil, "User deleted successfully")
+	api.SuccessResponse(ctx, nil, "User deleted successfully")
 }
 
 func (gc GlobalController) GetYourself(ctx *gin.Context) {
@@ -78,7 +78,7 @@ func (gc GlobalController) GetYourself(ctx *gin.Context) {
 			return
 		}
 
-		khttp.SuccessResponse(ctx, gin.H{"claims": claims})
+		api.SuccessResponse(ctx, gin.H{"claims": claims})
 		return
 	}
 
@@ -98,7 +98,7 @@ type RoleInput struct {
 func (gc GlobalController) CreateRole(ctx *gin.Context) {
 	var input RoleInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		khttp.BadRequestResponse(ctx, nil, "JSON Error: "+err.Error())
+		api.BadRequestResponse(ctx, nil, "JSON Error: "+err.Error())
 		return
 	}
 
@@ -118,23 +118,23 @@ func (gc GlobalController) CreateRole(ctx *gin.Context) {
 	}
 
 	if result := gc.db.Create(&role); result.Error != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Error during creating role: "+result.Error.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Error during creating role: "+result.Error.Error())
 		return
 	}
 
 	gc.db.Preload("Permissions").First(&role, role.ID)
 
-	khttp.SuccessResponse(ctx, gin.H{"data": role}, "Role created successfully.")
+	api.SuccessResponse(ctx, gin.H{"data": role}, "Role created successfully.")
 }
 
 func (gc GlobalController) GetRoles(ctx *gin.Context) {
 	var roles []models.Role
 	if result := gc.db.Preload("Permissions").Find(&roles); result.Error != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Error during fetching the role: "+result.Error.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Error during fetching the role: "+result.Error.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"data": roles})
+	api.SuccessResponse(ctx, gin.H{"data": roles})
 }
 
 func (gc GlobalController) GetRole(ctx *gin.Context) {
@@ -142,11 +142,11 @@ func (gc GlobalController) GetRole(ctx *gin.Context) {
 	var role models.Role
 
 	if result := gc.db.Preload("Permissions").First(&role, id); result.Error != nil {
-		khttp.NotFoundResponse(ctx)
+		api.NotFoundResponse(ctx)
 		return
 	}
 
-	khttp.SuccessResponse(ctx, gin.H{"data": role}, "Successfully fetched the role.")
+	api.SuccessResponse(ctx, gin.H{"data": role}, "Successfully fetched the role.")
 
 }
 
@@ -155,13 +155,13 @@ func (gc GlobalController) UpdateRole(ctx *gin.Context) {
 	var role models.Role
 
 	if result := gc.db.First(&role, id); result.Error != nil {
-		khttp.NotFoundResponse(ctx)
+		api.NotFoundResponse(ctx)
 		return
 	}
 
 	var input RoleInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		khttp.BadRequestResponse(ctx, nil, "JSON Erorr: "+err.Error())
+		api.BadRequestResponse(ctx, nil, "JSON Erorr: "+err.Error())
 		return
 	}
 
@@ -176,7 +176,7 @@ func (gc GlobalController) UpdateRole(ctx *gin.Context) {
 
 	gc.db.Model(&role).Association("Permissions").Replace(&permissions)
 
-	khttp.SuccessResponse(ctx, nil, "Roles was updated successfully.")
+	api.SuccessResponse(ctx, nil, "Roles was updated successfully.")
 }
 
 func (gc GlobalController) DeleteRole(ctx *gin.Context) {
@@ -184,21 +184,21 @@ func (gc GlobalController) DeleteRole(ctx *gin.Context) {
 	var role models.Role
 
 	if result := gc.db.First(&role, id); result.Error != nil {
-		khttp.NotFoundResponse(ctx)
+		api.NotFoundResponse(ctx)
 		return
 	}
 
 	if result := gc.db.Where("role_id = ?", role.ID).Delete(&models.Permission{}); result.Error != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Error during deleting permissions: "+result.Error.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Error during deleting permissions: "+result.Error.Error())
 		return
 	}
 
 	if result := gc.db.Delete(&role); result.Error != nil {
-		khttp.InternalServerErrorResponse(ctx, nil, "Error during deleting the role: "+result.Error.Error())
+		api.InternalServerErrorResponse(ctx, nil, "Error during deleting the role: "+result.Error.Error())
 		return
 	}
 
-	khttp.SuccessResponse(ctx, nil, "Role and its permissions are successfully deleted.")
+	api.SuccessResponse(ctx, nil, "Role and its permissions are successfully deleted.")
 }
 
 func (gc GlobalController) RegisterUserController() {
