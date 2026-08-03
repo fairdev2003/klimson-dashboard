@@ -108,16 +108,20 @@ func Redis() *redis.Client {
 }
 
 func AutoMigrateModels() {
-	var modelsToMigrate []any
-	for _, m := range models.MigratableModels {
-		modelsToMigrate = append(modelsToMigrate, m.Model)
-	}
+	if os.Getenv("AUTO_MIGRATE") == "true" {
+		var modelsToMigrate []any
+		for _, m := range models.MigratableModels {
+			modelsToMigrate = append(modelsToMigrate, m.Model)
+		}
 
-	if err := db.AutoMigrate(modelsToMigrate...); err != nil {
-		logger.ErrorLog("Error while migrating models to postgres database")
-		return
+		if err := db.AutoMigrate(modelsToMigrate...); err != nil {
+			logger.ErrorLog("Error while migrating models to postgres database")
+			return
+		}
+		logger.GreenServerLog("✓ " + "Migrated database models")
+	} else {
+		logger.BlueServerLog("x " + "Database migration is skipped.")
 	}
-	logger.GreenServerLog("✓ " + "Migrated database models")
 }
 
 func StartGinServer() {

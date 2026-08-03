@@ -67,6 +67,31 @@ func GreenServerLog(log ...any) {
 	fmt.Println(blue("● server/"+cfg.InternalName) + " " + yellow("("+cfg.Api.Version+")") + red(" % ") + green(log...))
 }
 
+func BlueServerLog(log ...any) {
+
+	file, err := os.Open("./" + "server-config" + "/config.json")
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	defer file.Close()
+
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	var cfg = config.PreGeneratedConfig
+	err = json.Unmarshal(bytes, &cfg)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	blue := color.New(color.FgBlue).SprintFunc()
+	yellow := color.New(color.FgYellow).SprintFunc()
+
+	fmt.Println(blue("● server/"+cfg.InternalName) + " " + yellow("("+cfg.Api.Version+")") + blue(" % ") + blue(log...))
+}
+
 func GetFileLocation() string {
 	_, file, _, ok := runtime.Caller(1)
 	if !ok {
