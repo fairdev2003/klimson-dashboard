@@ -1,13 +1,17 @@
 package handlers
 
 import (
+	"fmt"
 	"os"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+	"github.com/zgierz/klimson/backend/api"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RootJwtClaims struct {
@@ -56,4 +60,33 @@ func GenerateToken(contributor models.Contributor) (string, error) {
 	logger.ServerLog(secret)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
+}
+
+func PasswordMiddleware(hashedPassword string) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		pass := ctx.Query("password")
+
+		if pass == "" {
+			currentPath := ctx.Request.URL.Path
+			exampleURL := fmt.Sprintf("http://%s%s?password=PASSWORD", ctx.Request.Host, currentPath)
+
+			api.UnauthorizedResponse(ctx, map[string]interface{}{
+				"error":   true,
+				"message": "Password is required.",
+				"hint":    "Please provide the password using the 'password' query parameter. or header 'X-Password'.",
+				"example": exampleURL,
+			}, "Password is required.")
+			ctx.Abort()
+			return
+		}
+
+		err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(pass))
+		if err != nil {
+			api.UnauthorizedResponse(ctx, nil, fmt.Sprintf("Password is incorrect. %v", err))
+			ctx.Abort()
+			return
+		}
+
+		ctx.Next()
+	}
 }

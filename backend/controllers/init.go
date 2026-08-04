@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"context"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
+	"github.com/zgierz/klimson/backend/handlers"
 	"github.com/zgierz/klimson/backend/helpers"
 	"github.com/zgierz/klimson/backend/models"
 	"github.com/zgierz/klimson/backend/permission"
@@ -102,7 +104,8 @@ func (controller GlobalController) RegisterRoutes() {
 
 	// misc
 	controller.adminPath.GET("/disk", helpers.RequirePermission(permission.DISK_INFO), controller.GetStorageLeftPercentage)
-	controller.adminPath.GET("/security/cv", helpers.RequirePermission(permission.CV_RETRIEVE), controller.ReturnSecurityCV)
+	controller.adminPath.GET("/cv/security", handlers.PasswordMiddleware(os.Getenv("SECURITY_CV_PASSWORD")), controller.ReturnSecurityCV)
+	controller.adminPath.GET("/cv/it", handlers.PasswordMiddleware(os.Getenv("IT_CV_PASSWORD")), controller.ReturnDevCV)
 
 	controller.adminPath.GET("/permissions/all", controller.GetPermissionsList)
 	controller.adminPath.GET("/permissions/categories", controller.GetPermissionCategoriesList)

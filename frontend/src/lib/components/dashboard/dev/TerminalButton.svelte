@@ -14,7 +14,7 @@
 </script>
 
 <button
-	class="group w-35 flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-950 p-2 pr-4 shadow-xl transition-all hover:border-blue-500/50 active:scale-95"
+	class="group w-35 flex items-center gap-2 rounded-xl hover:bg-blue-900/50 hover:text-white bg-blue-950/50 p-2 pr-4 shadow-xl transition-all hover:border-blue-500/50 active:scale-95"
 	{onclick}
 >
 	<div class="rounded-full bg-blue-500/20 p-2 transition-colors group-hover:bg-blue-500">

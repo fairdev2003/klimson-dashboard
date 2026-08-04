@@ -62,6 +62,24 @@ func UnauthorizedResponse(ctx *gin.Context, data any, m ...string) {
 	build_response(ctx, http.StatusUnauthorized, true, message, data)
 }
 
+// Returns a JSON which is made for response that is forbidden (HTTP 403)
+func ForbiddenResponse(ctx *gin.Context, data any, m ...string) {
+	message := getMessage(m, "Forbidden Access")
+	build_response(ctx, http.StatusForbidden, true, message, data)
+}
+
+// Returns a JSON which is made for response that is conflict (HTTP 409)
+func ConflictResponse(ctx *gin.Context, data any, m ...string) {
+	message := getMessage(m, "Conflict")
+	build_response(ctx, http.StatusConflict, true, message, data)
+}
+
+// Returns a JSON which is made for response that is unavailable for legal reasons (HTTP 451)
+func LegalReasonsResponse(ctx *gin.Context, data any, m ...string) {
+	message := getMessage(m, "Legal Reasons")
+	build_response(ctx, http.StatusUnavailableForLegalReasons, true, message, data)
+}
+
 // Returns a JSON which is made for response that has too many request registered (HTTP 429)
 func TooManyRequestsResponse(ctx *gin.Context, cooldown string, m ...string) {
 	message := getMessage(m, "Too many requests! Try again in: "+cooldown)

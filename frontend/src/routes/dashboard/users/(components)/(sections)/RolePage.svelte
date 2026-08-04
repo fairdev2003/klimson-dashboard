@@ -22,7 +22,7 @@
 	}: Props = $props();
 </script>
 
-<div class="flex flex-col gap-4 w-2xl mx-auto">
+<div class="flex flex-col gap-4 lg:w-2xl w-full mx-auto">
 	{#each account_controller.roles as role}
 		<RoleRecord {role} />
 	{/each}

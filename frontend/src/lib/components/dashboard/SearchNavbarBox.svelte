@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { routes } from '$lib/dashboard/stores/data.store';
 	import { dashboard_config } from '$lib/dashboard/stores/persist';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
+	import type { RoutesResponse } from '../../../routes/dashboard/routes/types';
 	let value: string = $state('');
 	let opened: boolean = $state(false);
 
@@ -18,7 +20,7 @@
 		description: string;
 	};
 
-	const routes: Route[] = [
+	const app_routes: Route[] = [
 		{
 			name: 'Hub',
 			icon: 'mynaui:home',
@@ -82,7 +84,9 @@
 	];
 
 	const searchedRoutes = $derived(
-		value === '' ? routes : routes.filter((e) => e.name.toLowerCase().includes(value.toLowerCase()))
+		value === ''
+			? app_routes
+			: app_routes.filter((e) => e.name.toLowerCase().includes(value.toLowerCase()))
 	);
 
 	const searchedBookmarks = $derived(
@@ -92,6 +96,28 @@
 					e.name.toLowerCase().includes(value.toLowerCase())
 				)
 	);
+
+	let routesData = $state<RoutesResponse[]>([]);
+
+	$effect(() => {
+		const unsubscribe = routes.subscribe((val) => {
+			if (val) routesData = val;
+		});
+		return unsubscribe;
+	});
+
+	let filtered_routes = $derived.by<RoutesResponse[]>(() => {
+		if (!routesData) return [];
+
+		if (value !== '') {
+			const query = value.toLowerCase();
+			$routes = $routes.filter(
+				(e) => e.method.toLowerCase().includes(query) || e.path.toLowerCase().includes(query)
+			);
+		}
+
+		return $routes;
+	});
 
 	$effect(() => {
 		if (opened) {
@@ -143,6 +169,7 @@
 					{#if searchedRoutes.length > 0 || searchedBookmarks.length > 0}
 						{@render RoutesTab()}
 						{@render BookmarksTab()}
+						{@render ApiRoutesTab()}
 					{:else}
 						<p class="text-neutral-500 p-3">No results found</p>
 					{/if}
@@ -168,6 +195,33 @@
 			<div class="flex flex-col">
 				<p class="font-black text-start text-neutral-200">{search_route.name}</p>
 				<p class="text-xs text-start text-neutral-400">{search_route.description}</p>
+			</div>
+		</button>
+	{/each}
+{/snippet}
+
+{#snippet ApiRoutesTab()}
+	<p class="font-black">API Routes</p>
+	{#each filtered_routes as search_api_route}
+		<button
+			onclick={() => {
+				if (!search_api_route) return;
+				goto(search_api_route.path);
+				opened = false;
+			}}
+			class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-4 transition-colors"
+		>
+			<div class="flex items-center justify-center size-8 bg-neutral-900 rounded-md shrink-0">
+				<Icon
+					icon={search_api_route.path.includes('ws') ? 'mdi:websocket' : 'material-symbols:api'}
+					width="20"
+					height="20"
+					class="text-neutral-300"
+				/>
+			</div>
+			<div class="flex flex-col">
+				<p class="font-black text-start text-neutral-200">{search_api_route.path}</p>
+				<p class="text-xs text-start text-neutral-400">{search_api_route.method}</p>
 			</div>
 		</button>
 	{/each}

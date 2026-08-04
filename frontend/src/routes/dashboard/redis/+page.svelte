@@ -61,7 +61,9 @@
 </script>
 
 <div class="p-7 flex flex-col gap-4">
-	<div class="flex justify-between items-center border-b border-neutral-700 pb-4">
+	<div
+		class="lg:flex-row flex justify-between flex-col lg:items-center gap-4 border-b border-neutral-700 pb-4"
+	>
 		<div class="flex-col flex gap-1">
 			<Heading>
 				<div
@@ -75,7 +77,7 @@
 			<span class="text-sm font-md text-neutral-400"
 				><b>Fast</b> and easy solution to store one-way data. Redis data is reactive!</span
 			>
-			<div class="flex mt-4 gap-2">
+			<div class="flex mt-4 gap-2 flex-wrap">
 				<button
 					onclick={() => change_view('start')}
 					class="base-label-pill"
@@ -130,7 +132,7 @@
 				<FancyLoader />
 			</div>
 		{:then ping_data}
-			<div class="flex flex-col gap-2 w-2xl mx-auto" in:blur={{ duration: 300 }}>
+			<div class="flex flex-col gap-2 lg:w-2xl w-full mx-auto" in:blur={{ duration: 300 }}>
 				{#each ping_data.data.rdbs as rdb}
 					{#if !rdb.startsWith('password:')}
 						{#await get(rdb)}
@@ -198,7 +200,7 @@
 				<FancyLoader />
 			</div>
 		{:then ping_data}
-			<div class="flex flex-col gap-2 w-2xl mx-auto" in:blur={{ duration: 300 }}>
+			<div class="flex flex-col gap-2 lg:w-2xl w-full mx-auto" in:blur={{ duration: 300 }}>
 				{#each ping_data.data.rdbs as rdb}
 					{@const key = rdb.split(':')[1]}
 					{#if rdb.startsWith('password:')}

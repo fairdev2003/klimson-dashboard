@@ -1,7 +1,7 @@
 package maroto
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -18,33 +18,37 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/props"
 )
 
-func Run2() {
+func GenerateDevCV() error {
 	m := GetMaroto2()
 	document, err := m.Generate()
 	if err != nil {
-		log.Fatal(err.Error())
+		return fmt.Errorf("failed to generate maroto document: %w", err)
 	}
 
-	pdfPath := "static/docs/assets/pdf/cv.pdf"
-	txtPath := "static/docs/assets/text/cv.txt"
+	pdfPath := "static/docs/assets/pdf/cv.dev.pdf"
+	txtPath := "static/docs/assets/text/cv.dev.txt"
 
 	if err := os.MkdirAll(filepath.Dir(pdfPath), 0755); err != nil {
-		log.Fatalf("Failed to create PDF directory: %v", err)
+		return fmt.Errorf("failed to create PDF directory: %w", err)
 	}
 
 	if err := os.MkdirAll(filepath.Dir(txtPath), 0755); err != nil {
-		log.Fatalf("Failed to create TXT directory: %v", err)
+		return fmt.Errorf("failed to create TXT directory: %w", err)
 	}
 
 	err = document.Save(pdfPath)
 	if err != nil {
-		log.Fatal(err.Error())
+		return fmt.Errorf("failed to save PDF file: %w", err)
 	}
 
-	err = document.GetReport().Save(txtPath)
-	if err != nil {
-		log.Fatal(err.Error())
+	if report := document.GetReport(); report != nil {
+		err = report.Save(txtPath)
+		if err != nil {
+			return fmt.Errorf("failed to save TXT report: %w", err)
+		}
 	}
+
+	return nil
 }
 
 func GetMaroto2() core.Maroto {

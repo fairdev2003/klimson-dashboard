@@ -14,7 +14,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/zgierz/klimson/backend/config"
 	"github.com/zgierz/klimson/backend/helpers"
-	"github.com/zgierz/klimson/backend/helpers/maroto"
 	"github.com/zgierz/klimson/backend/logger"
 	"github.com/zgierz/klimson/backend/models"
 
@@ -160,7 +159,6 @@ func FetchEnvVariables() {
 
 func Init() {
 	helpers.ClearConsole()
-	maroto.GenerateSecurityCV()
 	LoadConfig()
 	FetchEnvVariables()
 	db = Db()
