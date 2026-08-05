@@ -36,9 +36,50 @@ export type ModalProps = {
 
 export class ModalLogic {
 	public modalContainer: HTMLDivElement | undefined;
+	public backdropContainer: HTMLDivElement | undefined;
 	public props = $state<ModalProps>({ opened: true });
 	constructor(public initialProps: ModalProps) {
 		this.props = initialProps;
+	}
+
+	public static animateBackdrop(node: HTMLElement) {
+		gsap.fromTo(node, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+
+		return () => {
+			gsap.to(node, { opacity: 0, duration: 0.2, ease: 'power2.in' });
+		};
+	}
+
+	public static animateModalWindow(node: HTMLElement) {
+		gsap.fromTo(
+			node,
+			{ opacity: 0, scale: 0.95, y: 20 },
+			{ opacity: 1, scale: 1, y: 0, duration: 0.3, ease: 'back.out(1.2)' }
+		);
+
+		return () => {
+			gsap.to(node, { opacity: 0, scale: 0.95, y: 15, duration: 0.2, ease: 'power2.in' });
+		};
+	}
+
+	public async handleCloseAnimation() {
+		if (!this.backdropContainer || !this.modalContainer) {
+			this.props.opened = false;
+			return;
+		}
+
+		await Promise.all([
+			gsap.to(this.backdropContainer, { opacity: 0, duration: 0.2, ease: 'power2.in' }),
+			gsap.to(this.modalContainer, {
+				opacity: 0,
+				scale: 0.95,
+				y: 15,
+				duration: 0.2,
+				ease: 'power2.in'
+			})
+		]);
+
+		this.props.opened = false;
 	}
 
 	private ShakeModalContainer() {
@@ -65,14 +106,14 @@ export class ModalLogic {
 			return;
 		}
 
-		this.props.opened = false;
+		await this.handleCloseAnimation();
 	}
 
 	public async on_exit_icon_click() {
 		if (this.props.onClose) {
 			this.props.onClose();
 		}
-		this.props.opened = false;
+		await this.handleCloseAnimation();
 	}
 
 	public async on_content_click(e: MouseEvent) {

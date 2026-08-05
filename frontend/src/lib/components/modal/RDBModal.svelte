@@ -3,6 +3,28 @@
 	import { tv } from 'tailwind-variants';
 	import RDBModalBar from './RDBModalBar.svelte';
 	import RDBSubmitControls from './RDBSubmitControls.svelte';
+	import { tick } from 'svelte';
+	import gsap from 'gsap';
+
+	$effect(() => {
+		if (opened) {
+			tick().then(() => {
+				if (!modal.backdropContainer || !modal.modalContainer) return;
+
+				gsap.set(modal.backdropContainer, { opacity: 0 });
+				gsap.set(modal.modalContainer, { opacity: 0, scale: 0.95, y: 20 });
+
+				gsap.to(modal.backdropContainer, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+				gsap.to(modal.modalContainer, {
+					opacity: 1,
+					scale: 1,
+					y: 0,
+					duration: 0.3,
+					ease: 'back.out(1.2)'
+				});
+			});
+		}
+	});
 
 	let {
 		opened = $bindable(false),
@@ -90,6 +112,8 @@
 {#if modal.props.opened}
 	<div class="fixed inset-0 z-200">
 		<div
+			{@attach modal.animateBackdrop}
+			bind:this={modal.backdropContainer}
 			class="absolute flex flex-col inset-0 bg-black/50 backdrop-blur-sm"
 			onclick={async () => {
 				await modal.on_background_click();
@@ -102,6 +126,7 @@
 				onclick={(e) => {
 					modal.on_content_click(e);
 				}}
+				{@attach modal.animateModalWindow}
 				class={`${className} ${modalStyles({ size, border, padding_preset, bg_color })} flex flex-col max-h-[90vh]`}
 			>
 				{#if !toolbarHidden}
