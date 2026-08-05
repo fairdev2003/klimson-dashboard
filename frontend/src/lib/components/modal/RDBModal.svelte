@@ -58,7 +58,7 @@
 				auto: 'w-auto h-auto',
 				accept_preset: 'lg:w-80 w-[95%] h-auto',
 				form_preset: 'lg:w-150 h-auto lg:h-7/10 w-[95%]',
-				window: 'w-8/10 h-8/10'
+				window: 'lg:w-7/10 lg:h-8/10 w-[95%] h-[95%]'
 			},
 			screen_size: {},
 			border: {

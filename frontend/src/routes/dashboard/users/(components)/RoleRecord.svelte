@@ -8,6 +8,7 @@
 	import RoleMainImplemetation from './(sections)/RoleMainImplemetation.svelte';
 	import RolePermSection from './(sections)/RolePermSection.svelte';
 	import BindedUsers from './(sections)/BindedUsers.svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	type Props = { role: Role };
 
@@ -56,6 +57,7 @@
 				const response = await account_controller.UpdateRoleAndFetchNew(role);
 				if (response) {
 					updateRoleModalOpened = false;
+					toast.success('Role updated successfully.');
 				}
 			} catch (error) {
 				debug.error(error);

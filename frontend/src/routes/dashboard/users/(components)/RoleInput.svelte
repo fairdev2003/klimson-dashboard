@@ -53,6 +53,9 @@
 		<p>ROLE</p>
 	</span>
 
+	{#if searchOn}
+		<div class="flex flex-col gap-2 fixed inset-0 bg-black/60"></div>
+	{/if}
 	<div class="bg-neutral-900 relative w-full flex flex-col">
 		<div
 			class:rounded-b-none={searchOn}

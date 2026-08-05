@@ -24,6 +24,7 @@
 	import { bold } from '$lib/terminal/style';
 	import RolePage from './(components)/(sections)/RolePage.svelte';
 	import RoleInput from './(components)/RoleInput.svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
@@ -267,6 +268,7 @@
 				if (response.status === 200) {
 					debug.success('Success');
 					await refetchUsers();
+					toast.success('User updated successfully.');
 				}
 			} catch (error) {
 				debug.log(error);

@@ -18,10 +18,7 @@
 	import DatabaseWidget from './widgets/DatabaseWidget.svelte';
 	import SpotifyWidget from './widgets/SpotifyWidget.svelte';
 	import DropdownButton from '$lib/components/dashboard/settings/components/DropdownButton.svelte';
-	import {
-		settings_page_open,
-		type SettingKey
-	} from '$lib/components/dashboard/settings/store.svelte';
+	import { type SettingKey } from '$lib/components/dashboard/settings/store.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import CPUWidget from './widgets/CPUWidget.svelte';
 	import WidgetContainer from './widgets/containers/WidgetContainer.svelte';
@@ -35,6 +32,8 @@
 	import BaseDockComponent from '$lib/components/dashboard/dock/boxes/BaseDockComponent.svelte';
 	import { blur, fade } from 'svelte/transition';
 	import { Dashboard } from '$lib/dashboard/logic';
+	import SettingsModal from '$lib/components/dashboard/settings/(modal)/SettingsModal.svelte';
+	import { useLocalStorage } from '@ariefsn/svelte-use';
 
 	let loading: boolean = $state(false);
 
@@ -45,6 +44,9 @@
 	onMount(() => {
 		Dashboard.state.setDockComponent(BaseDockComponent);
 	});
+	let settingsModalOpened = $state(false);
+
+	const settings_page_open = useLocalStorage<SettingKey>('settings_page_open', 'main');
 </script>
 
 <div in:blur={{ duration: 300 }} class=" p-8 py-4 text-white flex flex-col gap-5">
@@ -55,9 +57,8 @@
 		</div>
 		<button
 			onclick={() => {
-				$settings_startup_modal = 'widgets';
-				$settings_page_open = 'customization';
-				goto('/dashboard/settings');
+				settingsModalOpened = true;
+				settings_page_open.set('customization');
 			}}
 			class="size-13 items-center flex justify-center hover:bg-neutral-700 rounded-xl cursor-pointer"
 		>
@@ -69,6 +70,8 @@
 
 	<SecondHubContainer />
 </div>
+
+<SettingsModal bind:opened={settingsModalOpened} />
 
 {#snippet GradientLeft()}
 	<div
