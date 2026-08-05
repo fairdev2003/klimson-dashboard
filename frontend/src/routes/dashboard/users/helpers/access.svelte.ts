@@ -113,6 +113,22 @@ class AccountController extends AControllerData {
 		}
 		return true;
 	}
+
+	public async UpdateRoleAndFetchNew(role: Role): Promise<boolean> {
+		try {
+			const update_response = await api.user.UpdateRole(role.id, role);
+
+			if (update_response.status === 200) {
+				debug.system('Roles successfully updated!');
+				await this.FetchRolesAndAssign();
+			}
+		} catch (error) {
+			debug.error(error);
+		} finally {
+			debug.system("Trycatch statement 'AccountController.CreateNewRole()' has ended!");
+		}
+		return true;
+	}
 }
 
 const account_controller = new AccountController();

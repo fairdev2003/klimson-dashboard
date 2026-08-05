@@ -43,7 +43,7 @@ export class UserClass {
 	}
 
 	public async UpdateRole(
-		id: number | string,
+		id: number | string | undefined,
 		data: Partial<Role>
 	): Promise<ServerResponse<BackendResponse<Role>>> {
 		return await this.api.put(`/admin/users/roles/update-role/${id}`, data);

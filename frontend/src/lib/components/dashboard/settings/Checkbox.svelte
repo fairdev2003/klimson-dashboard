@@ -8,7 +8,7 @@
 	let { checked = $bindable() }: Props = $props();
 </script>
 
-<button
+<!-- <button
 	onclick={() => {
 		checked = !checked;
 	}}
@@ -26,4 +26,20 @@
 			<Icon icon="mingcute:close-fill" width="18" height="18" />
 		{/if}
 	</div>
+</button> -->
+
+<button
+	onclick={() => {
+		checked = !checked;
+	}}
+	class="transition-colors duration-300 cursor-pointer
+           flex items-center rounded-full w-16 h-8 border-1 {checked
+		? 'bg-blue-500/60 border-transparent'
+		: 'bg-transparent border-neutral-700'} p-0.5 relative"
+>
+	<div
+		class="h-full rounded-full w-6.5 flex items-center justify-center
+               transition-all duration-300 ease-in-out shadow-sm
+               {checked ? 'translate-x-8 bg-white' : 'translate-x-0 bg-white'}"
+	></div>
 </button>

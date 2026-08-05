@@ -9,14 +9,16 @@
 		children,
 		className,
 		onClose,
-		title,
+		title = $bindable(''),
 		size,
 		border,
 		padding_preset,
 		form_config,
 		backgroundExitLocked = $bindable(),
 		titleStyle,
-		stickyBar
+		stickyBar,
+		toolbarHidden,
+		bg_color
 	}: ModalProps = $props();
 
 	const modal = new ModalLogic({
@@ -35,14 +37,17 @@
 		padding_preset,
 		backgroundExitLocked,
 		titleStyle,
-		stickyBar
+		stickyBar,
+		toolbarHidden,
+		bg_color
 	});
 
 	const modalStyles = tv({
 		base: 'z-100 flex flex-col gap-2 ',
 		variants: {
 			bg_color: {
-				classic: 'bg-neutral-900'
+				classic: 'bg-neutral-900',
+				blacker: 'bg-neutral-950 border-neutral-800 border'
 			},
 			round_size: {
 				normal: 'rounded-lg',
@@ -52,7 +57,8 @@
 			size: {
 				auto: 'w-auto h-auto',
 				accept_preset: 'lg:w-80 w-[95%] h-auto',
-				form_preset: 'lg:w-150 h-auto lg:h-7/10 w-[95%]'
+				form_preset: 'lg:w-150 h-auto lg:h-7/10 w-[95%]',
+				window: 'w-8/10 h-8/10'
 			},
 			screen_size: {},
 			border: {
@@ -96,9 +102,11 @@
 				onclick={(e) => {
 					modal.on_content_click(e);
 				}}
-				class={`${className} ${modalStyles({ size, border, padding_preset })} flex flex-col max-h-[90vh]`}
+				class={`${className} ${modalStyles({ size, border, padding_preset, bg_color })} flex flex-col max-h-[90vh]`}
 			>
-				<RDBModalBar {title} {titleStyle} onButtonClick={() => modal.on_exit_icon_click()} />
+				{#if !toolbarHidden}
+					<RDBModalBar {title} {titleStyle} onButtonClick={() => modal.on_exit_icon_click()} />
+				{/if}
 
 				<div
 					class="flex flex-col flex-1 gap-4 min-h-0 justify-between w-full max-w-full overflow-hidden"
@@ -108,7 +116,7 @@
 					</div>
 
 					<div
-						class="flex-1 sticky-0 min-h-0 w-full overflow-y-auto overflow-x-hidden px-1 box-border"
+						class="flex-1 sticky-0 min-h-0 w-full overflow-y-auto scrollbar-gutter-stable overflow-x-hidden px-1 box-border"
 					>
 						{@render children?.()}
 					</div>

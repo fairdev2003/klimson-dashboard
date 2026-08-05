@@ -23,6 +23,7 @@
 	import { terminal } from '$lib/terminal/logic';
 	import { bold } from '$lib/terminal/style';
 	import RolePage from './(components)/(sections)/RolePage.svelte';
+	import RoleInput from './(components)/RoleInput.svelte';
 
 	let selectedLabel: LabelName = $derived(
 		($page.url.searchParams.get('label') as LabelName) || 'acc'
@@ -109,6 +110,7 @@
 					class:normal-label-pill={selectedLabel !== 'roles'}
 					class="base-label-pill">Roles</button
 				>
+
 				<button
 					onclick={() => updateLabel('perms')}
 					class:selected-label-pill={selectedLabel === 'perms'}
@@ -153,6 +155,8 @@
 
 	<div>
 		{#if selectedLabel === 'acc'}
+			<!--  -->
+
 			<UserListing
 				{users}
 				{usersLoading}
@@ -164,7 +168,9 @@
 						last_name: user.last_name,
 						nickname: user.nickname,
 						pfp: user.pfp,
-						blocked: user.blocked
+						blocked: user.blocked,
+						role: user.role,
+						role_id: user.role_id
 					};
 
 					editUserModalOpened = true;
@@ -212,7 +218,7 @@
 	<div class="flex flex-col gap-2">
 		{#if userForm.nickname}
 			<div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
-				<UserPreview user={userForm} />
+				<UserPreview bind:user={userForm} />
 			</div>
 		{/if}
 		<div class="flex flex-col gap-1">
@@ -279,8 +285,10 @@
 	size="form_preset"
 	bind:opened={editUserModalOpened}
 >
+	{#snippet stickyBar()}
+		<UserPreview bind:user={currentUser} />
+	{/snippet}
 	<div class="flex flex-col gap-2">
-		<UserPreview user={currentUser} />
 		<span class="text-neutral-400 uppercase justify-between items-center flex font-bold text-xs">
 			<p>ID: {currentUser?.id}</p>
 		</span>
@@ -314,6 +322,8 @@
 
 			<input bind:value={userForm.pfp} class="rounded-lg border-0 bg-neutral-800 p-2" />
 		</div>
+
+		<RoleInput bind:role_id={userForm.role_id} bind:user_role={userForm.role} />
 	</div>
 </RDBModal>
 

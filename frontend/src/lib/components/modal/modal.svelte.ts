@@ -22,7 +22,7 @@ export type ModalProps = {
 	children?: Snippet;
 	onClose?: () => void;
 	className?: string;
-	size: 'auto' | 'accept_preset' | 'form_preset';
+	size: 'auto' | 'accept_preset' | 'form_preset' | 'window';
 	border: 'normal' | 'borderless' | 'form';
 	padding_preset: 'zero' | 'normal' | 'small' | 'big';
 	title?: string;
@@ -30,6 +30,8 @@ export type ModalProps = {
 	backgroundExitLocked: boolean;
 	titleStyle?: TitleStyle;
 	stickyBar?: Snippet;
+	toolbarHidden?: boolean;
+	bg_color?: 'classic' | 'blacker';
 };
 
 export class ModalLogic {

@@ -5,6 +5,7 @@
 	import account_controller from '../../helpers/access.svelte';
 	import { debug } from '$lib/terminal/logic';
 	import RDBColorInput from '$lib/components/modal/RDBColorInput.svelte';
+	import RoleInput from '../RoleInput.svelte';
 
 	type Props = { role: Role };
 

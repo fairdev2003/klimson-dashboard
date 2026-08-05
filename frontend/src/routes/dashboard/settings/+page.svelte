@@ -9,6 +9,7 @@
 		type SettingKey
 	} from '$lib/components/dashboard/settings/store.svelte';
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
+	import RDBModal from '$lib/components/modal/RDBModal.svelte';
 	import type { Component, Snippet } from 'svelte';
 	import { blur } from 'svelte/transition';
 
@@ -28,7 +29,7 @@
 </script>
 
 <!-- category container -->
-<div class="col-span-2 lg:p-10 mb-10">
+<div class="col-span-2 lg:p-10 mb-10 sticky top-0">
 	<h1 class="font-bold">
 		<Heading>Categories</Heading>
 	</h1>

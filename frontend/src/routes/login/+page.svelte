@@ -9,6 +9,8 @@
 	import type { BackendResponse, ServerResponse } from '$lib/api/types';
 	import FancyLoader from '../dashboard/redis/(components)/FancyLoader.svelte';
 	import axios from 'axios';
+	import { redirectTo } from '$lib/dashboard/stores/persist';
+	import { get } from 'svelte/store';
 
 	let pass: string = $state('');
 	let login: string = $state('');
@@ -164,7 +166,7 @@
 					theme="base"
 					className="flex justify-center w-full py-3 font-semibold transition-transform text-center"
 					onclick={() => {
-						goto('/dashboard');
+						goto(get(redirectTo) || '/dashboard');
 					}}
 				>
 					Access Dashboard

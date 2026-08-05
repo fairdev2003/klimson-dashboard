@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="flex lg:gap-0 gap-5 pt-5 flex-col border-t border-neutral-700 h-full lg:w-3/4 lg:px-10"
+	class="flex lg:gap-0 gap-5 pt-5 flex-col border-t border-neutral-700 h-full lg:px-10"
 	in:blur={{ duration: 300 }}
 >
 	<InputSettingsRecord

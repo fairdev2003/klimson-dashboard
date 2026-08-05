@@ -51,7 +51,16 @@
 	title="Delete the role"
 	size="form_preset"
 	form_config={{
-		onSubmit: async () => {}
+		onSubmit: async () => {
+			try {
+				const response = await account_controller.UpdateRoleAndFetchNew(role);
+				if (response) {
+					updateRoleModalOpened = false;
+				}
+			} catch (error) {
+				debug.error(error);
+			}
+		}
 	}}
 >
 	{#snippet stickyBar()}

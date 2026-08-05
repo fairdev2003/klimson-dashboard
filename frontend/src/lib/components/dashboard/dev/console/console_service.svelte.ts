@@ -1,7 +1,7 @@
 import { api } from '$lib/api/api';
 import type { BackendResponse, ServerResponse } from '$lib/api/types';
 import { debug } from '$lib/dashboard/stores/debug';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { AutoComplete, CommandBuilder } from './command_builder.svelte';
 import { goto } from '$app/navigation';
 import { terminal } from './terminal.svelte';
@@ -13,6 +13,8 @@ import { notifications, type NotificationRecord } from '../../navbar/notificatio
 import type { StorageRecord } from '$lib/api/requests/storage';
 import { base_url } from '$lib/api/api.store';
 import type { Command } from '@lucide/svelte';
+import { page } from '$app/state';
+import { redirectTo } from '$lib/dashboard/stores/persist';
 
 export class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
@@ -246,12 +248,34 @@ console_service
 	.setDescription('Terminating cms session')
 	.setAction(async () => {
 		try {
-			await api.api.post('/auth/logout');
-		} catch (error) {
-			debug.error('Erorr during logout');
-			debug.error(error);
+			const response = await api.api.post('/auth/logout');
+
+			if (response.status && response.status !== 200) {
+				console.warn(`Logout returned status: ${response.status}`);
+			}
+		} catch (error: unknown) {
+			debug.error('Error during logout request to server');
+
+			if (error instanceof Error) {
+				debug.error(error.message);
+			} else {
+				debug.error(String(error));
+			}
 		} finally {
-			goto('/login');
+			try {
+				const currentPath = window.location.pathname + window.location.search;
+
+				redirectTo.set(
+					encodeURIComponent(currentPath)
+						.replace(/%2F/g, '/')
+						.replace(/%3F/g, '?')
+						.replace(/%3D/g, '=')
+				);
+				goto('/login');
+			} catch (navError) {
+				debug.error('Error during redirection to login page');
+				debug.error(navError);
+			}
 		}
 	});
 

@@ -3,7 +3,7 @@
 	import gsap from 'gsap';
 	import RDBInput from '$lib/components/modal/RDBInput.svelte';
 	import { blur, slide } from 'svelte/transition';
-	import { userLogin } from '$lib/dashboard/stores/persist';
+	import { redirectTo, userLogin } from '$lib/dashboard/stores/persist';
 	import { goto } from '$app/navigation';
 	import type { AxiosResponse } from 'axios';
 	import { api } from '$lib/api/api';
@@ -13,6 +13,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import { spotifyApp } from '$lib/components/spotify/spotify.svelte';
 	import Icon from '@iconify/svelte';
+	import { get } from 'svelte/store';
 
 	let timeString = $state('');
 	let dateString = $state('');
@@ -61,7 +62,7 @@
 
 			if (response.status === 200) {
 				loading = false;
-				goto('/dashboard');
+				goto(get(redirectTo) || '/dashboard');
 			}
 		} catch (e: any) {
 			loading = false;

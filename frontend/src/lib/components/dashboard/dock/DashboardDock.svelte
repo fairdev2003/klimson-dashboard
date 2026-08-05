@@ -16,8 +16,10 @@
 	import DockMenu from './DockMenu.svelte';
 	import DockBackground from './DockBackground.svelte';
 	import MobileDock from './MobileDock.svelte';
+	import SettingsModal from '../settings/(modal)/SettingsModal.svelte';
 
 	let mobileDockOpened = $state(false);
+	let settingsModalOpened = $state(false);
 
 	function toggleMobileDockSection(state?: boolean) {
 		if (!state) {
@@ -67,7 +69,7 @@
 			</button>
 			<div
 				onclick={() => {
-					goto('/dashboard/settings');
+					settingsModalOpened = true;
 				}}
 				class="size-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center"
 			>
@@ -77,6 +79,8 @@
 	</div>
 	<MobileDock bind:mobileDockOpened />
 {/if}
+
+<SettingsModal bind:opened={settingsModalOpened} />
 
 {#snippet Controls()}
 	<div>

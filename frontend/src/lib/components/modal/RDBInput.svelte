@@ -5,9 +5,10 @@
 		value?: string;
 		label?: string;
 		oninput?: (e: string) => void;
+		placeholder?: string;
 	};
 
-	let { value = $bindable(), label, oninput }: Props = $props();
+	let { value = $bindable(), label, oninput, placeholder }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-1">
@@ -15,5 +16,9 @@
 		<p>{label}</p>
 	</span>
 
-	<input bind:value class="rounded-lg border-0 bg-neutral-800 p-2" />
+	<input
+		bind:value
+		{placeholder}
+		class="rounded-lg placeholder:text-neutral-600 border-0 bg-neutral-800 p-2"
+	/>
 </div>

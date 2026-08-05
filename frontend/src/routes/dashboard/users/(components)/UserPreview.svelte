@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type User } from '$lib/api/types';
+	import type { User } from '$lib/types/user';
 	import Icon from '@iconify/svelte';
 	import { blur, slide } from 'svelte/transition';
 
@@ -7,7 +7,7 @@
 		user: User | undefined;
 	};
 
-	let { user }: Props = $props();
+	let { user = $bindable() }: Props = $props();
 </script>
 
 {#if user}
@@ -35,8 +35,9 @@
 					</span>
 					<p class="hover:underline cursor-pointer">
 						<!-- pill -->
-						<span class="rounded-full px-2 text-xs p-0.5 bg-purple-800 text-purple-300"
-							>Nigga fucker</span
+						<span
+							style="background-color: {user.role?.color || 'gray'};"
+							class="rounded-full px-2 text-xs p-0.5">{user.role?.name}</span
 						>
 					</p>
 				</div>

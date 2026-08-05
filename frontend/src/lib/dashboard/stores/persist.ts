@@ -66,4 +66,5 @@ export const animation_preset = persistedWritable<AnimationPresetType>('animatio
 
 export const accounts = persistedWritable<JWT[]>('accounts', []);
 export const route = persistedWritable<string>('route', '/dashboard');
+export const redirectTo = persistedWritable<string>('redirectTo', '/dashboard');
 export const userLogin = persistedWritable<string>('userLogin', '');
