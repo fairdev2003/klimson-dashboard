@@ -12,6 +12,7 @@ class Storage {
 	public delete_multiple_enabled: boolean = $state(false);
 	public edit_enabled: boolean = $state(false); // for mobile
 	public storage_records: V2StorageRecord[] | undefined = $state();
+	public file_view: boolean = $state(false);
 
 	public selected_path: string = $state('/');
 

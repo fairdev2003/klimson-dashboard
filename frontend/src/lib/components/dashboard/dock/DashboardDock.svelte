@@ -105,7 +105,7 @@
 
 			<div
 				onclick={() => {
-					window.history.forward();
+					window.location.reload();
 				}}
 				class="w-10 h-10 min-w-10 min-h-10 rounded-lg hover:bg-neutral-700 flex items-center justify-center cursor-pointer"
 			>

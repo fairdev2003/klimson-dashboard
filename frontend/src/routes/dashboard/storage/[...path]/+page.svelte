@@ -2,7 +2,6 @@
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/state';
 	import { goto, invalidateAll } from '$app/navigation';
-	import StorageRecordTile from '../components/StorageRecordTile.svelte';
 	import { type StorageRecord } from '$lib/api/requests/storage';
 	import Button from '$lib/components/Button.svelte';
 	import Modal from '$lib/components/Modal.svelte';
@@ -15,6 +14,9 @@
 	import { explorer } from '$lib/components/dashboard/storage/file.svelte';
 	import { base_url } from '$lib/api/api.store';
 	import { debug } from '$lib/dashboard/stores/debug';
+	import RDBModal from '$lib/components/modal/RDBModal.svelte';
+	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
+	import STGTile from '../components/STGTile.svelte';
 
 	let { data, params } = $props();
 
@@ -220,7 +222,7 @@
 		class="gap-4 p-4"
 	>
 		{#each data.storage_file_list as { file_size, is_dir, modified, name }}
-			<StorageRecordTile
+			<STGTile
 				onrightclick={(e) => handleRightClick(e, { is_dir, name, file_size, modified })}
 				{is_dir}
 				{name}
@@ -233,7 +235,6 @@
 
 					if (is_dir && !success) {
 						const currentPath = page.url.pathname.replace(/\/$/, '');
-						// goto(`${currentPath}/${name}`);
 						goto(storage_logic.selected_path + '' + name);
 					}
 				}}
@@ -241,6 +242,68 @@
 		{/each}
 	</div>
 </div>
+
+{#snippet StorageHeader()}
+	<input type="file" class="hidden" bind:this={fileInput} onchange={UploadFile} />
+	<div
+		class="p-4 bg-neutral-900 m-4 rounded-xl lg:flex-row flex flex-col gap-4 justify-between lg:items-center"
+	>
+		<div class="flex-col flex gap-1">
+			<Heading>
+				<div
+					class="flex gap-2 items-center text-blue-500 overflow-hidden"
+					in:slide={{ duration: 300, delay: 300 }}
+				>
+					<Icon icon="material-symbols:storage" width="30" height="30" class="mb-2" />
+					<p>File Storage</p>
+				</div>
+			</Heading>
+			<span class="text-sm font-md text-neutral-400">File Storage - Local File Management</span>
+		</div>
+		<div class="flex flex-wrap flex-col gap-2">
+			<div class="flex flex-wrap gap-3">
+				<Button
+					theme="base"
+					disabled={uploading}
+					onclick={() => {
+						fileInput.click();
+					}}>Upload a file</Button
+				>
+				<Button
+					theme="base"
+					disabled={uploading}
+					onclick={() => {
+						AddNewFile();
+					}}>Add new file</Button
+				>
+				<Button
+					theme="secondary"
+					onclick={() => {
+						folderModalOpen = !folderModalOpen;
+					}}>Create New Folder</Button
+				>
+			</div>
+		</div>
+	</div>
+{/snippet}
+
+<RDBModal
+	bind:opened={folderModalOpen}
+	onClose={() => {
+		folderModalOpen = false;
+	}}
+	form_config={{
+		onSubmit: CreateFolder
+	}}
+	title="Creting New Folder"
+	size="form_preset"
+>
+	<div class="flex flex-col gap-4">
+		<DatabaseModalInput bind:value={folderName} label="Folder Name" />
+	</div>
+</RDBModal>
+
+<svelte:window onpaste={HandlePaste} />
 
 {#if menuVisible && selectedItem}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -324,76 +387,6 @@
 		</div>
 	</div>
 {/if}
-
-{#snippet StorageHeader()}
-	<input type="file" class="hidden" bind:this={fileInput} onchange={UploadFile} />
-	<div
-		class="p-4 bg-neutral-900 m-4 rounded-xl lg:flex-row flex flex-col gap-4 justify-between lg:items-center"
-	>
-		<div class="flex flex-col gap-2">
-			<p>Listed: {data.storage_file_list && data.storage_file_list.length} files</p>
-
-			<div class="flex gap-3">
-				<a
-					href="/dashboard/storage"
-					class="p-1 px-3 hover:underline cursor-pointer rounded-full border border-neutral-700"
-				>
-					<p class="text-xs">/</p>
-				</a>
-				{#if params.path !== ''}
-					{#each data.path_table as path, i}
-						<a
-							href={navigateToDir(data.path_table, i)}
-							class="p-1 px-3 hover:underline cursor-pointer rounded-full border border-neutral-700"
-						>
-							<p class="text-xs">{path}</p>
-						</a>
-					{/each}
-				{/if}
-			</div>
-		</div>
-		<div class="flex gap-3">
-			<Button
-				theme="base"
-				disabled={uploading}
-				onclick={() => {
-					fileInput.click();
-				}}>Upload a file</Button
-			>
-			<Button
-				theme="base"
-				disabled={uploading}
-				onclick={() => {
-					AddNewFile();
-				}}>Add new file</Button
-			>
-			<Button
-				theme="secondary"
-				onclick={() => {
-					folderModalOpen = !folderModalOpen;
-				}}>Create New Folder</Button
-			>
-		</div>
-	</div>
-{/snippet}
-
-<Modal
-	bind:opened={folderModalOpen}
-	onClose={() => {
-		folderModalOpen = false;
-	}}
-	title="Creting New Folder"
-	className="w-100"
->
-	<div class="flex flex-col gap-4">
-		<DatabaseModalInput bind:value={folderName} label="Folder Name" />
-		<div class="flex justify-end">
-			<Button onclick={CreateFolder} size="small" theme="secondary">Create</Button>
-		</div>
-	</div>
-</Modal>
-
-<svelte:window onpaste={HandlePaste} />
 
 <style>
 	@import 'tailwindcss';

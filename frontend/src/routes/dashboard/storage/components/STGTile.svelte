@@ -6,6 +6,7 @@
 	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
 	import HarcCheckBox from '$lib/components/dashboard/HarcCheckBox.svelte';
 	import { base_url } from '$lib/api/api.store';
+	import STGIcon from './STGIcon.svelte';
 
 	type Props = {
 		onclick: (e: MouseEvent) => void;
@@ -24,6 +25,8 @@
 
 <button
 	onclick={(e) => {
+		storage_logic.file_view = !storage_logic.file_view;
+
 		if (name.endsWith('.md') || name.endsWith('.txt') || name.endsWith('.json')) {
 			goto(`/dashboard/content_manager/markdown/editor/${slug}/${name}`);
 			return;
@@ -44,15 +47,10 @@
 		e.preventDefault();
 		onrightclick(e);
 	}}
-	class:delete_enabled={storage_logic.delete_multiple_enabled}
-	class:edit_mode_mobile={storage_logic.edit_enabled}
-	class:delete_checked={deleteOn}
-	class:tile_normal={!deleteOn}
-	class="group relative flex flex-col items-center gap-3 p-4 rounded-md
-                        shadow-sm hover:shadow-md"
+	class="group relative flex flex-col items-center gap-3 p-4 rounded-md shadow-sm hover:bg-neutral-800 transition-colors hover:shadow-md"
 >
 	<div class="text-neutral-400 group-hover:text-white w-16 h-16 flex items-center justify-center">
-		{@render FolderIcon(name)}
+		<STGIcon {name} {is_dir} {slug} />
 	</div>
 
 	<div
@@ -107,7 +105,7 @@
 	}
 
 	.tile_normal {
-		@apply bg-neutral-900 transition-colors hover:bg-neutral-800;
+		@apply bg-transparent transition-colors hover:bg-neutral-800;
 	}
 
 	.delete_checkbox {

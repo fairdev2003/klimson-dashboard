@@ -2,12 +2,16 @@
 	import { contextMenuOptions } from '$lib/dashboard/stores/store';
 	import { type Snippet } from 'svelte';
 	import { dashboard_config, isMobile, sidebar_open } from '$lib/dashboard/stores/persist';
-	import { fade } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
 	import ContextMenu from './ContextMenu.svelte';
 
 	import Sidebar from './sidebar/Sidebar.svelte';
 	import CMSNavbar from './CMSNavbar.svelte';
 	import DashboardDock from './dock/DashboardDock.svelte';
+	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
+	import Icon from '@iconify/svelte';
+	import { page } from '$app/state';
+	import { debug } from '$lib/terminal/logic';
 
 	type Props = {
 		children: Snippet;
@@ -21,6 +25,7 @@
 		e.preventDefault();
 		menuPos = { x: e.clientX, y: e.clientY };
 		// showMenu = true;
+		debug.log(page.route);
 	}
 
 	let { children }: Props = $props();
@@ -45,6 +50,7 @@
 			<div
 				class:dock-invisible={!$dashboard_config.dock}
 				class:dock-visible={$dashboard_config.dock}
+				class=""
 			>
 				{@render children()}
 			</div>

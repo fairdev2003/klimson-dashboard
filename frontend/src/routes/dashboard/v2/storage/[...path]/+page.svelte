@@ -5,7 +5,7 @@
 	import type { StorageRecord } from '$lib/api/requests/storage';
 	import { storage_logic } from '$lib/dashboard/storage/storage.svelte';
 	import { onMount } from 'svelte';
-	import StorageRecordTile from '../../../storage/components/StorageRecordTile.svelte';
+	import StorageRecordTile from '../../../storage/components/STGTile.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import { toast } from '$lib/dashboard/stores/toast';
 	import StorageCard from '$lib/components/dashboard/storage/StorageCard.svelte';
