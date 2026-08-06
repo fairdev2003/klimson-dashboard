@@ -17,11 +17,13 @@
 	import DockBackground from './DockBackground.svelte';
 	import MobileDock from './MobileDock.svelte';
 	import SettingsModal from '../settings/(modal)/SettingsModal.svelte';
+	import { useDebounce } from '@ariefsn/svelte-use';
 
 	let mobileDockOpened = $state(false);
 	let settingsModalOpened = $state(false);
 
 	function toggleMobileDockSection(state?: boolean) {
+		useDebounce;
 		if (!state) {
 			mobileDockOpened = !mobileDockOpened;
 		} else {

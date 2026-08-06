@@ -8,7 +8,7 @@
 	import { dashboardLoadState } from '$lib/dashboard/stores/data.store';
 	import Toast from '$lib/components/dashboard/Toast.svelte';
 	import { goto } from '$app/navigation';
-	import { route } from '$lib/dashboard/stores/persist';
+	import { dashboard_config, route } from '$lib/dashboard/stores/persist';
 
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
@@ -16,6 +16,10 @@
 	import FancyLoader from './redis/(components)/FancyLoader.svelte';
 	import Console from '$lib/components/dashboard/dev/Terminal.svelte';
 	import Dashboard from '$lib/dashboard/dashboard.svelte';
+	import { useDebounce } from '@ariefsn/svelte-use';
+	import { debug } from '$lib/terminal/logic';
+	import axios from 'axios';
+	import { api } from '$lib/api/api';
 
 	onMount(() => {
 		const preventZoom = (e: any) => {
@@ -60,6 +64,34 @@
 		window.addEventListener('mousemove', onMouseMove);
 		window.addEventListener('mouseup', onMouseUp);
 	}
+
+	$effect(() => {
+		const currentConfig = $dashboard_config;
+
+		if (!currentConfig) return;
+
+		const timer = setTimeout(async () => {
+			try {
+				const api_resp = await api.api.post(
+					`/admin/redis/user-config/set?user_id=root`,
+					currentConfig
+				);
+
+				if (api_resp.status === 200) {
+					toast.success(api_resp.data.message || 'Config saved');
+					debug.system(api_resp);
+				}
+			} catch (error) {
+				if (axios.isAxiosError(error)) {
+					toast.error(error.message);
+				} else {
+					toast.error('An unexpected error occurred');
+				}
+			}
+		}, 500);
+
+		return () => clearTimeout(timer);
+	});
 </script>
 
 <svelte:head>
