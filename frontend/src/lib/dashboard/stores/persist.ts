@@ -39,22 +39,18 @@ export type Bookmark = {
 };
 
 export type DashboardSettings = {
-	allowToSaveQuizWithoutQuestions: boolean;
 	code_theme: CodeEditorTheme;
-	sidebar_preference: SideBarPillPreferences[];
-	dock: boolean;
-	dock_custom_name: string;
+	client_pills: SideBarPillPreferences[];
+	dock_on: boolean;
 	bookmarks: Bookmark[];
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
 export const debugOn = persistedWritable<boolean>('debug_on', true);
 export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_settings', {
-	allowToSaveQuizWithoutQuestions: false,
 	code_theme: 'classic',
-	sidebar_preference: ['profile'],
-	dock: false,
-	dock_custom_name: 'Dashboard Dock',
+	client_pills: ['profile'],
+	dock_on: false,
 	bookmarks: []
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);

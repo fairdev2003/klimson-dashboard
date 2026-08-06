@@ -5,16 +5,4 @@
 	import StoragePill from './StoragePill.svelte';
 </script>
 
-<div class="flex flex-col gap-3 -z-1">
-	{#if $dashboard_config.sidebar_preference.includes('profile')}
-		<SidebarUserLogged
-			name={$nickname}
-			role="$root"
-			pfp_logo="https://klimson.dev/_app/immutable/assets/klimson.CQA0gh-5.jpeg"
-		/>
-	{/if}
-
-	{#if $dashboard_config.sidebar_preference.includes('storage')}
-		<StoragePill />
-	{/if}
-</div>
+<div class="flex flex-col gap-3 -z-1"></div>

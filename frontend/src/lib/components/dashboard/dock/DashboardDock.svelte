@@ -40,7 +40,7 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-{#if $dashboard_config.dock}
+{#if $dashboard_config.dock_on}
 	<div
 		style="position: sticky; top: 10px;"
 		class="h-17 p-10 px-5 flex justify-between items-center z-100 inset-0 border-neutral-700/60 bg-neutral-900"

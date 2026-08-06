@@ -18,9 +18,10 @@ import { DashboardMisc } from './dashboard_misc.svelte';
 import Constants from './constants';
 import type { Component } from 'svelte';
 import { DashboardHttpLogger } from './http.svelte';
-import { persistedWritable, userLogin } from './stores/persist';
+import { dashboard_config, persistedWritable, userLogin } from './stores/persist';
 import { use } from 'marked';
 import { useCycleList } from '@ariefsn/svelte-use';
+import axios from 'axios';
 
 export let locale = persistedWritable<string>('locale', 'pl-PL');
 
@@ -82,6 +83,19 @@ class DashboardClass {
 
 		dashboardLoadState.set('Pobieranie danych panelu...');
 		const routesResponse = await Promise.all([api.misc.GetRoutes()]);
+
+		try {
+			const user_config_response = await api.api.get(`/admin/redis/user-config/get?user_id=root`);
+
+			if (user_config_response.status === 200) {
+				dashboard_config.set(user_config_response.data.client_config);
+				debug.system('Client configuration successfully loaded!');
+			}
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				debug.error(error.message);
+			}
+		}
 
 		routes.set(routesResponse[0].data);
 		console.log(routesResponse[0].data);

@@ -100,6 +100,26 @@ func InitRoutes() {
 		Password string `json:"password"`
 		Login    string `json:"login"`
 	}
+	cpu_hub := helpers.NewHub("cpu")
+	logger_ws := helpers.NewHub("logger")
+	go cpu_hub.Run()
+	go logger_ws.Run()
+
+	go func() {
+		ticker := time.NewTicker(2 * time.Second)
+		for range ticker.C {
+			cpuUsage, _ := cpu.Percent(0, false)
+
+			cpu_hub.Send(map[string]interface{}{
+				"cpu": cpuUsage,
+			})
+		}
+	}()
+	controller := controllers.NewQuizController(db, ctx, apiPath, adminPath, &models.WebsocketIsland{
+		CPUHub:    (*models.WSHub)(cpu_hub),
+		LoggerHub: (*models.WSHub)(logger_ws),
+	}, rdb)
+	controller.RegisterRoutes()
 
 	apiPath.POST("/login", func(c *gin.Context) {
 		var req LoginRequest
@@ -131,7 +151,9 @@ func InitRoutes() {
 				khttp.InternalServerErrorResponse(c, nil, "Error while generating token:", err.Error())
 			}
 
-			khttp.SuccessResponse(c, gin.H{}, "Login was successfull")
+			config, err := controllers.GlobalController.GetUserConfigFromRdbHash(controller, "root")
+
+			khttp.SuccessResponse(c, gin.H{"user_config": config}, "Login was successfull")
 
 		} else {
 			logger.ServerLog("Znaleziono kontrybutora o nicku: ", user.Password)
@@ -162,27 +184,4 @@ func InitRoutes() {
 		khttp.SuccessResponse(ctx, gin.H{"success": true}, "Cookie is successfully deleted!")
 	})
 
-	cpu_hub := helpers.NewHub("cpu")
-	logger_ws := helpers.NewHub("logger")
-	go cpu_hub.Run()
-	go logger_ws.Run()
-
-	// websocket_registry := helpers.NewRegistry()
-
-	go func() {
-		ticker := time.NewTicker(2 * time.Second)
-		for range ticker.C {
-			cpuUsage, _ := cpu.Percent(0, false)
-
-			cpu_hub.Send(map[string]interface{}{
-				"cpu": cpuUsage,
-			})
-		}
-	}()
-
-	newQuizController := controllers.NewQuizController(db, ctx, apiPath, adminPath, &models.WebsocketIsland{
-		CPUHub:    (*models.WSHub)(cpu_hub),
-		LoggerHub: (*models.WSHub)(logger_ws),
-	}, rdb)
-	newQuizController.RegisterRoutes()
 }

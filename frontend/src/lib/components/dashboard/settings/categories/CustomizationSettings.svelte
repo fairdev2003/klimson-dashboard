@@ -55,16 +55,11 @@
 	/>
 	<CheckboxSettingsRecord
 		beta
-		bind:checked={$dashboard_config.dock}
+		bind:checked={$dashboard_config.dock_on}
 		title="Dashboard Dock"
 		description="Enables dashboard dock"
 	/>
-	<InputSettingsRecord
-		bind:value={$dashboard_config.dock_custom_name}
-		title="Custom dock text"
-		description="Decide what text will display on the new dock component"
-		placeholder="Custom dock name..."
-	/>
+
 	<MultipleSettingsRecord
 		title="Choose sidebar pills"
 		description="Choose what pill will be displayed on the top-level of the sidebar"
@@ -72,7 +67,7 @@
 			{ key: 'User Pill', value: 'profile' },
 			{ key: 'Storage Pill', value: 'storage' }
 		]}
-		bind:current_value={$dashboard_config.sidebar_preference}
+		bind:current_value={$dashboard_config.client_pills}
 		onchoose={(e) => {
 			debug.log(e.key);
 		}}
