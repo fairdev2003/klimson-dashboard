@@ -46,27 +46,6 @@
 	bg_color="classic"
 	size="window"
 	padding_preset="normal"
-	form_config={{
-		onSubmit: async () => {
-			try {
-				const api_resp = await api.api.post(
-					`/admin/redis/user-config/set?user_id=root`,
-					$dashboard_config
-				);
-
-				if (api_resp.status === 200) {
-					toast.success(api_resp.data.message);
-					debug.system(api_resp);
-				}
-			} catch (error) {
-				if (axios.isAxiosError(error)) {
-					toast.error(error.message);
-				}
-			} finally {
-				toast.info('Done');
-			}
-		}
-	}}
 	border="borderless"
 	bind:title={toolbarName}
 >
