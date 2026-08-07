@@ -68,8 +68,8 @@
 		base: 'z-100 flex flex-col gap-2 ',
 		variants: {
 			bg_color: {
-				classic: 'bg-neutral-900',
-				blacker: 'bg-neutral-950 border-neutral-800 border'
+				classic: 'bg-background',
+				blacker: 'bg-primary-background border-border border'
 			},
 			round_size: {
 				normal: 'rounded-lg',

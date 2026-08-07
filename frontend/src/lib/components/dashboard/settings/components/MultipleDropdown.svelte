@@ -47,7 +47,7 @@
 <div class="relative">
 	<button
 		class:min-w-50={set_w}
-		class="bg-neutral-800 dropdown-button flex items-center gap-1 justify-between px-4 p-2 border cursor-pointer hover:bg-neutral-700 border-neutral-700 rounded-xl"
+		class="bg-foreground dropdown-button flex items-center gap-1 justify-between px-4 p-2 border cursor-pointer hover:bg-neutral-700 border-border rounded-xl"
 		onclick={() => (opened = !opened)}
 	>
 		{#if children}

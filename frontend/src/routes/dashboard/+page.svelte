@@ -49,7 +49,7 @@
 	const settings_page_open = useLocalStorage<SettingKey>('settings_page_open', 'main');
 </script>
 
-<div in:blur={{ duration: 300 }} class=" p-8 py-4 text-white flex flex-col gap-5">
+<div in:blur={{ duration: 300 }} class=" p-8 py-4 text-text flex flex-col gap-5">
 	<div class="my-2 flex justify-between">
 		<div class="flex flex-col">
 			<Heading>Hub</Heading>

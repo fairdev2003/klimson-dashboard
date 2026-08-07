@@ -45,7 +45,7 @@
 {#if $dashboard_config.dock_on}
 	<div
 		style="position: sticky; top: 10px;"
-		class="h-17 p-10 px-5 flex justify-between items-center z-100 inset-0 border-neutral-700/60 bg-neutral-900"
+		class="h-17 p-10 px-5 flex justify-between items-center z-100 inset-0 border-border bg-background"
 	>
 		<div class="flex h-full items-center">
 			<div class="flex items-center gap-5">

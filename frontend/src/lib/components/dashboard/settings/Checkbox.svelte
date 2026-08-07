@@ -34,8 +34,8 @@
 	}}
 	class="transition-colors duration-300 cursor-pointer
            flex items-center rounded-full w-12 h-6 border-1 {checked
-		? 'bg-blue-500/60 border-transparent'
-		: 'bg-transparent border-neutral-700'} p-0.5 relative"
+		? 'bg-foreground border-transparent'
+		: 'bg-transparent border-border'} p-0.5 relative"
 >
 	<div
 		class="h-full rounded-full w-4.5 flex items-center justify-center

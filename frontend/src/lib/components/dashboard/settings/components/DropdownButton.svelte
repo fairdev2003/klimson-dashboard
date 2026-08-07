@@ -47,13 +47,13 @@
 <div class="relative">
 	<button
 		class:min-w-50={set_w}
-		class="bg-neutral-800 dropdown-button flex items-center gap-1 justify-between px-4 p-2 border cursor-pointer hover:bg-neutral-700 border-neutral-700 rounded-xl"
+		class="bg-foreground text-text dropdown-button flex items-center gap-1 justify-between px-4 p-2 border cursor-pointer hover:bg-primary border-border rounded-xl"
 		onclick={() => (opened = !opened)}
 	>
 		{#if children}
 			{@render children?.()}
 		{:else if label}
-			<p>{label}</p>
+			<p class="text-text">{label}</p>
 		{:else}
 			<p>{l}</p>
 		{/if}
@@ -69,7 +69,7 @@
 		<div
 			in:blur={{ duration: 300 }}
 			out:blur={{ duration: 300 }}
-			class="absolute dropdown-container w-50 overflow-hidden top-full left-1/2 -translate-x-1/2 mt-2 bg-neutral-800 border border-neutral-700 w-48 z-50 rounded-md"
+			class="absolute dropdown-container w-50 overflow-hidden top-full left-1/2 -translate-x-1/2 mt-2 bg-foreground border border-border w-48 z-50 rounded-md"
 		>
 			<div class="flex flex-col">
 				{#each options as option}
@@ -87,7 +87,7 @@
 							opened = false;
 						}}
 						class:selected={current_value === option.value}
-						class="px-4 py-2 cursor-pointer hover:bg-neutral-700 text-left transition-colors"
+						class="px-4 py-2 cursor-pointer hover:bg-primary text-secondary-text text-left transition-colors"
 					>
 						{option.key}
 					</button>
@@ -103,6 +103,11 @@
 	@import 'tailwindcss';
 
 	.selected {
-		@apply bg-blue-500 hover:bg-blue-500;
+		background-color: var(--color-primary);
+		color: var(--color-text);
+	}
+
+	.selected:hover {
+		background-color: var(--color-primary);
 	}
 </style>

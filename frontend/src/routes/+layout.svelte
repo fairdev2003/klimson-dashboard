@@ -2,6 +2,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import './../app.css';
 	import './../scrollbar.css';
+	import './../theme.css';
 
 	let { children } = $props();
 </script>

@@ -43,6 +43,7 @@ export type DashboardSettings = {
 	client_pills: SideBarPillPreferences[];
 	dock_on: boolean;
 	bookmarks: Bookmark[];
+	theme: 'dark' | 'light' | 'system';
 };
 export type AnimationPresetType = 'blur' | 'klimson' | 'jason';
 
@@ -51,7 +52,8 @@ export const dashboard_config = persistedWritable<DashboardSettings>('dashboard_
 	code_theme: 'classic',
 	client_pills: ['profile'],
 	dock_on: false,
-	bookmarks: []
+	bookmarks: [],
+	theme: 'system'
 });
 export const developerView = persistedWritable<boolean>('dev_view', false);
 

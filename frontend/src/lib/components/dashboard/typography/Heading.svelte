@@ -17,7 +17,7 @@
 <h1
 	{...props}
 	id={props.id}
-	class={`heading group relative text-2xl font-bold ${props.class} ${padding && 'pt-5 '} font-bold`}
+	class={`heading text-text group relative text-2xl font-bold ${props.class} ${padding && 'pt-5 '} font-bold`}
 >
 	<span>{@render children()}</span>
 </h1>

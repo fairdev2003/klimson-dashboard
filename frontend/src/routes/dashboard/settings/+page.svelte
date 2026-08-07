@@ -50,7 +50,7 @@
 <!-- settings container -->
 <div class="col-span-8 lg:p-10 flex flex-col gap-5">
 	{#key current_page}
-		<h1 in:blur={{ duration: 300 }} class="text-3xl font-bold">
+		<h1 in:blur={{ duration: 300 }} class="text-3xl text-text font-bold">
 			{current_page}
 		</h1>
 	{/key}

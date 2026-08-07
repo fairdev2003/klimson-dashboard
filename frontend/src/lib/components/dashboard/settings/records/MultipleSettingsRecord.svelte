@@ -40,7 +40,7 @@
 	{/if}
 	<div class="flex flex-col lg:w-150">
 		<Heading>{title}</Heading>
-		<p class="font-medium text-sm text-neutral-300">{description}</p>
+		<p class="font-medium text-sm text-text">{description}</p>
 		<p class="text-red-500 text-xs">{error_text && disabled ? error_text : ''}</p>
 	</div>
 	<div class="">

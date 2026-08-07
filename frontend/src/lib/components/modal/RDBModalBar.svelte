@@ -15,7 +15,7 @@
 		base: 'uppercase text-xs font-black text-white',
 		variants: {
 			titleStyle: {
-				basic: 'text-white',
+				basic: 'text-text',
 				danger: 'text-red-400'
 			}
 		},
@@ -29,7 +29,7 @@
 	<p class={titleStyles({ titleStyle })}>{title}</p>
 	<button
 		onclick={onButtonClick}
-		class="p-2 hover:bg-neutral-700/50 hover:text-red-400 rounded-xl cursor-pointer"
+		class="p-2 hover:bg-neutral-700/50 hover:text-red-400 text-text rounded-xl cursor-pointer"
 	>
 		<Icon icon="material-symbols:close" />
 	</button>

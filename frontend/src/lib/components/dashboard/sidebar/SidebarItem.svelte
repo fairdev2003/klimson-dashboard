@@ -36,25 +36,34 @@
 {/if}
 
 <style>
-	@import 'tailwindcss';
-
 	.link {
-		@apply bg-blue-500;
+		background-color: var(--color-primary);
 	}
 
 	.selected {
-		@apply bg-blue-700/60 font-bold hover:bg-blue-700  text-white;
+		background-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+		font-weight: bold;
+		color: var(--color-text, #ffffff);
+	}
+	.selected:hover {
+		background-color: var(--color-primary);
 	}
 
 	.normal {
-		@apply bg-neutral-800 hover:bg-neutral-700 border-neutral-700 text-neutral-500;
+		background-color: var(--color-background);
+		border-color: var(--color-border);
+		color: var(--color-secondary-text);
+	}
+	.normal:hover {
+		background-color: var(--color-foreground);
 	}
 
 	.disabled {
-		@apply opacity-50 hover:bg-neutral-800 hover:cursor-not-allowed;
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
 	.disabled:hover {
-		background-color: none !important;
+		background-color: transparent !important;
 	}
 </style>

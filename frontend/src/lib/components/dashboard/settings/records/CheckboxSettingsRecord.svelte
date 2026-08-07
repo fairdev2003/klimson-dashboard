@@ -18,13 +18,13 @@
 			<Heading>{title}</Heading>
 			{#if beta}
 				<div
-					class="p-0.5 bg-blue-600 text-xs font-black items-center flex justify-center px-2 rounded-lg"
+					class="p-0.5 bg-primary text-text text-xs font-black items-center flex justify-center px-2 rounded-lg"
 				>
 					BETA
 				</div>
 			{/if}
 		</div>
-		<p class="font-medium text-sm text-neutral-300">{description}</p>
+		<p class="font-medium text-sm text-text">{description}</p>
 	</div>
 	<div class="">
 		<Checkbox bind:checked />

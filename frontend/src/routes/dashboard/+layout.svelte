@@ -20,6 +20,7 @@
 	import { debug } from '$lib/terminal/logic';
 	import axios from 'axios';
 	import { api } from '$lib/api/api';
+	import { browser } from '$app/environment';
 
 	onMount(() => {
 		const preventZoom = (e: any) => {
@@ -91,6 +92,59 @@
 		}, 500);
 
 		return () => clearTimeout(timer);
+	});
+
+	export function setupDeviceTheme(
+		getThemeConfig: () => string,
+		applyTheme: (theme: string) => void
+	) {
+		if (!browser) return;
+
+		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+		const handleSystemThemeChange = () => {
+			if (getThemeConfig() === 'device') {
+				const systemTheme = mediaQuery.matches ? 'dark' : 'light';
+				applyTheme(systemTheme);
+			}
+		};
+
+		mediaQuery.addEventListener('change', handleSystemThemeChange);
+
+		return () => {
+			mediaQuery.removeEventListener('change', handleSystemThemeChange);
+		};
+	}
+
+	function applyThemeToDOM(themeName: string) {
+		if (themeName === 'system') {
+			const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+		} else {
+			document.documentElement.setAttribute('data-theme', themeName);
+		}
+	}
+
+	$effect(() => {
+		const currentThemeSetting = $dashboard_config?.theme;
+		if (currentThemeSetting) {
+			debug.system('Resolved Theme: ' + currentThemeSetting);
+			applyThemeToDOM(currentThemeSetting);
+		}
+	});
+
+	onMount(() => {
+		const cleanup = setupDeviceTheme(
+			() => $dashboard_config?.theme ?? 'dark',
+			(resolvedTheme) => {
+				if ($dashboard_config?.theme === 'system') {
+					document.documentElement.setAttribute('data-theme', resolvedTheme);
+					debug.system('Resolved Theme: ' + resolvedTheme);
+				}
+			}
+		);
+
+		return cleanup;
 	});
 </script>
 

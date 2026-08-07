@@ -38,7 +38,7 @@
 </script>
 
 <div
-	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-neutral-700 bg-neutral-900 px-5 text-[14px] text-white"
+	class="absolute top-0 left-0 flex h-[80px] z-110 w-full items-center justify-between border-b border-border bg-background px-5 text-[14px] text-white"
 >
 	{#if Dashboard.state.dashboard_loader_on}
 		<div
@@ -67,7 +67,7 @@
 </div>
 
 {#snippet CMSTextLogo()}
-	<a class="pr-5 text-blue-500 pb-2 ml-5" href="/dashboard">
+	<a class="pr-5 text-text pb-2 ml-5" href="/dashboard">
 		<Icon icon="dinkie-icons:mango" width="40" height="40" />
 	</a>
 {/snippet}

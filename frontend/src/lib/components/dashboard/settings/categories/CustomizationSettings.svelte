@@ -23,9 +23,23 @@
 </script>
 
 <div
-	class="flex lg:gap-0 gap-5 pt-5 flex-col border-t border-neutral-700 h-full lg:px-10"
+	class="flex lg:gap-0 gap-5 pt-5 flex-col border-t border-foreground h-full lg:px-10"
 	in:blur={{ duration: 300 }}
 >
+	<DropdownSettingsRecord
+		title="Dashboard Theme"
+		description="Choose Theme of your code editor built in dashboard!"
+		options={[
+			{ key: 'Dark', value: 'dark' },
+			{ key: 'Light', value: 'light' },
+			{ key: 'System', value: 'system' },
+			{ key: 'Candy', value: 'candy' }
+		]}
+		bind:current_value={$dashboard_config.theme}
+		onchoose={(e) => {
+			debug.log(e.key);
+		}}
+	/>
 	<DropdownSettingsRecord
 		title="Modal Animation"
 		description="Choose modal animation that will show in!"

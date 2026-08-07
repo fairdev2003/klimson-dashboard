@@ -34,24 +34,20 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	oncontextmenu={(e) => handleRightClick(e)}
-	class="flex flex-col h-screen overflow-hidden bg-neutral-950 text-white"
+	class="flex flex-col h-screen overflow-hidden bg-primary-background text-white"
 >
 	<header class="border-b h-20 border-neutral-700 flex items-center px-4 shrink-0">
 		<CMSNavbar />
 	</header>
 
 	<div class="flex flex-1 relative">
-		<aside class="hidden lg:flex z-20 bg-neutral-900 border-r border-neutral-700 transition-all">
+		<aside class="hidden lg:flex z-20 bg-background border-r border-border transition-all">
 			<Sidebar />
 		</aside>
 
-		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1">
+		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1 text-text">
 			<DashboardDock />
-			<div
-				class:dock-invisible={!$dashboard_config.dock}
-				class:dock-visible={$dashboard_config.dock}
-				class=""
-			>
+			<div class="">
 				{@render children()}
 			</div>
 		</main>

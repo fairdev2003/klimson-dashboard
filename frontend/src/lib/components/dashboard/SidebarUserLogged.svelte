@@ -19,7 +19,7 @@
 <button
 	{onclick}
 	class:selected
-	class="bg-neutral-800 hover:bg-neutral-700 cursor-pointer gap-3 w-full flex items-center p-2 rounded-lg"
+	class="bg-foreground hover:bg-neutral-700 cursor-pointer gap-3 w-full flex items-center p-2 rounded-lg"
 >
 	<img
 		alt="pfp"
@@ -27,11 +27,11 @@
 		class="size-12 rounded-full"
 	/>
 	<div class="flex flex-col h-full justify-center gap-0.5 items-center">
-		<p class="text-white text-sm text-start">
+		<p class="text-text text-sm text-start">
 			{nickname.value}
 			<span class="bg-orange-800 p-0.5 text-orange-300 rounded-full px-2 text-xs">{role}</span>
 		</p>
-		<span class="flex gap-1 items-center text-start text-xs text-neutral-400 cursor-pointer">
+		<span class="flex gap-1 items-center text-start text-xs text-secondary-text cursor-pointer">
 			<Icon icon="material-symbols:edit" width="16" height="16" class="mb-0.5" />
 			<p class="text-xs">Edit yourself</p>
 		</span>
