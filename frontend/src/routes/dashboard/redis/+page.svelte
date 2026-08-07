@@ -138,7 +138,7 @@
 						{#await get(rdb)}
 							<FancyLoader color="red" />
 						{:then data}
-							<div class="bg-background justify-between flex rounded-lg p-3 px-7 items-center">
+							<div class="bg-card text-text justify-between flex rounded-lg p-3 px-7 items-center">
 								<div class="flex flex-col">
 									<span class="flex gap-1 items-center">
 										<Icon icon="devicon:redis" />
@@ -207,7 +207,7 @@
 						{#await get(rdb)}
 							<FancyLoader color="red" />
 						{:then data}
-							<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
+							<div class="bg-card justify-between flex rounded-lg p-3 px-7 items-center">
 								<div class="flex flex-col">
 									<span class="flex gap-1 items-center text-red-500">
 										<span class="font-black items-center flex gap-1 text-red-500">
