@@ -43,7 +43,7 @@
 	{#if Dashboard.state.dashboard_loader_on}
 		<div
 			out:blur={{ duration: 300 }}
-			class="bg-blue-500 duration-1000 top-0 h-0.5 left-0 absolute transition-all"
+			class="bg-primary duration-1000 bottom-0 h-0.5 left-0 absolute transition-all"
 			style="width: {Dashboard.state.loaded_percent}%;"
 		></div>
 	{/if}

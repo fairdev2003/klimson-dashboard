@@ -1,13 +1,27 @@
 @import 'tailwindcss';
 
-	.selected-label-pill {
-		@apply text-blue-400 bg-blue-500/20 hover:bg-blue-500/40;
-	}
+.selected-label-pill {
+        color: var(--color-secondary-text);
+        background-color: var(--color-primary)
+    }
+    .selected-label-pill:hover {
+        background-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+    }
 
-	.normal-label-pill {
-		@apply bg-neutral-800 text-neutral-400 hover:bg-neutral-700;
-	}
+    .normal-label-pill {
+        background-color: var(--color-muted);
+        color: var(--color-secondary-text);
+    }
+    .normal-label-pill:hover {
+        background-color: var(--color-foreground);
+    }
 
-	.base-label-pill {
-		@apply select-none px-4 p-2 rounded-full text-sm transition-all cursor-pointer;
-	}
+    .base-label-pill {
+        user-select: none;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        transition: all 0.15s ease-in-out;
+        cursor: pointer;
+    }

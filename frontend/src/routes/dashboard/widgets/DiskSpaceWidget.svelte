@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Heading from '$lib/components/dashboard/typography/Heading.svelte';
 	import Icon from '@iconify/svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { derived } from 'svelte/store';
 	import gsap from 'gsap';
 	import { api } from '$lib/api/api';
@@ -41,19 +41,27 @@
 	});
 
 	$effect(() => {
-		let config = $dashboard_config ?? $dashboard_config;
+		// Śledzimy zmianę motywu poprzez obserwowanie atrybutu data-theme na html
+		const observer = new MutationObserver(async () => {
+			await tick(); // Czekamy na przetworzenie DOM przez Svelte
 
-		const rootStyles = getComputedStyle(document.documentElement);
+			const rootStyles = getComputedStyle(document.documentElement);
+			const primaryColor = rootStyles.getPropertyValue('--color-primary').trim();
+			const mutedColor = rootStyles.getPropertyValue('--color-foreground').trim();
 
-		const primaryColor = rootStyles.getPropertyValue('--color-primary').trim();
-		const mutedColor = rootStyles.getPropertyValue('--color-foreground').trim();
-
-		gsap.to('.blob-item', {
-			backgroundColor: (i) => (i < power ? primaryColor : mutedColor),
-			duration: 1,
-			stagger: 0.1,
-			ease: 'power1.inOut'
+			gsap.to('.blob-item', {
+				backgroundColor: (i) => (i < power ? primaryColor : mutedColor),
+				duration: 0.5,
+				overwrite: 'auto'
+			});
 		});
+
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme']
+		});
+
+		return () => observer.disconnect();
 	});
 	function formatBytes(bytes: number | string, decimals = 2) {
 		const b = Number(bytes);

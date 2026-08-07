@@ -108,60 +108,91 @@ h3 {
 }
 
 [data-theme="candy"] {
-  --color-primary-background: var(--color-rose-100);
-  --color-background: var(--color-rose-50);
-  --color-foreground: var(--color-rose-200);
+  --color-primary-background: var(--color-rose-200);
+  --color-background: var(--color-rose-100);
+  --color-foreground: var(--color-rose-300);
+
+  --color-widget-background: var(--color-rose-50);
+  --color-widget-border: var(--color-rose-300);
+  
+  --color-spotify: var(--color-rose-600);
+
+  --color-cpu-good: var(--color-rose-600);
+  --color-cpu-warn: var(--color-rose-600);
+  --color-cpu-bad: var(--color-red-600);
+
+  --color-text: var(--color-rose-950);
+  --color-secondary-text: var(--color-rose-800);
+
+  --color-primary: var(--color-rose-600);
+  --color-primary-foreground: var(--color-white);
+  --color-danger: var(--color-red-600);
+  
+  --color-muted: var(--color-rose-200);
+  --color-muted-foreground: var(--color-rose-900);
+  
+  --color-border: var(--color-rose-300);
+  --bookmark-0: var(--color-rose-800);
+  --bookmark-1: var(--color-pink-800);
+  --bookmark-2: var(--color-fuchsia-800);
+  --bookmark-3: var(--color-purple-800);
+  --bookmark-4: var(--color-rose-900);
+  --bookmark-5: var(--color-pink-900);
+  --bookmark-6: var(--color-red-800);
+  --bookmark-7: var(--color-rose-950);
+}
+
+[data-theme="bubble-tea"] {
+  --color-primary-background: var(--color-stone-100);
+  --color-background: var(--color-stone-50);
+  --color-foreground: var(--color-stone-200);
 
   --color-widget-background: var(--color-transparent);
   --color-widget-border: var(--color-border);
-  
-  --color-spotify: var(--color-rose-500);
 
-  --color-cpu-good: var(--color-rose-500);
-  --color-cpu-warn: var(--color-rose-500);
-  --color-cpu-bad: var(--color-rose-500);
+  --color-text: var(--color-stone-800);
+  --color-secondary-text: var(--color-stone-600);
 
-  --color-text: var(--color-rose-950);
-  --color-secondary-text: var(--color-rose-700);
+  --color-primary: var(--color-pink-300);
+  --color-primary-foreground: var(--color-stone-950);
 
-  --color-primary: var(--color-rose-500);
-  --color-primary-foreground: var(--color-white);
-  --color-danger: var(--color-red-500);
-  
-  --color-muted: var(--color-rose-100);
-  --color-muted-foreground: var(--color-rose-600);
-  
-  --color-border: var(--color-rose-200);
+  --color-muted: var(--color-stone-100);
+  --color-muted-foreground: var(--color-stone-500);
 
-  --bookmark-0: var(--color-rose-700);
-  --bookmark-1: var(--color-pink-700);
-  --bookmark-2: var(--color-fuchsia-700);
-  --bookmark-3: var(--color-purple-700);
-  --bookmark-4: var(--color-rose-800);
-  --bookmark-5: var(--color-pink-800);
-  --bookmark-6: var(--color-red-700);
-  --bookmark-7: var(--color-rose-900);
+  --color-border: var(--color-stone-300);
 
+  --color-cpu-good: var(--color-emerald-500);
+  --color-cpu-warn: var(--color-amber-500);
+  --color-cpu-bad: var(--color-red-500);
+
+  --color-spotify: var(--color-pink-400);
+
+  --bookmark-0: var(--color-amber-700);
+  --bookmark-1: var(--color-pink-500);
+  --bookmark-2: var(--color-violet-500);
+  --bookmark-3: var(--color-teal-500);
+  --bookmark-4: var(--color-orange-500);
+  --bookmark-5: var(--color-rose-400);
+  --bookmark-6: var(--color-brown-600); /* jeśli brak - stone-700 */
+  --bookmark-7: var(--color-stone-800);
 }
 
 [data-theme="blackout"] {
-  --color-primary-background: var(--color-neutral-950);
+  --color-primary-background: var(--color-neutral-900);
   
-  --hero-gradient: linear-gradient(to right top, var(--color-red-950), var(--color-primary-background));
+  --color-widget-background: var(--color-neutral-950);
+  --color-widget-border: var(--color-neutral-800);
 
-  --color-widget-background: var(--color-transparent);
-  --color-widget-border: var(--color-neutral-700);
+  --color-spotify: var(--color-red-700);
 
-  --color-spotify: var(--color-red-900);
+  --color-cpu-good: var(--color-red-700);
+  --color-cpu-warn: var(--color-red-700);
+  --color-cpu-bad: var(--color-red-500);
 
-  --color-cpu-good: var(--color-red-900);
-  --color-cpu-warn: var(--color-red-900);
-  --color-cpu-bad: var(--color-red-900);
+  --color-background: var(--color-neutral-950);
+  --color-foreground: var(--color-neutral-900);
 
-  --color-background: var(--color-black);
-  --color-foreground: var(--color-neutral-950);
-
-  --color-text: var(--color-white);
+  --color-text: var(--color-neutral-100);
   --color-secondary-text: var(--color-neutral-400);
 
   --color-primary: var(--color-red-600);
@@ -169,16 +200,53 @@ h3 {
   --color-danger: var(--color-red-500);
   
   --color-muted: var(--color-neutral-900);
-  --color-muted-foreground: var(--color-neutral-400);
+  --color-muted-foreground: var(--color-neutral-500);
   
-  --color-border: var(--color-neutral-900);
+  --color-border: var(--color-neutral-800);
 
-  --bookmark-0: var(--color-red-900);
-  --bookmark-1: var(--color-zinc-800);
-  --bookmark-2: var(--color-neutral-900);
-  --bookmark-3: var(--color-red-950);
-  --bookmark-4: var(--color-zinc-900);
-  --bookmark-5: var(--color-red-800);
+  --bookmark-0: var(--color-neutral-900);
+  --bookmark-1: var(--color-neutral-800);
+  --bookmark-2: var(--color-zinc-900);
+  --bookmark-3: var(--color-zinc-800);
+  --bookmark-4: var(--color-neutral-900);
+  --bookmark-5: var(--color-red-950);
   --bookmark-6: var(--color-neutral-800);
-  --bookmark-7: var(--color-black);
+  --bookmark-7: var(--color-neutral-900);
+}
+
+[data-theme="chomikuj"] {
+  --color-primary-background: var(--color-background);
+  
+  --color-widget-background: var(--color-background);
+  --color-widget-border: var(--color-amber-300);
+
+  --color-spotify: var(--color-amber-600);
+
+  --color-cpu-good: var(--color-amber-600);
+  --color-cpu-warn: var(--color-orange-500);
+  --color-cpu-bad: var(--color-red-600);
+
+  --color-background: var(--color-amber-100);
+  --color-foreground: var(--color-amber-200);
+
+  --color-text: var(--color-amber-950);
+  --color-secondary-text: var(--color-amber-800);
+
+  --color-primary: var(--color-orange-600);
+  --color-primary-foreground: var(--color-white);
+  --color-danger: var(--color-red-600);
+  
+  --color-muted: var(--color-amber-200);
+  --color-muted-foreground: var(--color-amber-700);
+  
+  --color-border: var(--color-amber-300);
+
+  --bookmark-0: var(--color-amber-700);
+  --bookmark-1: var(--color-orange-700);
+  --bookmark-2: var(--color-yellow-700);
+  --bookmark-3: var(--color-amber-800);
+  --bookmark-4: var(--color-orange-800);
+  --bookmark-5: var(--color-amber-900);
+  --bookmark-6: var(--color-yellow-800);
+  --bookmark-7: var(--color-orange-900);
 }

@@ -62,7 +62,7 @@
 
 <div class="p-7 flex flex-col gap-4">
 	<div
-		class="lg:flex-row flex justify-between flex-col lg:items-center gap-4 border-b border-neutral-700 pb-4"
+		class="lg:flex-row flex justify-between flex-col lg:items-center gap-4 border-b border-border pb-4"
 	>
 		<div class="flex-col flex gap-1">
 			<Heading>
@@ -138,7 +138,7 @@
 						{#await get(rdb)}
 							<FancyLoader color="red" />
 						{:then data}
-							<div class="bg-neutral-800 justify-between flex rounded-lg p-3 px-7 items-center">
+							<div class="bg-background justify-between flex rounded-lg p-3 px-7 items-center">
 								<div class="flex flex-col">
 									<span class="flex gap-1 items-center">
 										<Icon icon="devicon:redis" />

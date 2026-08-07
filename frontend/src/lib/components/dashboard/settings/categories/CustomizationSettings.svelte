@@ -34,6 +34,9 @@
 			{ key: 'Light', value: 'light' },
 			{ key: 'System', value: 'system' },
 			{ key: 'Candy', value: 'candy' },
+			{ key: 'Bubble Tea', value: 'bubble-tea' },
+			{ key: 'Chomikuj.pl', value: 'chomikuj' },
+
 			{ key: 'Blackout', value: 'blackout' }
 		]}
 		bind:current_value={$dashboard_config.theme}
