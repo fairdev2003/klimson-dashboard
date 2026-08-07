@@ -65,7 +65,7 @@
 						}}
 						class="p-2 px-3 hidden lg:flex gap-1 transition-colors {bookmark.color} cursor-pointer rounded-lg items-center"
 					>
-						<p class="text-xs">{bookmark.name}</p>
+						<p class="text-xs text-white">{bookmark.name}</p>
 					</button>
 				{/each}
 			</div>
@@ -75,7 +75,7 @@
 				onclick={() => {
 					bookmarkModalOpened = !bookmarkModalOpened;
 				}}
-				class="p-2 px-3 hidden lg:flex gap-1 transition-colors bg-neutral-800 cursor-pointer rounded-lg items-center hover:bg-neutral-700"
+				class="p-2 px-3 hidden lg:flex gap-1 text-white transition-colors bg-primary cursor-pointer rounded-lg items-center hover:bg-neutral-700"
 			>
 				<Icon icon="material-symbols:bookmark" width="15" height="15" />
 				<p class="text-xs">Add Bookmark</p>
@@ -85,7 +85,7 @@
 					deleteOn = !deleteOn;
 				}}
 				class:delete-on={deleteOn}
-				class="p-2 px-3 hidden border-2 border-neutral-800 lg:flex gap-1 transition-colors bg-neutral-800 cursor-pointer rounded-lg items-center hover:bg-neutral-700"
+				class="p-2 px-3 hidden border-2 border-border lg:flex gap-1 text-white transition-colors bg-primary cursor-pointer rounded-lg items-center hover:bg-neutral-700"
 			>
 				<Icon icon="mdi:trash" width="15" height="15" />
 			</button>

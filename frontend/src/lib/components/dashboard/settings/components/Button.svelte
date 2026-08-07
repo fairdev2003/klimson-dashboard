@@ -8,7 +8,7 @@
 </script>
 
 <button
-	class="bg-neutral-800 dropdown-button flex items-center gap-1 justify-center px-6 p-2 border cursor-pointer hover:bg-neutral-700 border-neutral-700 rounded-xl"
+	class="bg-primary dropdown-button flex items-center gap-1 justify-center px-6 p-2 border cursor-pointer hover:bg-foreground border-border rounded-xl"
 	onclick={() => {
 		onclick?.();
 	}}

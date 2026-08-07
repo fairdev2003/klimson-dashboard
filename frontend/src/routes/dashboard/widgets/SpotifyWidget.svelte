@@ -16,7 +16,7 @@
 		onclick={() => {
 			goto('/dashboard/spotify');
 		}}
-		class="relative cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border hover:ring-green-500 hover:ring-2 border-neutral-700 bg-neutral-800/60"
+		class="relative cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border hover:ring-green-500 hover:ring-2 border-widget-border bg-widget-background"
 	>
 		<div class="absolute group-hover:flex hidden w-full h-full bg-green-500/20"></div>
 		<div class="p-5 w-full">
@@ -34,7 +34,7 @@
 							{spotifyApp.getSong()?.slice(0, 15)}{spotifyApp.getSong()?.length > 14 ? '...' : ''}
 						</h3>
 					</div>
-					<p class="text-xs text-neutral-400 font-semibold">
+					<p class="text-xs text-secondary-text font-semibold">
 						{spotifyApp.getArtist()}{spotifyApp.spotify.item.artists.length > 1 ? ', +' : ''}
 
 						{#if spotifyApp.spotify.item.artists.length > 1}
@@ -60,7 +60,7 @@
 				</div>
 				<div class={`h-1 rounded-full bg-white/30 w-full mt-4`}>
 					<div
-						class:bg-green-500={spotifyApp.spotify.is_playing}
+						class:bg-spotify={spotifyApp.spotify.is_playing}
 						class="h-full rounded-full transition-all duration-500 ease-linear"
 						style="width: {spotifyApp.spotify.is_playing &&
 							(spotifyApp.progress / spotifyApp.duration) * 100}%"
@@ -68,10 +68,10 @@
 				</div>
 
 				<div class="flex justify-between mt-2 relative">
-					<p class="text-[11px] text-white">
+					<p class="text-[11px] text-secondary-text">
 						{spotifyApp.spotify.is_playing ? spotifyApp.formatMs(spotifyApp.progress) : '--'}
 					</p>
-					<p class="text-[11px] text-white">
+					<p class="text-[11px] text-secondary-text">
 						{spotifyApp.spotify.is_playing ? spotifyApp.formatMs(spotifyApp.duration) : '--'}
 					</p>
 				</div>
@@ -107,7 +107,7 @@
 
 	.bar {
 		width: 3px;
-		background-color: #1ed760;
+		background-color: var(--color-spotify);
 		border-radius: 2px;
 
 		transform-origin: bottom;

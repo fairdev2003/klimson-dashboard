@@ -10,7 +10,7 @@
 </script>
 
 <button
-	class="relative overflow-hidden p-3 h-80 text-start group rounded-xl flex flex-col col-span-3 border gap-3 border-neutral-700 bg-neutral-800/60"
+	class="relative overflow-hidden p-3 h-80 text-start group rounded-xl flex flex-col col-span-3 border gap-3 border-widget-border bg-widget-background"
 >
 	<div class="flex flex-col">
 		<h2 class="text-lg font-bold">Latest Files</h2>

@@ -66,7 +66,7 @@
 					}}
 					class:normal={$route !== content.route}
 					class:selected={$route === content.route}
-					class="p-2 focus:outline-none cursor-pointer rounded-xl mb-4"
+					class="p-2 focus:outline-none cursor-pointer text-primary rounded-xl mb-4"
 				>
 					<Icon icon={String(content.icon)} width="25" height="25"></Icon>
 				</button>
@@ -89,10 +89,19 @@
 	@import 'tailwindcss';
 
 	.selected {
-		@apply bg-blue-700 hover:bg-blue-700  text-white;
+		color: var(--color-text);
+		background-color: var(--color-primary);
+	}
+
+	.selected:hover {
+		background-color: var(--color-foreground);
 	}
 
 	.normal {
-		@apply hover:bg-neutral-700 border-neutral-700;
+		background-color: transparent;
+	}
+
+	.normal:hover {
+		background-color: var(--color-foreground);
 	}
 </style>

@@ -11,6 +11,7 @@
 	import { base_url } from '$lib/api/api.store';
 	import { blur } from 'svelte/transition';
 	import Loader from '$lib/components/dashboard/Loader.svelte';
+	import { dashboard_config } from '$lib/dashboard/stores/persist';
 
 	let percent: number = $state(0);
 	let power = $derived(Math.floor(percent * 10));
@@ -26,14 +27,34 @@
 		os = response.data.os;
 		percent = Number(disk.percentage) / 100;
 
+		const rootStyles = getComputedStyle(document.documentElement);
+
+		const primaryColor = rootStyles.getPropertyValue('--color-primary').trim();
+		const mutedColor = rootStyles.getPropertyValue('--color-foreground').trim();
+
 		gsap.to('.blob-item', {
-			backgroundColor: (i) => (i < power ? '#22c55e' : '#525252'),
+			backgroundColor: (i) => (i < power ? primaryColor : mutedColor),
 			duration: 1,
 			stagger: 0.1,
 			ease: 'power1.inOut'
 		});
 	});
 
+	$effect(() => {
+		let config = $dashboard_config ?? $dashboard_config;
+
+		const rootStyles = getComputedStyle(document.documentElement);
+
+		const primaryColor = rootStyles.getPropertyValue('--color-primary').trim();
+		const mutedColor = rootStyles.getPropertyValue('--color-foreground').trim();
+
+		gsap.to('.blob-item', {
+			backgroundColor: (i) => (i < power ? primaryColor : mutedColor),
+			duration: 1,
+			stagger: 0.1,
+			ease: 'power1.inOut'
+		});
+	});
 	function formatBytes(bytes: number | string, decimals = 2) {
 		const b = Number(bytes);
 		if (b === 0) return '0 GB';
@@ -56,7 +77,7 @@
 			goto(route);
 		}, 100);
 	}}
-	class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 hover:ring-green-400 hover:ring-2 border-neutral-700 bg-neutral-800/60"
+	class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 hover:ring-green-400 hover:ring-2 border-widget-border bg-widget-background"
 >
 	<div class="absolute group-hover:flex hidden w-full h-full bg-green-500/20"></div>
 	<div class="flex flex-col gap-3 p-5">
@@ -68,11 +89,7 @@
 			{#if loadingRoute}
 				<Loader theme="regular" />
 			{:else}
-				<p
-					class:text-violet-500={$base_url === 'https://api.klimson.dev'}
-					class:text-blue-500={$base_url !== 'https://api.klimson.dev'}
-					class="text-xs mt-1 font-semibold"
-				>
+				<p class="text-xs mt-1 font-semibold text-primary">
 					{os}
 				</p>
 			{/if}
@@ -87,7 +104,7 @@
 		</div>
 		<div>
 			{#key usedGb}
-				<p in:blur={{ duration: 450 }} class="text-white text-md font-semibold">
+				<p in:blur={{ duration: 450 }} class="text-secondary-text text-md font-semibold">
 					{usedGb} / {totalGb}
 				</p>
 			{/key}

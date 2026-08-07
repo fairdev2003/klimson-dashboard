@@ -128,7 +128,7 @@
 
 <div class="relative hidden justify-center w-125 md:flex lg:flex z-100">
 	<input
-		class="h-12.5 w-full flex items-center bg-foreground border border-neutral-700/60 rounded-xl px-4 outline-none"
+		class="h-12.5 w-full flex items-center placeholder:text-secondary-text bg-background border border-border rounded-xl px-4 outline-none"
 		bind:value
 		onclick={() => {
 			opened = true;
@@ -151,7 +151,7 @@
 		<div
 			in:fade={{ duration: 300 }}
 			out:fade={{ duration: 300 }}
-			class="fixed w-125 border border-neutral-700 p-3 z-200 bg-neutral-900 rounded-xl"
+			class="fixed w-125 border border-neutral-700 p-3 z-200 bg-background rounded-xl"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<input
@@ -161,7 +161,7 @@
 					e.preventDefault();
 					value = '';
 				}}
-				class="w-full bg-neutral-800 p-3 rounded-lg border-0 outline-none"
+				class="w-full bg-foreground text-text p-3 rounded-lg border-0 outline-none"
 				placeholder="Search..."
 			/>
 			<div class="mt-3 h-[300px] overflow-auto">
@@ -187,14 +187,14 @@
 				goto(search_route.url);
 				opened = false;
 			}}
-			class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-4 transition-colors"
+			class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-foreground hover:bg-primary px-4 transition-colors"
 		>
 			<div class="flex items-center justify-center size-8 bg-neutral-900 rounded-md shrink-0">
 				<Icon icon={search_route.icon} width="20" height="20" class="text-neutral-300" />
 			</div>
 			<div class="flex flex-col">
-				<p class="font-black text-start text-neutral-200">{search_route.name}</p>
-				<p class="text-xs text-start text-neutral-400">{search_route.description}</p>
+				<p class="font-black text-start text-text">{search_route.name}</p>
+				<p class="text-xs text-start text-secondary-text">{search_route.description}</p>
 			</div>
 		</button>
 	{/each}
@@ -209,7 +209,7 @@
 				goto(search_api_route.path);
 				opened = false;
 			}}
-			class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-neutral-800 hover:bg-neutral-700 px-4 transition-colors"
+			class="flex items-center gap-3 w-full h-15 rounded-lg cursor-pointer bg-foreground hover:bg-primary px-4 transition-colors"
 		>
 			<div class="flex items-center justify-center size-8 bg-neutral-900 rounded-md shrink-0">
 				<Icon
@@ -220,8 +220,8 @@
 				/>
 			</div>
 			<div class="flex flex-col">
-				<p class="font-black text-start text-neutral-200">{search_api_route.path}</p>
-				<p class="text-xs text-start text-neutral-400">{search_api_route.method}</p>
+				<p class="font-black text-start text-text">{search_api_route.path}</p>
+				<p class="text-xs text-start text-secondary-text">{search_api_route.method}</p>
 			</div>
 		</button>
 	{/each}

@@ -11,7 +11,7 @@
 </script>
 
 <div
-	class="border relative justify-between px-4 flex items-center border-neutral-700 bg-neutral-800/60 rounded-lg h-1/2"
+	class="border relative justify-between px-4 flex items-center border-border bg-widget-background rounded-lg h-1/2"
 >
 	<div class="flex justify-between w-full h-6/10">
 		<div class="flex gap-2 flex-col">

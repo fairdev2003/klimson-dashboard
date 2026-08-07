@@ -50,9 +50,7 @@
 			onclick={() => {
 				notificationWindowToggled = !notificationWindowToggled;
 			}}
-			class:text-blue-500={notSeenNotifications.length > 0}
-			class:text-neutral-500={notSeenNotifications.length === 0}
-			class="size-10 rounded-full flex justify-center hover:text-white transition-colors cursor-pointer items-center"
+			class="size-10 text-primary rounded-full flex justify-center hover:text-foreground transition-colors cursor-pointer items-center"
 		>
 			<Icon icon="mingcute:notification-fill" width="20" height="20" />
 		</button>

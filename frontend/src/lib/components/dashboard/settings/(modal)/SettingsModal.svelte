@@ -52,11 +52,3 @@
 	<!-- category container -->
 	<SettingsPage />
 </RDBModal>
-
-<style>
-	@import 'tailwindcss';
-
-	.selected {
-		@apply text-blue-400 bg-blue-500/20 hover:bg-blue-500/40;
-	}
-</style>

@@ -10,5 +10,5 @@
 		mobileDockOpened = !mobileDockOpened;
 	}}
 	transition:fly={{ duration: 450 }}
-	class="absolute flex lg:hidden z-1 bg-black/50 h-screen w-screen"
+	class="absolute flex lg:hidden z-1 bg-foreground h-screen w-screen"
 ></div>

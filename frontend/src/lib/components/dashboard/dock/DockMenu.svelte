@@ -20,7 +20,7 @@
 		e.stopPropagation();
 	}}
 	transition:fly={{ y: -40, duration: 250, easing: cubicOut }}
-	class="lg:hidden p-4 flex flex-col gap-4 h-dvh shadow-2xl w-full bg-neutral-900 absolute z-20 border-b border-neutral-800"
+	class="lg:hidden p-4 flex flex-col gap-4 h-dvh shadow-2xl w-full bg-background absolute z-20 border-b border-neutral-800"
 >
 	<div class="flex flex-col gap-4 w-full overflow-auto scroll-class">
 		<SidebarPill />
@@ -35,7 +35,7 @@
 							$route = item.route;
 							mobileDockOpened = false;
 						}}
-						class="bg-neutral-800 flex items-center justify-center p-2 rounded-xl"
+						class="bg-foreground flex items-center justify-center p-2 rounded-xl"
 					>
 						<p class="mx-2">
 							{item.name}
@@ -48,13 +48,30 @@
 </div>
 
 <style>
-	@import 'tailwindcss';
-
 	.selected {
-		@apply bg-blue-700/60 hover:bg-blue-700  text-white;
+		background-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+		font-weight: bold;
+		color: var(--color-primary-foreground, #ffffff);
+	}
+	.selected:hover {
+		background-color: var(--color-primary);
 	}
 
 	.normal {
-		@apply bg-neutral-800 hover:bg-neutral-700 border-neutral-700;
+		background-color: var(--color-background);
+		border-color: var(--color-border);
+		color: var(--color-secondary-text);
+	}
+	.normal:hover {
+		background-color: var(--color-foreground);
+	}
+
+	.disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.disabled:hover {
+		background-color: transparent !important;
 	}
 </style>

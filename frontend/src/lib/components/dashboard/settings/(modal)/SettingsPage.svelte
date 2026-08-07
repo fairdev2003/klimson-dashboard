@@ -52,7 +52,7 @@
 						settings_page_open.set(slug);
 					}}
 					class:selected={settings_page_open.value === slug}
-					class="text-start p-3 px-4 rounded-xl bg-background hover:bg-foreground text-sm text-text font-semibold cursor-pointer transition-colors"
+					class="text-start p-3 px-4 rounded-xl text-primary bg-background hover:bg-foreground text-sm text-text font-semibold cursor-pointer transition-colors"
 					>{name}
 				</button>
 			{/each}
@@ -62,7 +62,7 @@
 	<!-- settings container -->
 	<div class="col-span-8 lg:p-10 flex flex-col gap-5 px-20">
 		{#key current_page}
-			<h1 in:blur={{ duration: 300 }} class="text-3xl font-bold text-text">
+			<h1 in:blur={{ duration: 300 }} class="text-3xl font-bold text-primary">
 				{current_page?.name}
 			</h1>
 		{/key}
@@ -81,5 +81,6 @@
 
 	.selected {
 		background-color: var(--color-primary);
+		color: white;
 	}
 </style>

@@ -36,22 +36,22 @@
 </script>
 
 <button
-	class="relative overflow-hidden text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 border-neutral-700 bg-neutral-800/60"
+	class="relative text-text overflow-hidden text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 border-widget-border bg-widget-background"
 >
 	<div class="flex flex-col gap-3 p-5">
-		<div class="flex gap-4 items-center">
+		<div class="flex gap-4 items-center text-secondary-text">
 			<Icon icon="material-symbols:database" width="40" height="40" />
 			<Heading>Time</Heading>
 		</div>
 		<div class="flex flex-col gap-1">
 			<div class="flex text-start justify-between gap-1 items-center">
-				<h2 in:blur={{ duration: 300 }} class="text-3xl text-blue-500 font-bold">
+				<h2 in:blur={{ duration: 300 }} class="text-3xl text-primary font-bold">
 					{currentTime}
 				</h2>
 			</div>
 
 			<div>
-				<h3 class="text-sm font-semibold">{currentDate}, {currentWeek}</h3>
+				<h3 class="text-sm text-secondary-text font-semibold">{currentDate}, {currentWeek}</h3>
 			</div>
 			<div class="hidden gap-2 group-hover:flex">
 				{@render LocalePill('pl-Pl', 'Polish')}

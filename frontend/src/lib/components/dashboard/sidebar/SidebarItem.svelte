@@ -28,7 +28,7 @@
 				<Icon icon={content.icon} />
 			{/if}
 
-			<p class="text-neutral-300 text-sm">
+			<p class="text-text text-sm">
 				{content.name}
 			</p>
 		</div>

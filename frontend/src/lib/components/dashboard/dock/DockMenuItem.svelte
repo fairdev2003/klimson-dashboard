@@ -17,11 +17,11 @@
 		}}
 		class="flex gap-2 items-center cursor-pointer select-none"
 	>
-		<div class="text-neutral-400 transition-transform duration-300 {opened ? 'rotate-180' : ''}">
+		<div class="text-text transition-transform duration-300 {opened ? 'rotate-180' : ''}">
 			<Icon icon="mdi:chevron-down" width="25" height="25" />
 		</div>
 
-		<h3 class="text-white font-bold capitalize text-lg">{name}</h3>
+		<h3 class="text-text font-bold capitalize text-lg">{name}</h3>
 	</div>
 	{#if opened}
 		<div class="">

@@ -53,7 +53,8 @@
 	<div class="my-2 flex justify-between">
 		<div class="flex flex-col">
 			<Heading>Hub</Heading>
-			<span class="text-sm font-md text-neutral-400">System load at: {$dashboard_load_date}</span>
+			<span class="text-sm font-md text-secondary-text">System load at: {$dashboard_load_date}</span
+			>
 		</div>
 		<button
 			onclick={() => {

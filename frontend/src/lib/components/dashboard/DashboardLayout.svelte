@@ -24,7 +24,6 @@
 	function handleRightClick(e: MouseEvent) {
 		e.preventDefault();
 		menuPos = { x: e.clientX, y: e.clientY };
-		// showMenu = true;
 		debug.log(page.route);
 	}
 
@@ -34,20 +33,27 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	oncontextmenu={(e) => handleRightClick(e)}
-	class="flex flex-col h-screen overflow-hidden bg-primary-background text-white"
+	class="flex flex-col h-screen overflow-hidden bg-primary-background text-text"
 >
-	<header class="border-b h-20 border-neutral-700 flex items-center px-4 shrink-0">
+	<header class="border-b h-20 border-border flex items-center px-4 shrink-0">
 		<CMSNavbar />
 	</header>
 
-	<div class="flex flex-1 relative">
-		<aside class="hidden lg:flex z-20 bg-background border-r border-border transition-all">
+	<div class="flex flex-1 relative overflow-hidden">
+		<aside class="hidden lg:flex z-20 bg-background border-r border-border transition-all shrink-0">
 			<Sidebar />
 		</aside>
 
-		<main in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} class="flex-1 text-text">
-			<DashboardDock />
-			<div class="">
+		<main
+			in:fade={{ duration: 150 }}
+			out:fade={{ duration: 150 }}
+			class="flex-1 flex flex-col min-h-0 relative"
+		>
+			<div class="shrink-0">
+				<DashboardDock />
+			</div>
+
+			<div class="flex-1 overflow-y-auto">
 				{@render children()}
 			</div>
 		</main>
