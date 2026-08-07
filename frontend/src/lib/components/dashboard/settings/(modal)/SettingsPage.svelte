@@ -52,7 +52,7 @@
 						settings_page_open.set(slug);
 					}}
 					class:selected={settings_page_open.value === slug}
-					class="text-start p-3 px-4 rounded-xl bg-foreground hover:bg-neutral-700 text-sm text-text font-semibold cursor-pointer transition-colors"
+					class="text-start p-3 px-4 rounded-xl bg-background hover:bg-foreground text-sm text-text font-semibold cursor-pointer transition-colors"
 					>{name}
 				</button>
 			{/each}
@@ -80,6 +80,6 @@
 	@import 'tailwindcss';
 
 	.selected {
-		@apply text-blue-400 bg-blue-500/20 hover:bg-blue-500/40;
+		background-color: var(--color-primary);
 	}
 </style>

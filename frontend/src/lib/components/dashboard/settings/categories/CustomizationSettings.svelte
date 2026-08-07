@@ -33,7 +33,8 @@
 			{ key: 'Dark', value: 'dark' },
 			{ key: 'Light', value: 'light' },
 			{ key: 'System', value: 'system' },
-			{ key: 'Candy', value: 'candy' }
+			{ key: 'Candy', value: 'candy' },
+			{ key: 'Blackout', value: 'blackout' }
 		]}
 		bind:current_value={$dashboard_config.theme}
 		onchoose={(e) => {
