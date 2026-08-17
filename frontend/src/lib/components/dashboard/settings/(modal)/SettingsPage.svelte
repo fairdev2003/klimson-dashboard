@@ -60,19 +60,17 @@
 	</div>
 
 	<!-- settings container -->
-	<div class="col-span-8 lg:p-10 flex flex-col gap-5 px-20">
+	<div class="col-span-8 lg:p-10 flex flex-col gap-5">
 		{#key current_page}
 			<h1 in:blur={{ duration: 300 }} class="text-3xl font-bold text-primary">
 				{current_page?.name}
 			</h1>
 		{/key}
-		<div class="max-h-[60vh]">
-			{#each settings as setting}
-				{#if setting.slug === settings_page_open.value}
-					<setting.component />
-				{/if}
-			{/each}
-		</div>
+		{#each settings as setting}
+			{#if setting.slug === settings_page_open.value}
+				<setting.component />
+			{/if}
+		{/each}
 	</div>
 </div>
 

@@ -9,9 +9,9 @@ import (
 
 func (controller GlobalController) GetTables(ctx *gin.Context) {
 	type TableResponse struct {
-		Table string `json:"table"` // e.g. "quizzes"
-		Name  string `json:"name"`  // e.g. "Quizzes"
-		Icon  string `json:"icon"`  // e.g. "quiz-icon"
+		Table string `json:"table"` 
+		Name  string `json:"name"`  
+		Icon  string `json:"icon"` 
 	}
 
 	var tables []TableResponse

@@ -11,7 +11,7 @@
 </script>
 
 <div
-	class="flex lg:gap-0 gap-5 pt-5 flex-col border-t border-border h-full lg:px-10"
+	class="flex lg:gap-0 gap-5 w-full pt-5 flex-col border-t border-border h-full"
 	in:blur={{ duration: 300 }}
 >
 	<CheckboxSettingsRecord

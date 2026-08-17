@@ -7,6 +7,7 @@ type SidebarBase = {
 	disabled: boolean;
 	slug: string;
 	route: string;
+	category: string;
 };
 
 export type SidebarItemType = {

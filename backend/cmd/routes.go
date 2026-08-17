@@ -37,7 +37,6 @@ func InitRoutes() {
 
 	adminPath.Use(helpers.CorsConf(origins))
 	adminPath.Use(AuthMiddleware())
-	adminPath.Use(helpers.AdminRateLimiter())
 	apiPath.Use(helpers.PublicRateLimiter())
 
 	apiPath.GET("/", func(c *gin.Context) {
@@ -133,6 +132,8 @@ func InitRoutes() {
 
 		result := db.Model(models.Contributor{}).Where("login = ?", req.Login).Find(&user)
 
+		// sftp://steve187.mikrus.xyz:10187/root
+
 		if result.RowsAffected == 0 {
 			err := bcrypt.CompareHashAndPassword([]byte(hashed_password), []byte(req.Password))
 			if err != nil {
@@ -143,7 +144,9 @@ func InitRoutes() {
 
 			token, err := handlers.GenerateRootToken(false)
 
+			c.SetCookie("k-token", token, 86400, "/", ".klimson.dev", false, true)
 			c.SetCookie("k-token", token, 86400, "/", "", false, true)
+
 			c.Writer.Header().Set("X-Token", token)
 
 			if err != nil {
@@ -179,7 +182,8 @@ func InitRoutes() {
 	})
 
 	apiPath.POST("/auth/logout", func(ctx *gin.Context) {
-		ctx.SetCookie("k-token", "token", -1, "/", "", false, true)
+		ctx.SetCookie("k-token", "", -1, "/", "", false, true)
+
 
 		khttp.SuccessResponse(ctx, gin.H{"success": true}, "Cookie is successfully deleted!")
 	})

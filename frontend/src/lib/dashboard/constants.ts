@@ -40,7 +40,8 @@ const contents: SidebarItems = [
 		route: '/',
 		name: 'Hub',
 		disabled: false,
-		slug: 'hub'
+		slug: 'hub',
+		category: 'General'
 	},
 	{
 		icon: 'material-symbols:database',
@@ -48,7 +49,8 @@ const contents: SidebarItems = [
 		route: 'database',
 		name: 'Database Editor',
 		disabled: false,
-		slug: 'db-database'
+		slug: 'db-database',
+		category: 'General'
 	},
 	{
 		icon: 'devicon:redis',
@@ -56,16 +58,65 @@ const contents: SidebarItems = [
 		route: 'redis',
 		name: 'Redis',
 		disabled: false,
-		slug: 'redis'
+		slug: 'redis',
+		category: 'General'
 	},
 
+	{
+		icon: 'thesvg:craft-cms',
+		href: '/dashboard/cms',
+		route: 'cms',
+		name: 'Klimson.dev',
+		disabled: false,
+		slug: 'users-access',
+		category: 'General',
+		child: [
+			{
+				icon: 'thesvg:craft-cms',
+				href: 'cms/stories',
+				route: 'users',
+				name: 'Stories',
+				disabled: false,
+				slug: 'users-access',
+				category: 'General'
+			},
+			{
+				icon: 'thesvg:craft-cms',
+				href: 'cms/docs',
+				route: 'users',
+				name: 'Job Documents',
+				disabled: false,
+				slug: 'users-access',
+				category: 'General'
+			},
+			{
+				icon: 'thesvg:craft-cms',
+				href: 'cms/blog',
+				route: 'users',
+				name: 'Blog',
+				disabled: false,
+				slug: 'users-access',
+				category: 'General'
+			},
+			{
+				icon: 'thesvg:craft-cms',
+				href: 'cms/server',
+				route: 'users',
+				name: 'Server Settings',
+				disabled: false,
+				slug: 'users-access',
+				category: 'General'
+			}
+		]
+	},
 	{
 		icon: 'mdi:files',
 		href: '/dashboard/storage',
 		route: 'storage',
 		name: 'File Storage',
 		disabled: false,
-		slug: 'file-storage'
+		slug: 'file-storage',
+		category: 'General'
 	},
 	{
 		icon: 'mdi:files',
@@ -73,7 +124,8 @@ const contents: SidebarItems = [
 		route: 'v2/storage',
 		name: 'V2 Storage',
 		disabled: false,
-		slug: 'file-storage-2'
+		slug: 'file-storage-2',
+		category: 'General'
 	},
 	{
 		icon: 'mdi:tools',
@@ -81,7 +133,8 @@ const contents: SidebarItems = [
 		route: 'tools',
 		name: 'Tools',
 		disabled: false,
-		slug: 'tools'
+		slug: 'tools',
+		category: 'General'
 	},
 
 	{
@@ -90,7 +143,8 @@ const contents: SidebarItems = [
 		route: 'todo',
 		name: 'Todo List',
 		disabled: false,
-		slug: 'todo'
+		slug: 'todo',
+		category: 'General'
 	},
 	{
 		icon: 'mdi:link',
@@ -98,7 +152,8 @@ const contents: SidebarItems = [
 		route: 'routes',
 		name: 'API Routes',
 		disabled: false,
-		slug: 'api-routes'
+		slug: 'api-routes',
+		category: 'General'
 	},
 	{
 		icon: 'mdi:user-key',
@@ -106,14 +161,7 @@ const contents: SidebarItems = [
 		route: 'users',
 		name: 'CMS Access',
 		disabled: false,
-		slug: 'users-access'
-	},
-	{
-		icon: 'mdi:controller-outline',
-		href: '/dashboard/asteroid',
-		route: 'asteroid',
-		name: 'Asteroid',
-		disabled: false,
-		slug: 'asteroid'
+		slug: 'users-access',
+		category: 'General'
 	}
 ];

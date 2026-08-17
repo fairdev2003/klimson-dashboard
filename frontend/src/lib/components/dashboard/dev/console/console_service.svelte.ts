@@ -620,10 +620,11 @@ console_service
 			};
 
 			const record = mockRecords[type || 'comment'];
+			const recordKeys = Object.keys(mockRecords).map((record) => record);
 			if (record) {
 				notifications.add(record);
 			} else {
-				debug.error('Nieznany typ powiadomienia. Użyj: comment, like, mention');
+				debug.error(`Nieznany typ powiadomienia. Użyj: ${recordKeys.join(', ')}`);
 			}
 		}
 

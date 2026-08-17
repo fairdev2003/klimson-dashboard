@@ -12,41 +12,45 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-{#if content.child}{:else}
-	<div
+
+<div>
+	<button
 		onclick={() => {
 			$route = content.route;
+
 			goto(content.href);
 		}}
 		class:normal={$route !== content.route}
 		class:selected={$route === content.route}
-		class:disabled={content.disabled}
-		class="flex overflow-hidden relative items-center px-3 cursor-pointer rounded-lg transition-colors h-10 gap-3"
+		class="p-2 focus:outline-none cursor-pointer w-full text-neutral-200 rounded-lg flex gap-2 items-start"
 	>
-		<div class="flex gap-2 items-center">
-			{#if content.icon}
-				<Icon icon={content.icon} />
-			{/if}
-
-			<p class="text-text text-sm">
+		<Icon icon={String(content.icon)} width="25" height="25"></Icon>
+		<div>
+			<p class="text-neutral-200">
 				{content.name}
 			</p>
 		</div>
+	</button>
+	<div class="flex gap-2">
+		{#if content.child}
+			<div class="w-0.5 bg-neutral-700 shadow-lg h-full"></div>
+			<div class="ml-5 mt-2 flex gap-2 flex-col">
+				{#each content.child as child}
+					<p>{child.name}</p>
+				{/each}
+			</div>
+		{/if}
 	</div>
-{/if}
+</div>
 
 <style>
+	@import 'tailwindcss';
 	.link {
 		background-color: var(--color-primary);
 	}
 
 	.selected {
-		background-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
-		font-weight: bold;
-		color: var(--color-text, #ffffff);
-	}
-	.selected:hover {
-		background-color: var(--color-primary);
+		@apply bg-neutral-700 hover:bg-neutral-600;
 	}
 
 	.normal {

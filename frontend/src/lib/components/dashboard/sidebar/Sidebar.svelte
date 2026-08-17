@@ -66,9 +66,9 @@
 					}}
 					class:normal={$route !== content.route}
 					class:selected={$route === content.route}
-					class="p-2 focus:outline-none cursor-pointer text-primary rounded-xl mb-4"
+					class="focus:outline-none cursor-pointer flex text-primary rounded-xl mb-4"
 				>
-					<Icon icon={String(content.icon)} width="25" height="25"></Icon>
+					<Icon icon={String(content.icon)} width="25" height="25" />
 				</button>
 			{/each}
 		</nav>
