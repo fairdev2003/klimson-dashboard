@@ -8,6 +8,7 @@
 	import ButtonSettingsRecord from '../records/ButtonSettingsRecord.svelte';
 	import BinarySendButton from '../components/BinarySendButton.svelte';
 	import { api } from '$lib/api/api';
+	import BinarySendSettingsRecord from '../records/BinarySendSettingsRecord.svelte';
 
 	let selectedServer: 'dev' | 'prod' = $state('prod');
 
@@ -18,15 +19,15 @@
 
 	async function handleFileUpload() {
 		if (!file) {
-			statusMessage = 'Wybierz plik binarny!';
+			statusMessage = 'Choose binary file!';
 			return;
 		}
 
 		uploading = true;
 		progress = 0;
-		statusMessage = 'Rozpoczynanie wysyłania...';
+		statusMessage = 'Sending file started...';
 
-		const CHUNK_SIZE = 1024 * 1024;
+		const CHUNK_SIZE = 2024 * 2024;
 		const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 		const fileName = file.name;
 
@@ -36,26 +37,27 @@
 				const start = i * CHUNK_SIZE;
 				const end = Math.min(start + CHUNK_SIZE, file.size);
 				const chunk = file.slice(start, end);
+				const headers = {
+					'Content-Type': 'application/octet-stream',
+					'X-Chunk-Index': chunkIndex.toString(),
+					'X-Total-Chunks': totalChunks.toString()
+				};
 
 				await api.api.post('/admin/dev/send', chunk, {
 					params: {
 						filename: fileName
 					},
-					headers: {
-						'Content-Type': 'application/octet-stream',
-						'X-Chunk-Index': chunkIndex.toString(),
-						'X-Total-Chunks': totalChunks.toString()
-					}
+					headers
 				});
 
 				progress = Math.round((chunkIndex / totalChunks) * 100);
-				statusMessage = `Wysłano chunk ${chunkIndex} z ${totalChunks} (${progress}%)`;
+				statusMessage = `Chunk sent: ${chunkIndex} z ${totalChunks} (${progress}%)`;
 			}
 
-			statusMessage = 'Sukces! Binarka została wysłana, zbudowana i zrestartowana.';
+			statusMessage = 'Success. Binary file was send.';
 		} catch (error: any) {
 			const errorMessage = error.response?.data?.error || error.message;
-			statusMessage = `Błąd: ${errorMessage}`;
+			statusMessage = `Error: ${errorMessage}`;
 		} finally {
 			uploading = false;
 		}
@@ -89,7 +91,9 @@
 		}}
 	/>
 
-	<BinarySendButton
+	<BinarySendSettingsRecord
+		title="Send Binary File"
+		description="Send binary File description"
 		bind:file
 		{handleFileUpload}
 		{onFileSelected}
