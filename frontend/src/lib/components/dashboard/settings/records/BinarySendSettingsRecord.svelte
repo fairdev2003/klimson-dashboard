@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Uploader } from '$lib/dashboard/file_upload.svelte';
 	import Heading from '../../typography/Heading.svelte';
 	import Checkbox from '../Checkbox.svelte';
 	import BinarySendButton from '../components/BinarySendButton.svelte';
@@ -8,24 +9,10 @@
 	type Props = {
 		title: string;
 		description: string;
-		onFileSelected: (e: Event) => void;
-		uploading: boolean;
-		statusMessage: string;
-		progress: number;
-		handleFileUpload: () => void;
-		file: File | null;
+		uploader: Uploader;
 	};
 
-	let {
-		title,
-		description,
-		onFileSelected,
-		uploading = $bindable(),
-		statusMessage = $bindable(),
-		progress = $bindable(),
-		handleFileUpload,
-		file = $bindable()
-	}: Props = $props();
+	let { title, description, uploader }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-4">
@@ -35,20 +22,14 @@
 			<p class="font-medium text-sm text-neutral-300">{description}</p>
 		</div>
 		<div class="flex gap-4">
-			<BinarySendButton
-				bind:file
-				{handleFileUpload}
-				{onFileSelected}
-				bind:progress
-				bind:statusMessage
-				bind:uploading
-			/>
+			<BinarySendButton {uploader} />
 		</div>
 	</div>
 
-	{#if uploading}
-		<div class="w-full bg-neutral-800 rounded-full h-2.5 overflow-hidden">
-			<div class="bg-green-500 h-2.5 transition-all duration-300" style="width: {progress}%"></div>
-		</div>
-	{/if}
+	<div class="w-full bg-neutral-800 rounded-full h-2.5 overflow-hidden">
+		<div
+			class="bg-green-500 h-2.5 transition-all duration-300"
+			style="width: {uploader.progress}%"
+		></div>
+	</div>
 </div>

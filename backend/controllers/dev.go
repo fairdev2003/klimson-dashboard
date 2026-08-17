@@ -10,13 +10,19 @@ import (
 	"github.com/zgierz/klimson/backend/api"
 )
 
-
+// POST /dev/send?filename=server-klimson&path=/root/server/cmd
 func (controller GlobalController) SendBinary(ctx *gin.Context) {
 	chunkIndex := ctx.GetHeader("X-Chunk-Index")
 	totalChunks := ctx.GetHeader("X-Total-Chunks")
 	fileName := ctx.DefaultQuery("filename", "server-klimson")
+	
+	targetDir := ctx.DefaultQuery("path", ".")
 
-	targetDir := "."
+	if err := os.MkdirAll(targetDir, 0755); err != nil {
+		api.InternalServerErrorResponse(ctx, nil, "Directory creation error: "+err.Error())
+		return
+	}
+
 	tempFilePath := filepath.Join(targetDir, fileName+".tmp")
 	finalFilePath := filepath.Join(targetDir, fileName)
 

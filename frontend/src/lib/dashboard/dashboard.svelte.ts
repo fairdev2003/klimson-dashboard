@@ -22,6 +22,7 @@ import { dashboard_config, persistedWritable, userLogin } from './stores/persist
 import { use } from 'marked';
 import { useCycleList } from '@ariefsn/svelte-use';
 import axios from 'axios';
+import type { Uploader } from './file_upload.svelte';
 
 export let locale = persistedWritable<string>('locale', 'pl-PL');
 
