@@ -67,9 +67,9 @@ func GetSecCompile() core.Maroto {
 					Style: fontstyle.Bold,
 					Color: getDarkGrayColor(),
 				}),
-				text.New("Specjalista ds. Obslugi Obiektu / Recepcjonista", props.Text{
+				text.New("Specjalista ds. Obslugi Klienta i Bezpieczenstwa Obiektu", props.Text{
 					Top:   6,
-					Size:  9,
+					Size:  8.5,
 					Style: fontstyle.Italic,
 					Color: getBlueColor(),
 				}),
@@ -96,7 +96,7 @@ func GetSecCompile() core.Maroto {
 	m.AddRows(
 		row.New(3),
 		row.New(12).Add(
-			text.NewCol(12, "Profesjonalny pracownik z doswiadczeniem w obsludze recepcji oraz ochronie mienia w srodowisku miedzynarodowym. Lacze umiejetnosc dbania o bezpieczenstwo obiektu z wysokim standardem obslugi klienta. Biegle posluguje sie jezykiem angielskim, co pozwala mi na sprawna komunikacje z goscmi z calego swiata. Cechuje mnie odpowiedzialnosc, czujnosc oraz umiejetnosc zachowania zimnej krwi w sytuacjach kryzysowych.", props.Text{
+			text.NewCol(12, "Wszechstronny specjalista łączący wysokie standardy obsługi klienta z dbałością o bezpieczeństwo i płynne funkcjonowanie obiektu. Posiadam doświadczenie w pracy w międzynarodowym środowisku, gdzie sprawna komunikacja, empatia oraz orientacja na rozwiązywanie problemów są kluczowe. Cechuje mnie odpowiedzialność, wysoka kultura osobista, czujność oraz umiejętność profesjonalnego reprezentowania firmy w kontaktach z klientami i gośćmi.", props.Text{
 				Top:  1,
 				Size: 7.5,
 			}),
@@ -117,11 +117,11 @@ func GetSecCompile() core.Maroto {
 	m.AddRows(
 		row.New(3),
 		row.New(5).Add(
-			text.NewCol(8, "Pracownik Ochrony i Recepcji", props.Text{Top: 1, Size: 8.5, Style: fontstyle.Bold}),
+			text.NewCol(8, "Specjalista ds. Obslugi Recepcji i Bezpieczenstwa", props.Text{Top: 1, Size: 8.5, Style: fontstyle.Bold}),
 			text.NewCol(4, "01.2026 - 26.06.2026", props.Text{Top: 1, Size: 8, Align: align.Right, Style: fontstyle.Italic}),
 		),
 		row.New(18).Add(
-			text.NewCol(12, "- Zapewnienie bezpieczenstwa w 10-pietrowym akademiku miedzynarodowym z obsluga komunikacji w jezyku angielskim.\n- Obsluga recepcji obiektu: wydawanie kluczy, przyjmowanie paczek i udzielanie informacji gosciom/mieszkancom.\n- Monitorowanie przestrzegania procedur PPOZ oraz przeprowadzanie kontroli systemu sygnalizacji pozarowej na wszystkich kondygnacjach.\n- Obsluga systemow CCTV oraz kontroli dostepu w duzym obiekcie, zapewniajaca bezpieczne funkcjonowanie budynku 24/7.\n- Wsparcie mieszkancow w naglych wypadkach oraz profesjonalne raportowanie incydentow i usterek technicznych.", props.Text{
+			text.NewCol(12, "- Kompleksowa obsługa recepcji w 10-pietrowym akademiku międzynarodowym: profesjonalne powitanie gości, wydawanie kluczy i obsługa korespondencji.\n- Budowanie pozytywnych relacji z mieszkańcami oraz zapewnienie im wsparcia i rzetelnej informacji w języku polskim i angielskim.\n- Monitorowanie procedur bezpieczeństwa obiektu, obsługa systemów CCTV, kontroli dostępu oraz kontrola PPOZ.\n- Szybkie i opanowane reagowanie w sytuacjach kryzysowych oraz wsparcie techniczne i koordynacja zgłoszeń.\n- Dbałość o najwyższe standardy wizerunkowe i bezpieczeństwo w przestrzeni publicznej obiektu 24/7.", props.Text{
 				Top:  0.5,
 				Size: 7.5,
 			}),
@@ -132,7 +132,7 @@ func GetSecCompile() core.Maroto {
 			text.NewCol(4, "03.2024 - 10.2025", props.Text{Top: 1, Size: 8, Align: align.Right, Style: fontstyle.Italic}),
 		),
 		row.New(15).Add(
-			text.NewCol(12, "- Budowanie pozytywnych relacji z Klientami i dbanie o ich zadowolenie z zakupow.\n- Aktywne doradztwo w doborze produktow oraz prezentacja oferty.\n- Dbanie o estetyczny wyglad punktu sprzedazy i ekspozycje towaru.\n- Sprawna obsluga platnosci oraz praca z systemami sprzedazowymi.\n- Rozwiazywanie biezacych uwag Klientow w sposob profesjonalny i zyczliwy.", props.Text{
+			text.NewCol(12, "- Aktywna sprzedaż, profesjonalne doradztwo produktowe oraz dbanie o satysfakcję i lojalność klientów.\n- Sprawna obsługa płatności, systemów kasowych oraz dbanie o estetyczną ekspozycję towarów.\n- Skuteczne rozwiązywanie bieżących uwag i reklamacji klientów z zachowaniem standardów jakościowych.\n- Współpraca w zespole nad realizacją celów sprzedażowych i wizerunkowych firmy.", props.Text{
 				Top:  0.5,
 				Size: 7.5,
 			}),
@@ -143,7 +143,7 @@ func GetSecCompile() core.Maroto {
 			text.NewCol(4, "07.2021 - 10.2021", props.Text{Top: 1, Size: 8, Align: align.Right, Style: fontstyle.Italic}),
 		),
 		row.New(11).Add(
-			text.NewCol(12, "- Organizacja pracy biurowej i wsparcie zespolu w codziennych zadaniach.\n- Dbalosc o porzadek w dokumentacji oraz terminowosc dzialan.\n- Wielozadaniowosc i szybkie reagowanie na zmieniajace sie priorytety.", props.Text{
+			text.NewCol(12, "- Organizacja bieżących prac biurowych oraz wsparcie zespołu w codziennych obowiązkach.\n- Dbałość o poprawność i obieg dokumentacji oraz terminowość realizowanych zadań.\n- Wielozadaniowość i elastyczność w dynamicznie zmieniającym się środowisku pracy.", props.Text{
 				Top:  0.5,
 				Size: 7.5,
 			}),
@@ -195,22 +195,21 @@ func GetSecCompile() core.Maroto {
 		row.New(3),
 		row.New(10).Add(
 			col.New(4).Add(
-				text.New("Operations & Security:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
-				text.New("Obsluga recepcji, Procedury PPOZ, CCTV", props.Text{Top: 4, Size: 7.5}),
+				text.New("Client Service & Ops:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
+				text.New("Obsluga recepcji, Doradztwo, Procedury", props.Text{Top: 4, Size: 7.5}),
 			),
 			col.New(4).Add(
-				text.New("Soft Skills:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
-				text.New("Rozwiazywanie konfliktow, Raportowanie", props.Text{Top: 4, Size: 7.5}),
+				text.New("Security & Safety:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
+				text.New("Systemy CCTV, Kontrola dostepu, PPOZ", props.Text{Top: 4, Size: 7.5}),
 			),
 			col.New(4).Add(
-				text.New("Languages:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
-				text.New("Polski (Ojczysty), Angielski (B2)", props.Text{Top: 4, Size: 7.5}),
+				text.New("Languages & Soft:", props.Text{Style: fontstyle.Bold, Size: 7.5}),
+				text.New("Angielski (B2), Empatia, Kryzysy", props.Text{Top: 4, Size: 7.5}),
 			),
 		),
 		row.New(4),
 	)
 
-	// HOBBIES
 	m.AddRow(6,
 		text.NewCol(12, "HOBBIES", props.Text{
 			Top:   1,
@@ -223,7 +222,7 @@ func GetSecCompile() core.Maroto {
 	m.AddRows(
 		row.New(3),
 		row.New(8).Add(
-			text.NewCol(12, "- Aktywny tryb zycia (rower, bieganie, pilka nozna)\n- Nowoczesne technologie i automatyzacja\n- Budowanie relacji i gry zespolowe", props.Text{
+			text.NewCol(12, "- Aktywny tryb życia (rower, bieganie, piłka nożna)\n- Nowoczesne technologie i automatyzacja procesów\n- Komunikacja międzyludzka, psychologia relacji i gry zespołowe", props.Text{
 				Top:  0.5,
 				Size: 7.5,
 			}),
