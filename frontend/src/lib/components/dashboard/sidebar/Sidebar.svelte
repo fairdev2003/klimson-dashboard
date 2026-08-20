@@ -10,6 +10,7 @@
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 	import { route } from '$lib/dashboard/stores/persist';
+	import { page } from '$app/state';
 
 	let contentRef: HTMLElement | null = $state(null);
 
@@ -19,6 +20,10 @@
 		if ($sidebar_open) {
 			gsap.fromTo(contentRef, { x: -20 }, { x: 0, duration: 0.3, ease: 'power2.out' });
 		}
+	});
+
+	$effect(() => {
+		console.log(page.route);
 	});
 
 	function handleToggle() {
