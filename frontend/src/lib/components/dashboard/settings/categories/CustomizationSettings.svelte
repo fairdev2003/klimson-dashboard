@@ -71,6 +71,19 @@
 			debug.log(e.key);
 		}}
 	/>
+
+	<DropdownSettingsRecord
+		title="Dashboard Sidebar Behavior"
+		description="Decide what behavior will exists while interacting with dashboard sidebar"
+		options={[
+			{ key: 'Always On', value: 'alwaysOn' },
+			{ key: 'Auto Hide', value: 'autoHide' }
+		]}
+		bind:current_value={$dashboard_config.sidebarBehavior}
+		onchoose={(e) => {
+			debug.log(e.key);
+		}}
+	/>
 	<CheckboxSettingsRecord
 		beta
 		bind:checked={$dashboard_config.dock_on}

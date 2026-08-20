@@ -59,6 +59,17 @@
 		</div>
 		<div class="flex gap-4">
 			<button
+				title="Toggle sidebar"
+				onclick={() => {
+					$sidebar_open = !$sidebar_open;
+				}}
+				class:terminal-button-base={!$sidebar_open}
+				class:terminal-button-selected={$sidebar_open}
+				class="size-10 cursor-pointer rounded-lg flex items-center justify-center"
+			>
+				<Icon icon="tabler:layout-sidebar" width="25" height="25" />
+			</button>
+			<button
 				title="Toggle terminal"
 				onclick={() => {
 					$debugOn = !$debugOn;

@@ -3,12 +3,22 @@
 	import Icon from '@iconify/svelte';
 	import type { SidebarItemType } from './sidebar.types';
 	import { route } from '$lib/dashboard/stores/persist';
+	import Dashboard from '$lib/dashboard/dashboard.svelte';
+	import { slide } from 'svelte/transition';
 
 	type Props = { content: SidebarItemType };
 	let { content }: Props = $props();
 
+	let opened: boolean = $state(false);
+
 	function redirectTo(routeRecord: SidebarItemType) {
 		$route = content.route;
+
+		Dashboard.state.latestRoutes.push(routeRecord);
+
+		if (routeRecord.child && routeRecord.child.length > 0) {
+			opened = !opened;
+		}
 
 		if (routeRecord.disabled) return;
 
@@ -19,66 +29,75 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 
-<div
-	onclick={() => redirectTo(content)}
-	class="h-10 cursor-pointer relative border border-neutral-800 items-center h-full hover:bg-white/10 rounded-lg group hover:border-blue-700 overflow-hidden"
->
-	{@render RouteRecordIndicator()}
+<div>
+	<button
+		onclick={() => redirectTo(content)}
+		class:selected={$route === content.route}
+		class:normal={$route !== content.route}
+		class="h-8 cursor-pointer relative flex items-center group overflow-hidden w-full"
+	>
+		{@render RouteRecordIndicator($route === content.route)}
 
-	{@render ChildComponentsDropdown(content.child ? true : false)}
+		{@render ChildComponentsDropdown(content.child ? true : false)}
 
-	{@render CurrentRouteSelection($route === content.route)}
+		<div class="flex items-center gap-2 px-4">
+			{#if content && content.icon}
+				<Icon icon={content.icon} />
+				<p>{content.name}</p>
+			{/if}
+		</div>
+	</button>
+	{#if opened}
+		<div transition:slide={{ duration: 150 }} class="w-full flex flex-col gap-1 pl-6">
+			{#each content.child as child}
+				<button
+					onclick={() => redirectTo(child)}
+					class:selected={$route === child.route}
+					class:normal={$route !== child.route}
+				>
+					{@render RouteRecordIndicator($route === child.route)}
 
-	<div class="flex h-full">
-		<p class="px-4 text-neutral-300">{content.name}</p>
-	</div>
+					<div class=" flex items-center gap-2 px-4">
+						{#if child && child.icon}
+							<Icon icon={child.icon} />
+							<p>{child.name}</p>
+						{/if}
+					</div>
+				</button>
+			{/each}
+		</div>
+	{/if}
 </div>
 
-{#snippet RouteRecordIndicator()}
+{#snippet RouteRecordIndicator(selected: boolean)}
 	<div
-		class="w-1 h-full left-0 z-2 top-0 bg-neutral-800 group group-hover:bg-blue-700 absolute"
+		class:bg-blue-700={selected}
+		class:bg-transparaent={!selected}
+		class="w-1 h-full left-0 z-2 top-0 group group-hover:bg-blue-700 absolute"
 	></div>
 {/snippet}
 
 {#snippet ChildComponentsDropdown(childExists?: boolean)}
 	{#if childExists}
-		<div class="absolute z-1 right-2 text-neutral-300 top-1.5">
-			<Icon icon="mdi:chevron-down" />
+		<div class="absolute z-1 right-2 text-neutral-300">
+			<Icon
+				icon="mdi:chevron-down"
+				class="w-4 h-4 transition-transform duration-250 ease-in-out {opened
+					? 'rotate-180'
+					: 'rotate-0'}"
+			/>
 		</div>
-	{/if}
-{/snippet}
-
-{#snippet CurrentRouteSelection(selected: boolean)}
-	{#if selected}
-		<div class="absolute z-1 w-full h-full bg-blue-700/40"></div>
 	{/if}
 {/snippet}
 
 <style>
 	@import 'tailwindcss';
-	.link {
-		background-color: var(--color-primary);
-	}
 
 	.selected {
-		@apply bg-neutral-700 hover:bg-neutral-600;
+		@apply bg-blue-700/40;
 	}
 
 	.normal {
-		background-color: var(--color-background);
-		border-color: var(--color-border);
-		color: var(--color-secondary-text);
-	}
-	.normal:hover {
-		background-color: var(--color-foreground);
-	}
-
-	.disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.disabled:hover {
-		background-color: transparent !important;
+		@apply hover:bg-white/10 hover:border-blue-800/60 text-neutral-400;
 	}
 </style>

@@ -126,6 +126,7 @@ func (controller GlobalController) GetUserConfigFromRdbHash(userID string) (*mod
 	config := &models.ClientConfig{}
 	config.DashboardTheme = resultMap["theme"]
 	config.CodeTheme = resultMap["code_theme"]
+	config.SidebarBehavior = resultMap["sidebarBehavior"]
 
 	if pillsStr, exists := resultMap["client_pills"]; exists && pillsStr != "" {
 		_ = json.Unmarshal([]byte(pillsStr), &config.SidebarPreferences)
@@ -180,11 +181,12 @@ func (controller GlobalController) saveClientConfig(userID string, config models
 	}
 
 	values := map[string]interface{}{
-		"theme":        config.DashboardTheme,
-		"code_theme":   config.CodeTheme,
-		"client_pills": string(sidebarJSON),
-		"dock_on":      dockOnVal,
-		"bookmarks":    string(bookmarksJSON),
+		"theme":           config.DashboardTheme,
+		"code_theme":      config.CodeTheme,
+		"client_pills":    string(sidebarJSON),
+		"dock_on":         dockOnVal,
+		"bookmarks":       string(bookmarksJSON),
+		"sidebarBehavior": config.SidebarBehavior,
 	}
 
 	err = controller.rdb.HSet(controller.ctx, redisKey, values).Err()

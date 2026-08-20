@@ -23,6 +23,11 @@ var (
 	adminPath *gin.RouterGroup
 )
 
+func setToken(ctx *gin.Context, tokenName string, token string) {
+	ctx.SetCookie(tokenName, token, 86400, "/", ".klimson.dev", false, true)
+	ctx.SetCookie(tokenName, token, 86400, "/", "", false, true)
+}
+
 func InitRoutes() {
 
 	ctx := context.Background()
@@ -132,8 +137,6 @@ func InitRoutes() {
 
 		result := db.Model(models.Contributor{}).Where("login = ?", req.Login).Find(&user)
 
-		// sftp://steve187.mikrus.xyz:10187/root
-
 		if result.RowsAffected == 0 {
 			err := bcrypt.CompareHashAndPassword([]byte(hashed_password), []byte(req.Password))
 			if err != nil {
@@ -144,8 +147,7 @@ func InitRoutes() {
 
 			token, err := handlers.GenerateRootToken(false)
 
-			c.SetCookie("k-token", token, 86400, "/", ".klimson.dev", false, true)
-			c.SetCookie("k-token", token, 86400, "/", "", false, true)
+			setToken(c, "k-token", token)
 
 			c.Writer.Header().Set("X-Token", token)
 
@@ -183,7 +185,6 @@ func InitRoutes() {
 
 	apiPath.POST("/auth/logout", func(ctx *gin.Context) {
 		ctx.SetCookie("k-token", "", -1, "/", "", false, true)
-
 
 		khttp.SuccessResponse(ctx, gin.H{"success": true}, "Cookie is successfully deleted!")
 	})

@@ -7,6 +7,7 @@ type ClientConfig struct {
 	SidebarPreferences []string   `json:"client_pills"`
 	Dock               *bool      `json:"dock_on"`
 	Bookmarks          []Bookmark `json:"bookmarks"`
+	SidebarBehavior    string     `json:"sidebarBehavior"`
 }
 
 type Bookmark struct {

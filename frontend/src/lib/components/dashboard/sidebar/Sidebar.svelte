@@ -9,8 +9,13 @@
 	import { sidebar_open } from '$lib/dashboard/stores/store';
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
-	import { route } from '$lib/dashboard/stores/persist';
+	import { dashboard_config, route } from '$lib/dashboard/stores/persist';
 	import { page } from '$app/state';
+	import LatestRoutes from './LatestRoutes.svelte';
+	import DashboardContents from './DashboardContents.svelte';
+	import StarredContents from './StarredContents.svelte';
+	import LatestUserContents from './LatestUserContents.svelte';
+	import { toast } from '$lib/dashboard/stores/toast';
 
 	let contentRef: HTMLElement | null = $state(null);
 
@@ -42,41 +47,42 @@
 	}
 </script>
 
-<div
-	style="width: {$sidebar_open ? '300px' : '40px'}; transition: width 0.3s ease;"
-	class="sticky left-0 top-16.25 h-dvh z-500 overflow-auto flex flex-col m-5"
->
-	<div>
-		<SidebarToggler bind:opened={$sidebar_open} onclick={handleToggle} />
+{#if !$sidebar_open && $dashboard_config.sidebarBehavior === 'autoHide'}
+	<div
+		class="fixed inset-y-0 left-0 w-6 z-100 pointer-events-none"
+		onmouseenter={() => {
+			$sidebar_open = true;
+		}}
+	>
+		<!-- Aktywny margines o szerokości 16px, który reaguje na mysz -->
+		<div class="w-4 h-full pointer-events-auto"></div>
 	</div>
+{/if}
+
+<div
+	style="width: {$sidebar_open ? '300px' : '0px'}; transition: width 0.3s ease;"
+	class="sticky left-0 top-16.25 h-dvh z-500 overflow-auto flex flex-col"
+>
+	<SidebarToggler bind:opened={$sidebar_open} onclick={handleToggle} />
 
 	{#if $sidebar_open}
-		<div bind:this={contentRef}>
-			<SidebarPill />
-
-			<nav class="flex flex-col gap-2 mt-3 overflow-auto h-9/10">
-				{#each Dashboard.constants.SidebarContents as content, i}
-					<SidebarItem {content} />
-				{/each}
+		<div
+			bind:this={contentRef}
+			class="h-full bg-neutral-900/90 backdrop-blur-md border-r border-neutral-800"
+			onmouseleave={() => {
+				if ($dashboard_config.sidebarBehavior === 'alwaysOn') return;
+				$sidebar_open = false;
+			}}
+		>
+			<div class="m-5">
+				<SidebarPill />
+			</div>
+			<nav>
+				<StarredContents />
+				<LatestUserContents />
+				<DashboardContents />
 			</nav>
 		</div>
-	{:else}
-		<nav class="flex flex-col gap-2 mt-3">
-			{#each Dashboard.constants.SidebarContents as content, i}
-				<button
-					onclick={() => {
-						$route = content.route;
-
-						goto(content.href);
-					}}
-					class:normal={$route !== content.route}
-					class:selected={$route === content.route}
-					class="focus:outline-none cursor-pointer flex text-primary rounded-xl mb-4"
-				>
-					<Icon icon={String(content.icon)} width="25" height="25" />
-				</button>
-			{/each}
-		</nav>
 	{/if}
 </div>
 
