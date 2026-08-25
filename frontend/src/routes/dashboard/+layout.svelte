@@ -21,6 +21,7 @@
 	import axios from 'axios';
 	import { api } from '$lib/api/api';
 	import { browser } from '$app/environment';
+	import UploadingToast from '$lib/components/dashboard/storage/UploadingToast.svelte';
 
 	onMount(() => {
 		const preventZoom = (e: any) => {
@@ -159,6 +160,7 @@
 <div class="h-full">
 	<Toast />
 	<Console />
+	<UploadingToast />
 	<div class="flex h-auto flex-col text-white">
 		{#await Dashboard.Load()}
 			<div class="mx-auto mt-10 flex items-center gap-3">

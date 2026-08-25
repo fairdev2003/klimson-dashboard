@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/zgierz/klimson/backend/controllers"
 	"github.com/zgierz/klimson/backend/handlers"
 	"github.com/zgierz/klimson/backend/helpers"
@@ -112,10 +113,27 @@ func InitRoutes() {
 	go func() {
 		ticker := time.NewTicker(2 * time.Second)
 		for range ticker.C {
+			// Pobieranie użycia CPU
 			cpuUsage, _ := cpu.Percent(0, false)
 
+			// Pobieranie statystyk pamięci RAM
+			memInfo, err := mem.VirtualMemory()
+			var memUsage float64 = 0
+			var totalMem uint64 = 0
+			var usedMem uint64 = 0
+
+			if err == nil {
+				memUsage = memInfo.UsedPercent
+				totalMem = memInfo.Total
+				usedMem = memInfo.Used
+			}
+
+			// Wysyłanie danych do hubu
 			cpu_hub.Send(map[string]interface{}{
-				"cpu": cpuUsage,
+				"cpu":       cpuUsage,
+				"memory":    memUsage,
+				"mem_total": totalMem,
+				"mem_used":  usedMem,
 			})
 		}
 	}()

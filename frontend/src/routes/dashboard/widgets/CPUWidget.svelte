@@ -6,6 +6,7 @@
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import { blur } from 'svelte/transition';
+	import UsageChart from './components/UsageChart.svelte';
 	let cpu = $state(0);
 	let cpuUsage = $derived(Math.floor(cpu));
 	let os: string = $state('OS_ID');
@@ -36,9 +37,14 @@
 
 		return () => socket.close();
 	});
+
+	let opened = $state(false);
 </script>
 
 <button
+	onclick={() => {
+		opened = !opened;
+	}}
 	class="relative overflow-hidden cursor-pointer text-start group rounded-xl flex flex-col h-45 max-w-100 w-full md:w-70 lg:w-70 border gap-3 hover:ring-purple-400 hover:ring-2 border-widget-border bg-widget-background"
 >
 	<div class="absolute group-hover:flex hidden w-full h-full bg-purple-500/20"></div>
@@ -69,3 +75,5 @@
 		</div>
 	{/if}
 </button>
+
+<UsageChart bind:opened />

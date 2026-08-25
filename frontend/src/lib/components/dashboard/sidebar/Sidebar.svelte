@@ -63,9 +63,8 @@
 	style="width: {$sidebar_open ? '300px' : '0px'}; transition: width 0.3s ease;"
 	class="sticky left-0 top-16.25 h-dvh z-500 overflow-auto flex flex-col"
 >
-	<SidebarToggler bind:opened={$sidebar_open} onclick={handleToggle} />
-
 	{#if $sidebar_open}
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div
 			bind:this={contentRef}
 			class="h-full bg-neutral-900/90 backdrop-blur-md border-r border-neutral-800"

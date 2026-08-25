@@ -13,17 +13,18 @@ export class Uploader {
 	private CHUNK_SIZE = 2024 * 2024;
 	public file = $state<File | null>(null);
 	private config: UplaoderConfig | undefined = $state({
-		path: '',
+		path: './',
 		chunk_size: this.CHUNK_SIZE
 	});
 
-	constructor() {}
+	constructor() { }
 
 	public SetConfig = (config: UplaoderConfig) => {
 		this.config = config;
 	};
 
 	public HandleFileUpload = async () => {
+
 		if (!this.file) {
 			this.statusMessage = 'Choose binary file!';
 			return;
@@ -35,6 +36,7 @@ export class Uploader {
 		}
 
 		this.uploading = true;
+		this.upload_state = "uploading"
 		this.progress = 0;
 		this.statusMessage = 'Sending file started...';
 
@@ -56,7 +58,7 @@ export class Uploader {
 				await api.api.post(`/admin/dev/send`, chunk, {
 					params: {
 						filename: fileName,
-						path: this.config.path ? this.config.path : ''
+						path: this.config.path ? this.config.path : '/'
 					},
 					headers
 				});
@@ -71,6 +73,10 @@ export class Uploader {
 			this.statusMessage = `Error: ${errorMessage}`;
 		} finally {
 			this.uploading = false;
+			this.upload_state = "uploaded"
+			setTimeout(() => {
+				this.upload_state = "choose_file"
+			}, 10000)
 		}
 	};
 
@@ -82,3 +88,6 @@ export class Uploader {
 		}
 	};
 }
+
+const uploader = new Uploader()
+export { uploader }

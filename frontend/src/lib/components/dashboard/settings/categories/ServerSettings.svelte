@@ -5,13 +5,7 @@
 	import { base_url } from '$lib/api/api.store';
 
 	import BinarySendSettingsRecord from '../records/BinarySendSettingsRecord.svelte';
-	import { Uploader } from '$lib/dashboard/file_upload.svelte';
-
-	const uploader = new Uploader();
-	uploader.SetConfig({
-		path: '',
-		chunk_size: 2024 * 2024
-	});
+	import { uploader } from '$lib/dashboard/file_upload.svelte';
 </script>
 
 <div
