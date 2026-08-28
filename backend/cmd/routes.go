@@ -116,7 +116,6 @@ func InitRoutes() {
 			// Pobieranie użycia CPU
 			cpuUsage, _ := cpu.Percent(0, false)
 
-			// Pobieranie statystyk pamięci RAM
 			memInfo, err := mem.VirtualMemory()
 			var memUsage float64 = 0
 			var totalMem uint64 = 0
@@ -128,7 +127,6 @@ func InitRoutes() {
 				usedMem = memInfo.Used
 			}
 
-			// Wysyłanie danych do hubu
 			cpu_hub.Send(map[string]interface{}{
 				"cpu":       cpuUsage,
 				"memory":    memUsage,
