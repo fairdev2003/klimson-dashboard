@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/zgierz/klimson/backend/api"
+	"github.com/zgierz/klimson/backend/logger"
 )
 
 const (
@@ -61,9 +63,9 @@ func GetOrFetchAccessToken() (string, error) {
 }
 
 func FetchSpotifyAccessToken() (string, error) {
-	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
-	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
-	refreshToken := os.Getenv("SPOTIFY_REFRESH_TOKEN")
+	clientID := strings.TrimSpace(os.Getenv("SPOTIFY_CLIENT_ID"))
+	clientSecret := strings.TrimSpace(os.Getenv("SPOTIFY_CLIENT_SECRET"))
+	refreshToken := strings.TrimSpace(os.Getenv("SPOTIFY_REFRESH_TOKEN"))
 
 	if clientID == "" || clientSecret == "" || refreshToken == "" {
 		return "", fmt.Errorf("missing spotify credentials in environment variables")
@@ -72,8 +74,6 @@ func FetchSpotifyAccessToken() (string, error) {
 	data := url.Values{}
 	data.Set("grant_type", "refresh_token")
 	data.Set("refresh_token", refreshToken)
-	data.Set("client_id", clientID)
-	data.Set("client_secret", clientSecret)
 
 	apiURL := "https://accounts.spotify.com/api/token"
 	req, err := http.NewRequest("POST", apiURL, strings.NewReader(data.Encode()))
@@ -81,6 +81,8 @@ func FetchSpotifyAccessToken() (string, error) {
 		return "", fmt.Errorf("failed to create request: %v", err)
 	}
 
+	authEncoded := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + clientSecret))
+	req.Header.Set("Authorization", "Basic "+authEncoded)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{Timeout: 10 * time.Second}
@@ -91,7 +93,9 @@ func FetchSpotifyAccessToken() (string, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("spotify returned non-200 status: %s", resp.Status)
+		var errBody map[string]interface{}
+		json.NewDecoder(resp.Body).Decode(&errBody)
+		return "", fmt.Errorf("spotify returned non-200 status: %s, details: %v", resp.Status, errBody)
 	}
 
 	var authResp SpotifyAuthResponse
@@ -105,6 +109,7 @@ func FetchSpotifyAccessToken() (string, error) {
 
 func RequestSpotify(spotify_url string, m ...string) (map[string]interface{}, error) {
 	accessToken, err := GetOrFetchAccessToken()
+	logger.ServerLog(accessToken)
 	if err != nil {
 		return nil, err
 	}

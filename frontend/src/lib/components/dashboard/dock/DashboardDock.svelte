@@ -1,20 +1,12 @@
 <script lang="ts">
 	import { sidebar_open, summary_open } from '$lib/dashboard/stores/store';
 	import { ChevronLeft, ChevronRight, Dot, Grip } from '@lucide/svelte';
-	import { page } from '$app/stores';
-	import Loader from '../Loader.svelte';
+
 	import { dashboard_config, debugOn, route } from '$lib/dashboard/stores/persist';
 	import Icon from '@iconify/svelte';
-	import { base_url } from '$lib/api/api.store';
-	import { toast } from '$lib/dashboard/stores/toast';
-	import EditingFile from './boxes/EditingFile.svelte';
-	import { goto } from '$app/navigation';
-	import { blur, fly, slide } from 'svelte/transition';
-	import Modal from '$lib/components/Modal.svelte';
+
 	import { Dashboard } from '$lib/dashboard/logic';
-	import { terminal } from '$lib/terminal/logic';
-	import DockMenu from './DockMenu.svelte';
-	import DockBackground from './DockBackground.svelte';
+
 	import MobileDock from './MobileDock.svelte';
 	import SettingsModal from '../settings/(modal)/SettingsModal.svelte';
 	import { useDebounce } from '@ariefsn/svelte-use';
@@ -45,7 +37,7 @@
 {#if $dashboard_config.dock_on}
 	<div
 		style="position: sticky; top: 10px;"
-		class="h-17 p-10 px-5 flex justify-between items-center z-100 inset-0 border-border bg-background"
+		class="h-17 p-10 px-5 flex justify-between bg-background items-center z-100 inset-0"
 	>
 		<div class="flex h-full items-center">
 			<div class="flex items-center gap-5">

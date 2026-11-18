@@ -113,6 +113,9 @@ func (controller GlobalController) RegisterRoutes() {
 	// dev endpoints
 	controller.adminPath.POST("/dev/send", helpers.RequirePermission(permission.ADMIN), controller.SendBinary)
 
+	// download file endpoints
+	controller.publicPath.GET("/public-drive/download/*path", controller.ServeFile)
+
 	// database crud
 	controller.adminPath.GET("/database/list/tables", helpers.RequirePermission(permission.GET_DB_TABLES), controller.GetTables)
 	controller.adminPath.GET("/database/table/:table_name", helpers.RequirePermission(permission.GET_DB_TABLE), controller.GetTableData)

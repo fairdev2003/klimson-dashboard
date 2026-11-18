@@ -3,9 +3,12 @@ import axios, { type AxiosResponse } from 'axios';
 import type { SpotifyPlaybackState } from '$lib/types/spotify';
 import type { ServerResponse } from '$lib/api/types';
 import { setCustomIconsLoader } from '@iconify/svelte';
+import Dashboard from '$lib/dashboard/dashboard.svelte';
+import { base_url } from '$lib/api/api.store';
+import { get } from 'svelte/store';
 
 class Spotify {
-	private readonly apiRoute = 'https://api.klimson.dev/spotify/currently_playing';
+	private readonly apiRoute = `${get(base_url)}/spotify/currently_playing`;
 	private pollingInterval = 5000;
 	private progressInterval = 1000;
 	public gradient: string = $state('');
@@ -19,7 +22,7 @@ class Spotify {
 	private pollingTimer: ReturnType<typeof setTimeout> | null = null;
 	private progressTimer: ReturnType<typeof setInterval> | null = null;
 
-	constructor() {}
+	constructor() { }
 
 	private async init() {
 		await this.fetchData();

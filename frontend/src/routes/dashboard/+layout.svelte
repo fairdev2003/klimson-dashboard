@@ -168,7 +168,6 @@
 			</div>
 		{:then access}
 			{#if access}
-				<CMSNavbar />
 				<DashboardLayout>
 					{@render children()}
 				</DashboardLayout>

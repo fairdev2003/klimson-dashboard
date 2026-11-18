@@ -12,6 +12,7 @@
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/state';
 	import { debug } from '$lib/terminal/logic';
+	import BlockyCMSNavbar from '../blocky/BlockyCMSNavbar.svelte';
 
 	type Props = {
 		children: Snippet;
@@ -33,9 +34,9 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	oncontextmenu={(e) => handleRightClick(e)}
-	class="flex flex-col h-screen overflow-hidden bg-primary-background text-text"
+	class="flex flex-col h-screen bg-primary-background ring-1 ring-black text-text"
 >
-	<header class="border-b h-20 border-border flex items-center px-4 shrink-0">
+	<header class="flex items-center bg-slate-900 mt-20">
 		<CMSNavbar />
 	</header>
 

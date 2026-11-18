@@ -106,6 +106,15 @@ const contents: SidebarItems = [
 				disabled: false,
 				slug: 'users-access',
 				category: 'General'
+			},
+			{
+				icon: 'thesvg:craft-cms',
+				href: 'cms/diary',
+				route: 'diary',
+				name: 'Diary',
+				disabled: false,
+				slug: 'diary',
+				category: 'General'
 			}
 		]
 	},
@@ -164,4 +173,14 @@ const contents: SidebarItems = [
 		slug: 'users-access',
 		category: 'General'
 	}
+	,
+	{
+		icon: 'material-symbols:shield',
+		href: '/dashboard/security',
+		route: 'security',
+		name: 'Security',
+		disabled: false,
+		slug: 'security',
+		category: 'General'
+	},
 ];

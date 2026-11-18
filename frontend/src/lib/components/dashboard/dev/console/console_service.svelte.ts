@@ -7,27 +7,26 @@ import { goto } from '$app/navigation';
 import { terminal } from './terminal.svelte';
 import axios from 'axios';
 import Dashboard from '$lib/dashboard/dashboard.svelte';
-import { formatter } from './formatter';
-import { bold, tail, italic, red, span } from '$lib/terminal/style';
+
+import { bold, tail, italic, span } from '$lib/terminal/style';
 import { notifications, type NotificationRecord } from '../../navbar/notification_service.svelte';
 import type { StorageRecord } from '$lib/api/requests/storage';
 import { base_url } from '$lib/api/api.store';
-import type { Command } from '@lucide/svelte';
-import { page } from '$app/state';
+
 import { redirectTo } from '$lib/dashboard/stores/persist';
 
 export class ConsoleService {
 	public activeRequests = $state(new Map<string, AbortController>());
 	private commands: Map<string, CommandBuilder> = new Map();
-	private unknown_command_handler: (user_input: string, name: string) => void = $state(() => {});
+	private unknown_command_handler: (user_input: string, name: string) => void = $state(() => { });
 	private on_command_handler: (
 		command: CommandBuilder | undefined,
 		input: string | undefined
-	) => void | undefined = () => {};
+	) => void | undefined = () => { };
 
 	public loading = $state(false);
 
-	constructor() {}
+	constructor() { }
 
 	public registerCommand(name: string): CommandBuilder {
 		const cmd = new CommandBuilder(name);
@@ -94,6 +93,12 @@ export class ConsoleService {
 
 			command.argHandlers.forEach((argHandler, i) => {
 				if (!argHandler.config?.auto_complete_args) {
+
+					if (argHandler.config?.customName) {
+						usage_string = usage_string + ` <${argHandler.config?.customName}>`;
+						return
+					}
+
 					usage_string = usage_string + ` <$arg${i + 1}>`;
 					return;
 				}
@@ -281,7 +286,7 @@ console_service
 
 console_service
 	.registerCommand('lockscreen')
-	.setDescription('Terminating cms session')
+	.setDescription('Terminating cms session and moving user to lockscreen')
 	.setAction(async () => {
 		try {
 			await api.api.post('/auth/logout');
@@ -378,7 +383,7 @@ console_service
 console_service
 	.registerCommand('cd')
 	.setDescription('Changes current directory')
-	.addArgHandler((arg) => arg)
+	.addArgHandler((arg) => arg, { customName: "path" })
 	.setAction(async (args) => {
 		let dir: string = args[0] || '';
 
@@ -520,7 +525,7 @@ console_service
 	});
 
 console_service
-	.registerCommand('n')
+	.registerCommand('notification')
 	.setDescription('Notification test')
 
 	.setAction((args) => {
@@ -693,8 +698,8 @@ console_service
 	.registerCommand('redis')
 	.bindLoading(console_loading) // binding
 	.setDescription('This command will allow you to operate on redis dashboard keys')
-	.addArgHandler((arg) => arg) // get, set
-	.addArgHandler((arg) => arg) // key
+	.addArgHandler((arg) => arg, { customName: "get|set" }) // get, set
+	.addArgHandler((arg) => arg, { customName: "value" }) // key
 	.addFlagHandler<string>(
 		'-t',
 		(flag) => {
@@ -724,7 +729,7 @@ console_service
 		}
 	});
 
-console_service.registerCommand('klimsonfetch').setAction(async () => {
+console_service.registerCommand('klimsonfetch').setDescription("Server info inspired by neofetch").setAction(async () => {
 	try {
 		const response = await api.misc.Fastfetch();
 
@@ -738,8 +743,7 @@ console_service.registerCommand('klimsonfetch').setAction(async () => {
 
 console_service
 	.registerCommand('goto')
-	.addArgHandler((arg) => arg)
-
+	.addArgHandler((arg) => arg, { customName: "route" })
 	.setDescription('Allow you to quickly go to available dashboard enpoints.')
 	.setAction((args) => {
 		let uri = args[0];

@@ -1,5 +1,3 @@
-import { debug } from '$lib/dashboard/stores/debug';
-
 type CommandLoader = boolean;
 type CommandAction = (args: any[], flags: CommandFlag<any>[]) => void;
 type ArgHandler = { handler: (arg: any) => any; config?: CommandConfig };
@@ -8,11 +6,11 @@ type LoadingState = {
 };
 type CommandConfig<T = any> =
 	| {
-			customName: string;
-			required?: boolean;
-			type?: T;
-			auto_complete_args?: string[];
-	  }
+		customName: string;
+		required?: boolean;
+		type?: T;
+		auto_complete_args?: string[];
+	}
 	| undefined;
 
 type CommandFlagConfig<T> = {};
@@ -39,7 +37,7 @@ export class CommandBuilder {
 	public description: string | undefined;
 	private loadingState?: LoadingState;
 
-	constructor(public name: string) {}
+	constructor(public name: string) { }
 
 	addArgHandler<T>(handler: (arg: T) => any, config?: CommandConfig<T>): this {
 		this.argHandlers.push({ handler, config });
